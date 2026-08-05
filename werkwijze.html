@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* MAIN WEBKWESTIE STYLES (ongewijzigd) */
+        /* MAIN WEBKWESTIE STYLES (ONGEWIJZIGD) */
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
         .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
         .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
@@ -30,12 +30,12 @@
         .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
         .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
 
-        /* VEILIGBLOX 3D GAME STYLES */
+        /* VEILIGBLOX 3D GAME STYLES (AANGEPAST - LICHTER, MEER ALS REFERENTIE) */
         #veiligblox-wrapper {
             position: relative;
             width: 100%;
             height: 550px;
-            background: #1a1a2e;
+            background: #e8ecf1; /* lichte achtergrond, zoals de referentie */
             user-select: none;
             border-radius: 8px;
             overflow: hidden;
@@ -44,94 +44,102 @@
         }
         #veiligblox-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
         #game-container { width: 100%; height: 100%; display: block; }
-        /* Zorg dat de canvas de volledige container vult */
         #game-container canvas { display: block; width: 100% !important; height: 100% !important; }
         #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
+        /* HEADER IETS TRANSPARANTER */
         #game-header {
             pointer-events: auto;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            padding: 6px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #ffcc00;
+            border-bottom: 2px solid #ccc;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
-        #game-header h1 { font-size: 18px; font-weight: 800; color: #fff; text-shadow: 0 0 15px #ffcc00; font-family: 'Segoe UI', sans-serif;}
-        #game-header h1 span { color: #ffcc00; }
-        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .safe-badge { background: #00cc66; color: #fff; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #88ff88; box-shadow: 0 0 20px #00cc66; }
-        .build-counter { background: rgba(255,204,0,0.2); color: #ffcc00; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ffcc00; }
-        .timer-display { background: rgba(255, 100, 100, 0.2); color: #ff6b6b; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ff6b6b; }
-        .score-display { background: rgba(255, 200, 0, 0.2); color: #ffcc00; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ffcc00; }
+        #game-header h1 { font-size: 16px; font-weight: 800; color: #003366; font-family: 'Segoe UI', sans-serif; text-shadow: none; }
+        #game-header h1 span { color: #ff6b00; }
+        .header-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .safe-badge { background: #00cc66; color: #fff; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #88ff88; }
+        .build-counter { background: rgba(0,51,102,0.1); color: #003366; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #003366; }
+        .timer-display { background: rgba(200,0,0,0.1); color: #cc0000; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #cc0000; }
+        .score-display { background: rgba(255,200,0,0.2); color: #b8860b; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #b8860b; }
 
-        #camera-info { pointer-events: none; position: absolute; top: 50px; right: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; color: #aaa; font-size: 11px; border: 1px solid #444; }
+        #camera-info { pointer-events: none; position: absolute; top: 50px; right: 15px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 6px; color: #333; font-size: 11px; border: 1px solid #ccc; }
 
+        /* BOUWMENU - COMPACT EN HELDER */
         #build-menu {
             pointer-events: auto;
             position: absolute;
             left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 10px;
-            border: 2px solid #ffcc00;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             align-items: center;
             max-height: 80%;
             overflow-y: auto;
         }
-        #build-menu label { color: #ffcc00; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        .color-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-        .color-btn { width: 24px; height: 24px; border-radius: 4px; border: 2px solid transparent; cursor: pointer; transition: all 0.2s; pointer-events: auto; }
-        .color-btn:hover { transform: scale(1.15); border-color: #fff; }
-        .color-btn.active { border-color: #fff; box-shadow: 0 0 10px currentColor; transform: scale(1.1); }
-        .build-btn { pointer-events: auto; background: #ffcc00; color: #1a1a2e; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; width: 100%; transition: all 0.2s;}
-        .build-btn.delete-mode { background: #ff4444; color: #fff; }
-        .build-btn.opdracht-btn { background: #4ecdc4; color: #1a1a2e; }
-        .build-btn.opdracht-btn.active-opdracht { background: #ffcc00; }
+        #build-menu label { color: #003366; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .color-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; }
+        .color-btn { width: 22px; height: 22px; border-radius: 4px; border: 2px solid #ddd; cursor: pointer; transition: all 0.2s; pointer-events: auto; }
+        .color-btn:hover { transform: scale(1.15); border-color: #003366; }
+        .color-btn.active { border-color: #003366; box-shadow: 0 0 8px rgba(0,51,102,0.4); transform: scale(1.1); }
+        .build-btn { pointer-events: auto; background: #003366; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 10px; cursor: pointer; width: 100%; transition: all 0.2s; }
+        .build-btn:hover { background: #ff6b00; }
+        .build-btn.delete-mode { background: #cc0000; }
+        .build-btn.delete-mode:hover { background: #990000; }
+        .build-btn.opdracht-btn { background: #e6e6e6; color: #003366; }
+        .build-btn.opdracht-btn:hover { background: #ff6b00; color: white; }
+        .build-btn.opdracht-btn.active-opdracht { background: #ff6b00; color: white; }
 
-        #opdracht-panel { pointer-events: auto; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); border-radius: 12px; padding: 12px 18px; border: 2px solid #ffcc00; text-align: center; display: none; width: 80%; max-width: 350px;}
+        #opdracht-panel { pointer-events: auto; position: absolute; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 10px; padding: 10px 16px; border: 1px solid #ccc; text-align: center; display: none; width: 80%; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
         #opdracht-panel.show { display: block; }
-        #opdracht-panel h2 { color: #ffcc00; font-size: 15px; margin-bottom: 4px; }
-        #opdracht-panel p { color: #ddd; font-size: 12px; margin: 3px 0; }
-        #opdracht-panel .hint { color: #66ccff; font-style: italic; }
-        #opdracht-panel .progress { color: #4ecdc4; font-weight: bold; }
-        .close-opdracht { pointer-events: auto; background: #ff4444; color: #fff; border: none; padding: 4px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; margin-top: 5px; }
+        #opdracht-panel h2 { color: #003366; font-size: 15px; margin-bottom: 3px; }
+        #opdracht-panel p { color: #333; font-size: 12px; margin: 2px 0; }
+        #opdracht-panel .hint { color: #0066cc; font-style: italic; }
+        #opdracht-panel .progress { color: #ff6b00; font-weight: bold; }
+        .close-opdracht { pointer-events: auto; background: #cc0000; color: #fff; border: none; padding: 3px 12px; border-radius: 12px; font-size: 11px; cursor: pointer; margin-top: 4px; }
 
-        #voorbeeld-container { pointer-events: auto; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); border-radius: 12px; padding: 10px; border: 2px solid #ffcc00; display: none; flex-direction: column; align-items: center; }
+        #voorbeeld-container { pointer-events: auto; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border-radius: 10px; padding: 8px; border: 1px solid #ccc; display: none; flex-direction: column; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         #voorbeeld-container.show { display: flex; }
-        #voorbeeld-container h4 { color: #ffcc00; font-size: 12px; margin-bottom: 5px; }
-        #voorbeeld-canvas { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #444; }
-        #voorbeeld-container .stappen { color: #ddd; font-size: 10px; margin-top: 5px; text-align: left; width: 100%; padding: 4px; list-style: none; }
-        #voorbeeld-container .stappen li { margin: 2px 0; color: #aaa; }
-        #voorbeeld-container .stappen li.done { color: #4ecdc4; }
+        #voorbeeld-container h4 { color: #003366; font-size: 11px; margin-bottom: 4px; }
+        #voorbeeld-canvas { width: 100px; height: 100px; background: rgba(255,255,255,0.8); border-radius: 6px; border: 1px solid #ddd; }
+        #voorbeeld-container .stappen { color: #333; font-size: 9px; margin-top: 4px; text-align: left; width: 100%; padding: 2px 4px; list-style: none; }
+        #voorbeeld-container .stappen li { margin: 1px 0; color: #666; }
+        #voorbeeld-container .stappen li.done { color: #006600; }
 
-        #popup-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; pointer-events: auto; }
+        #popup-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; pointer-events: auto; }
         #popup-overlay.show { display: flex; }
-        #popup-box { background: #1a1a2e; border: 2px solid #ffcc00; border-radius: 20px; padding: 25px 40px; text-align: center; color: #fff; max-width: 90%;}
-        #popup-box h2 { font-size: 22px; color: #ffcc00; margin-bottom: 8px; }
-        #popup-box p { font-size: 14px; margin: 8px 0; }
-        .btn-popup { margin-top: 15px; padding: 8px 20px; background: #ffcc00; color: #1a1a2e; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; pointer-events: auto; }
+        #popup-box { background: white; border: 2px solid #ff6b00; border-radius: 16px; padding: 20px 30px; text-align: center; color: #003366; max-width: 90%; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        #popup-box h2 { font-size: 20px; color: #ff6b00; margin-bottom: 6px; }
+        #popup-box p { font-size: 14px; margin: 6px 0; }
+        .btn-popup { margin-top: 12px; padding: 8px 24px; background: #ff6b00; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; pointer-events: auto; }
+        .btn-popup:hover { background: #cc5500; }
 
-        #timer-warning { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: #fff; padding: 15px 30px; border-radius: 15px; font-size: 22px; font-weight: bold; display: none; z-index: 1500; text-shadow: 0 0 15px #000; }
-        #info-balk { pointer-events:none; position:absolute; bottom:15px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); padding:6px 16px; border-radius:30px; color:#ddd; font-size:12px; border:1px solid #ffcc00; text-align:center; white-space:nowrap; }
+        #timer-warning { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(200,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 20px; font-weight: bold; display: none; z-index: 1500; text-shadow: 0 0 10px #000; }
+        #info-balk { pointer-events:none; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.85); backdrop-filter:blur(4px); padding:4px 14px; border-radius:20px; color:#333; font-size:11px; border:1px solid #ccc; text-align:center; white-space:nowrap; }
     </style>
 </head>
 <body>
 
+    <!-- HEADER WEBKWESTIE (ONGEWIJZIGD) -->
     <div class="header-main">
         <h1 style="margin:0;">POLITIE CYBER CRIME DOSSIER</h1>
         <p style="margin:5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
+    <!-- NAVIGATIE (ONGEWIJZIGD) -->
     <div class="nav">
         <a href="index.html">1. Inleiding</a>
         <a href="opdracht.html">2. De Opdracht</a>
@@ -142,6 +150,7 @@
         <a href="leerkracht.html">7. Leerkracht</a>
     </div>
 
+    <!-- CONTAINER (ONGEWIJZIGD) -->
     <div class="container">
         <h2>3. Werkwijze: Simulatie & Analyse</h2>
         <p>Start de opdracht en bouw mee in de VeiligBlox omgeving. Terwijl je speelt, zullen er berichten van andere spelers binnenkomen. <strong>Let goed op wat er voorbij komt!</strong></p>
@@ -155,12 +164,12 @@
             <div style="color:#94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
         </div>
 
-        <!-- 3D VEILIGBLOX INTEGRATIE -->
+        <!-- VEILIGBLOX 3D (AANGEPAST) -->
         <div id="veiligblox-wrapper">
             <div id="game-container"></div>
             <div id="ui-overlay">
                 <div id="game-header">
-                    <h1>🔲 <span>Veilig</span>Blox</h1>
+                    <h1>🧱 <span>Veilig</span>Blox</h1>
                     <div class="header-right">
                         <span class="timer-display" id="timerDisplay">⏱️ 3:00</span>
                         <span class="score-display">⭐ <span id="scoreDisplay">0</span></span>
@@ -169,7 +178,7 @@
                     </div>
                 </div>
 
-                <div id="camera-info">🖱️ Sleep om te draaien · Scroll om te zoomen</div>
+                <div id="camera-info">🖱️ Sleep · Scroll om te zoomen</div>
 
                 <div id="opdracht-panel">
                     <h2 id="opdracht-titel">🏗️ Bouw een vogel</h2>
@@ -181,7 +190,7 @@
 
                 <div id="voorbeeld-container">
                     <h4 id="voorbeeld-titel">📐 Voorbeeld</h4>
-                    <canvas id="voorbeeld-canvas" width="120" height="120"></canvas>
+                    <canvas id="voorbeeld-canvas" width="100" height="100"></canvas>
                     <ul class="stappen" id="voorbeeld-stappen"></ul>
                 </div>
 
@@ -203,7 +212,7 @@
                     </div>
                     <button class="build-btn delete-mode" id="delete-btn">🗑️ Verwijder</button>
                     <button class="build-btn" id="clear-btn">🧹 Alles weg</button>
-                    <hr style="width:100%;border-color:#444;margin:2px 0;">
+                    <hr style="width:100%;border-color:#ddd;margin:2px 0;">
                     <button class="build-btn opdracht-btn" data-opdracht="vogel">🐦 Vogel</button>
                     <button class="build-btn opdracht-btn" data-opdracht="cijfer2">🔢 Cijfer 2</button>
                 </div>
@@ -219,13 +228,13 @@
                 </div>
 
                 <div id="info-balk">
-                    <strong>🔒 VeiligBlox</strong> — Kies een opdracht om de timer te starten!
+                    <strong>🔒 VeiligBlox</strong> — Klik op de grond om een blok te plaatsen · Rechtsklik om te verwijderen
                 </div>
             </div>
         </div>
         <!-- EINDE VEILIGBLOX -->
 
-        <!-- RECHERCHEUR 1 -->
+        <!-- RECHERCHEUR 1 (ONGEWIJZIGD) -->
         <div class="role-box">
             <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
             <div class="form-group">
@@ -242,7 +251,7 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 2 -->
+        <!-- RECHERCHEUR 2 (ONGEWIJZIGD) -->
         <div class="role-box">
             <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
             <div class="form-group">
@@ -255,7 +264,7 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 3 -->
+        <!-- RECHERCHEUR 3 (ONGEWIJZIGD) -->
         <div class="role-box">
             <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
             <div class="form-group">
@@ -280,10 +289,12 @@
         (function() {
             'use strict';
 
+            // --- CONFIG ---
             const MAX_BLOCKS = 150;
             const BLOCK_SIZE = 0.8;
             const GRID = 0.5;
 
+            // --- STATE ---
             let selectedColor = '#ff6b6b';
             let deleteMode = false;
             let blocks = [];
@@ -297,6 +308,7 @@
             let timerRunning = false;
             let timerWarningShown = false;
 
+            // --- THREE.JS ---
             let scene, camera, renderer, ground;
             let isDragging = false;
             let prevMouse = { x: 0, y: 0 };
@@ -304,6 +316,7 @@
             let camPhi = 0.6;
             let camDist = 16;
 
+            // --- DOM ---
             const containerWrapper = document.getElementById('veiligblox-wrapper');
             const blockCountEl = document.getElementById('blockCount');
             const scoreDisplayEl = document.getElementById('scoreDisplay');
@@ -326,6 +339,7 @@
             const popupMessage = document.getElementById('popup-message');
             const popupBtn = document.getElementById('popup-btn');
 
+            // --- CHAT POPUPS ---
             const chatPopups = [
                 { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
                 { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
@@ -370,6 +384,7 @@
                 chatLog.scrollTop = chatLog.scrollHeight;
             }
 
+            // --- OPDACHTEN ---
             const OPDACHTEN = {
                 vogel: {
                     titel: '🐦 Bouw een vogel',
@@ -401,54 +416,55 @@
                 }
             };
 
+            // --- THREE.JS INIT ---
             function initScene() {
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color(0x87CEEB);
+                scene.background = new THREE.Color(0xe8ecf1); // lichte achtergrond
 
                 const aspect = containerWrapper.clientWidth / containerWrapper.clientHeight;
-                camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+                camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
                 updateCamera();
 
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(containerWrapper.clientWidth, containerWrapper.clientHeight);
                 renderer.shadowMap.enabled = true;
                 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                // Zorg dat de canvas de container vult
                 renderer.domElement.style.display = 'block';
                 renderer.domElement.style.width = '100%';
                 renderer.domElement.style.height = '100%';
-                const container = document.getElementById('game-container');
-                container.appendChild(renderer.domElement);
+                document.getElementById('game-container').appendChild(renderer.domElement);
 
-                // Licht
-                const ambient = new THREE.AmbientLight(0x404060, 0.6);
+                // Licht: zacht en gelijkmatig
+                const ambient = new THREE.AmbientLight(0xffffff, 0.7);
                 scene.add(ambient);
 
-                const sun = new THREE.DirectionalLight(0xffeedd, 1.2);
-                sun.position.set(15, 25, 10);
-                sun.castShadow = true;
-                sun.shadow.mapSize.width = 2048;
-                sun.shadow.mapSize.height = 2048;
-                const d = 25;
-                sun.shadow.camera.left = -d;
-                sun.shadow.camera.right = d;
-                sun.shadow.camera.top = d;
-                sun.shadow.camera.bottom = -d;
-                sun.shadow.camera.near = 1;
-                sun.shadow.camera.far = 40;
-                scene.add(sun);
+                const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+                dirLight.position.set(10, 20, 10);
+                dirLight.castShadow = true;
+                dirLight.shadow.mapSize.width = 2048;
+                dirLight.shadow.mapSize.height = 2048;
+                const d = 15;
+                dirLight.shadow.camera.left = -d;
+                dirLight.shadow.camera.right = d;
+                dirLight.shadow.camera.top = d;
+                dirLight.shadow.camera.bottom = -d;
+                dirLight.shadow.camera.near = 1;
+                dirLight.shadow.camera.far = 30;
+                scene.add(dirLight);
 
-                const fill = new THREE.DirectionalLight(0x8888ff, 0.3);
-                fill.position.set(-10, 5, -10);
-                scene.add(fill);
-
-                const hemi = new THREE.HemisphereLight(0x87CEEB, 0x3a7d44, 0.4);
-                scene.add(hemi);
+                const fillLight = new THREE.DirectionalLight(0xccddff, 0.3);
+                fillLight.position.set(-10, 5, -10);
+                scene.add(fillLight);
             }
 
+            // --- GROND (lichter, met raster) ---
             function createGround() {
-                const geo = new THREE.PlaneGeometry(30, 30);
-                const mat = new THREE.MeshStandardMaterial({ color: 0x5da130, roughness: 0.9 });
+                const geo = new THREE.PlaneGeometry(20, 20);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: 0xdadfe6,
+                    roughness: 0.8,
+                    metalness: 0.1
+                });
                 ground = new THREE.Mesh(geo, mat);
                 ground.rotation.x = -Math.PI / 2;
                 ground.position.y = 0;
@@ -456,19 +472,32 @@
                 ground.name = 'ground';
                 scene.add(ground);
 
-                const grid = new THREE.GridHelper(30, 20, 0x88ff88, 0x44aa44);
-                grid.position.y = 0.01;
-                scene.add(grid);
+                // Fijn raster (zoals in de referentie)
+                const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xbbbbbb);
+                gridHelper.position.y = 0.01;
+                scene.add(gridHelper);
             }
 
+            // --- BLOK FUNCTIES ---
             function addBlockToScene(x, y, z, color = null) {
                 const finalColor = color || selectedColor;
                 const geo = new THREE.BoxGeometry(BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                const mat = new THREE.MeshStandardMaterial({ color: finalColor, roughness: 0.4 });
+                const mat = new THREE.MeshStandardMaterial({
+                    color: finalColor,
+                    roughness: 0.3,
+                    metalness: 0.05,
+                    emissive: new THREE.Color(finalColor).multiplyScalar(0.05)
+                });
                 const mesh = new THREE.Mesh(geo, mat);
                 mesh.position.set(x, y + BLOCK_SIZE / 2, z);
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
+                // Randen (zwarte lijnen) voor de blokken, zoals in de referentie
+                const edges = new THREE.EdgesGeometry(geo);
+                const lineMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 1 });
+                const wireframe = new THREE.LineSegments(edges, lineMat);
+                mesh.add(wireframe);
+
                 mesh.userData = { isBlock: true, color: finalColor, x, y, z };
                 scene.add(mesh);
                 blocks.push(mesh);
@@ -510,6 +539,7 @@
                 scoreDisplayEl.textContent = score;
             }
 
+            // --- INTERACTIE ---
             function getIntersection(event, objects) {
                 const rect = renderer.domElement.getBoundingClientRect();
                 const mouse = new THREE.Vector2();
@@ -521,6 +551,7 @@
                 return intersects.length > 0 ? intersects[0] : null;
             }
 
+            // --- CAMERA ---
             function updateCamera() {
                 const x = camDist * Math.cos(camTheta) * Math.cos(camPhi);
                 const y = camDist * Math.sin(camPhi);
@@ -558,6 +589,7 @@
                 }, { passive: false });
             }
 
+            // --- OPDACHT LOGICA ---
             function startOpdracht(name) {
                 const opdracht = OPDACHTEN[name];
                 if (!opdracht) return;
@@ -586,7 +618,7 @@
                     clearInterval(timerInterval);
                     timerRunning = false;
                     timerDisplayEl.textContent = '⏱️ 3:00';
-                    timerDisplayEl.style.color = '#ff6b6b';
+                    timerDisplayEl.style.color = '#cc0000';
                 }
             }
 
@@ -609,19 +641,18 @@
 
             function tekenVoorbeeld(blokken) {
                 const ctx = voorbeeldCanvas.getContext('2d');
-                ctx.clearRect(0, 0, 120, 120);
-                const scale = 16;
-                const ox = 60,
-                    oy = 100;
+                ctx.clearRect(0, 0, 100, 100);
+                const scale = 14;
+                const ox = 50, oy = 85;
                 blokken.forEach(b => {
                     const x = ox + b.x * scale;
                     const y = oy - b.z * scale;
                     const s = (b.size || 0.8) * scale;
                     ctx.fillStyle = b.color;
-                    ctx.fillRect(x - s / 2, y - s / 2, s, s);
+                    ctx.fillRect(x - s/2, y - s/2, s, s);
                     ctx.strokeStyle = '#333';
                     ctx.lineWidth = 1;
-                    ctx.strokeRect(x - s / 2, y - s / 2, s, s);
+                    ctx.strokeRect(x - s/2, y - s/2, s, s);
                 });
             }
 
@@ -660,6 +691,7 @@
 
             popupBtn.addEventListener('click', () => { popupOverlay.classList.remove('show'); });
 
+            // --- TIMER ---
             function startTimer() {
                 if (timerRunning) return;
                 timerRunning = true;
@@ -693,10 +725,10 @@
                 const min = Math.floor(timerSeconds / 60);
                 const sec = timerSeconds % 60;
                 timerDisplayEl.textContent = '⏱️ ' + String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
-                timerDisplayEl.style.color = timerSeconds <= 30 ? '#ff4444' : '#ff6b6b';
+                timerDisplayEl.style.color = timerSeconds <= 30 ? '#cc0000' : '#003366';
             }
 
-            // --- UI Events ---
+            // --- UI EVENTS ---
             document.querySelectorAll('.color-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
@@ -754,7 +786,7 @@
 
             closeOpdrachtBtn.addEventListener('click', closeOpdracht);
 
-            // --- Click / Rechtsklik voor bouwen ---
+            // --- KLIK / RECHTSKLIK VOOR BOUWEN ---
             renderer.domElement.addEventListener('click', (e) => {
                 if (e.button !== 0) return;
                 if (deleteMode) {
@@ -766,6 +798,7 @@
                 if (hit) {
                     const x = Math.round(hit.point.x / GRID) * GRID;
                     const z = Math.round(hit.point.z / GRID) * GRID;
+                    // Check of er al een blok staat op (x,z) y=0
                     let occupied = false;
                     for (let b of blocks) {
                         if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4 && Math.abs(b.userData.y - 0) < 0.1) {
@@ -786,7 +819,7 @@
                 if (hit) removeBlock(hit.object);
             });
 
-            // --- Resize ---
+            // --- RESIZE ---
             window.addEventListener('resize', () => {
                 const w = containerWrapper.clientWidth;
                 const h = containerWrapper.clientHeight;
@@ -797,31 +830,17 @@
                 }
             });
 
-            // --- Decoratie (bomen en enkele startblokken) ---
+            // --- DECORATIE (enkele startblokken) ---
             function addDecoration() {
-                const treeMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57 });
-                const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
-                for (let i = 0; i < 6; i++) {
-                    const angle = (i / 6) * Math.PI * 2;
-                    const r = 10;
-                    const x = Math.cos(angle) * r;
-                    const z = Math.sin(angle) * r;
-                    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 1.5, 6), trunkMat);
-                    trunk.position.set(x, 0.75, z);
-                    trunk.castShadow = true;
-                    trunk.receiveShadow = true;
-                    scene.add(trunk);
-                    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.8, 6, 6), treeMat);
-                    leaf.position.set(x, 2.0, z);
-                    leaf.castShadow = true;
-                    leaf.receiveShadow = true;
-                    scene.add(leaf);
-                }
-                // Startblokken (voorbeeld)
+                // Een paar startblokken om te laten zien hoe het werkt
                 addBlockToScene(0, 0, 0, '#ff6b6b');
                 addBlockToScene(1.2, 0, 0, '#45b7d1');
                 addBlockToScene(-1.2, 0, 0, '#45b7d1');
                 addBlockToScene(0, 0.8, 0, '#ffcc00');
+                // Een torentje als voorbeeld
+                addBlockToScene(2.5, 0, 1.5, '#4ecdc4');
+                addBlockToScene(2.5, 0.8, 1.5, '#4ecdc4');
+                addBlockToScene(2.5, 1.6, 1.5, '#ff9f43');
             }
 
             // --- INIT ---
@@ -830,13 +849,13 @@
                 createGround();
                 setupCameraControls();
                 addDecoration();
-                // Start animatie loop
+
                 function animate() {
                     requestAnimationFrame(animate);
                     renderer.render(scene, camera);
                 }
                 animate();
-                console.log('VeiligBlox gestart');
+                console.log('VeiligBlox gestart (referentiestijl)');
             }
 
             init();
