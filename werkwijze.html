@@ -3,535 +3,536 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Politiedossier Roblox - Bouwopdracht</title>
+    <title>Politiedossier Roblox - Werkwijze</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- THREE.JS VOOR VEILIGBLOX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #0f172a; color: #e2e8f0; }
+        /* MAIN WEBKWESTIE STYLES */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
+        .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
+        .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
+        .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
+        .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        .header { background: linear-gradient(135deg, #002244, #0a3d6b); color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
-        .header h1 { margin: 0; font-size: 1.8rem; }
-        .header p { margin: 5px 0 0; opacity: 0.8; }
-        
-        .nav { background: #1e293b; display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 2px solid #334155; }
-        .nav a { color: #94a3b8; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
-        .nav a:hover, .nav a.active { background: #ffcc00; color: #0f172a; border-radius: 4px 4px 0 0; }
-        
-        .container { max-width: 1000px; margin: 30px auto; padding: 25px; background: #1e293b; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); border: 1px solid #334155; }
-        
-        .game-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 15px; }
-        .game-header h2 { margin: 0; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
-        .timer-badge { background: #dc2626; padding: 6px 16px; border-radius: 30px; font-size: 1.3rem; font-weight: bold; color: white; box-shadow: 0 0 15px rgba(220,38,38,0.3); }
-        
-        .game-area { display: flex; gap: 20px; flex-wrap: wrap; }
-        .canvas-wrapper { flex: 1; min-width: 600px; background: #0f172a; border-radius: 10px; padding: 15px; border: 2px solid #334155; }
-        #gameCanvas { background: #0f172a; border-radius: 6px; display: block; width: 100%; height: 400px; cursor: pointer; border: 1px solid #2d3748; }
-        
-        .side-panel { flex: 0 0 280px; background: #0f172a; border-radius: 10px; padding: 15px; border: 2px solid #334155; }
-        .side-panel h3 { margin: 0 0 12px; color: #fbbf24; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .example-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; background: #1e293b; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
-        .grid-cell { aspect-ratio: 1; background: #2d3748; border-radius: 2px; }
-        .grid-cell.filled { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.3); }
-        .grid-cell.filled-blue { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.3); }
-        
-        .status-box { background: #1e293b; padding: 10px; border-radius: 6px; margin: 10px 0; text-align: center; border-left: 4px solid #fbbf24; }
-        .status-box.success { border-left-color: #22c55e; }
-        .status-box.fail { border-left-color: #ef4444; }
-        
-        .chat-log { background: #0f172a; border: 1px solid #1e293b; padding: 8px; border-radius: 6px; max-height: 140px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 12px; margin-top: 10px; }
-        .chat-entry { padding: 4px 8px; margin-bottom: 3px; background: #1e293b; border-radius: 3px; border-left: 3px solid #fbbf24; }
-        .chat-entry .sender { color: #fbbf24; font-weight: bold; }
-        
-        .popup-alert { display: none; background: #7f1d1d; border: 2px solid #ef4444; padding: 12px 16px; border-radius: 8px; margin: 10px 0; animation: pulse 0.5s ease; }
-        .popup-alert .fa-bell { color: #fbbf24; margin-right: 10px; }
-        @keyframes pulse { 0% { transform: scale(0.95); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        
-        .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
-        .btn-game { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-game:hover { background: #1d4ed8; transform: scale(1.02); }
-        .btn-game.green { background: #16a34a; }
-        .btn-game.green:hover { background: #15803d; }
-        .btn-game.orange { background: #ea580c; }
-        .btn-game.orange:hover { background: #c2410c; }
-        .btn-game.red { background: #dc2626; }
-        .btn-game.red:hover { background: #b91c1c; }
-        
-        .btn-next { display: inline-block; background: #2563eb; color: white; padding: 12px 28px; text-decoration: none; font-weight: bold; border-radius: 8px; margin-top: 20px; transition: 0.2s; }
-        .btn-next:hover { background: #1d4ed8; transform: translateY(-2px); }
-        
-        @media (max-width: 700px) {
-            .canvas-wrapper { min-width: 100%; }
-            .side-panel { flex: 1; }
-            .game-area { flex-direction: column; }
+        .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
+        .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
+
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
+        input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        textarea { height: 80px; resize: vertical; }
+
+        .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
+        .btn-next:hover { background-color: #ffcc00; color: #002244; }
+
+        /* POP-UP & CHAT LOG STYLES */
+        .chat-popup-alert { display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-weight: bold; animation: pulse 0.5s ease-in-out; }
+        @keyframes pulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
+        .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
+
+        /* VEILIGBLOX 3D GAME STYLES (SCOPED) */
+        #veiligblox-wrapper {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            background: #1a1a2e;
+            user-select: none;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #374151;
+            margin-bottom: 20px;
         }
+        #veiligblox-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
+        #game-container { width: 100%; height: 100%; display: block; }
+        #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        #game-header {
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #ffcc00;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        #game-header h1 { font-size: 18px; font-weight: 800; color: #fff; text-shadow: 0 0 15px #ffcc00; font-family: 'Segoe UI', sans-serif;}
+        #game-header h1 span { color: #ffcc00; }
+        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .safe-badge { background: #00cc66; color: #fff; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #88ff88; box-shadow: 0 0 20px #00cc66; }
+        .build-counter { background: rgba(255,204,0,0.2); color: #ffcc00; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ffcc00; }
+        .timer-display { background: rgba(255, 100, 100, 0.2); color: #ff6b6b; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ff6b6b; }
+        .score-display { background: rgba(255, 200, 0, 0.2); color: #ffcc00; padding: 4px 10px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid #ffcc00; }
+
+        #camera-info { pointer-events: none; position: absolute; top: 50px; right: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; color: #aaa; font-size: 11px; border: 1px solid #444; }
+
+        #build-menu {
+            pointer-events: auto;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 10px;
+            border: 2px solid #ffcc00;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        #build-menu label { color: #ffcc00; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .color-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
+        .color-btn { width: 24px; height: 24px; border-radius: 4px; border: 2px solid transparent; cursor: pointer; transition: all 0.2s; pointer-events: auto; }
+        .color-btn:hover { transform: scale(1.15); border-color: #fff; }
+        .color-btn.active { border-color: #fff; box-shadow: 0 0 10px currentColor; transform: scale(1.1); }
+        .build-btn { pointer-events: auto; background: #ffcc00; color: #1a1a2e; border: none; padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; width: 100%; transition: all 0.2s;}
+        .build-btn.delete-mode { background: #ff4444; color: #fff; }
+        .build-btn.opdracht-btn { background: #4ecdc4; color: #1a1a2e; }
+        .build-btn.opdracht-btn.active-opdracht { background: #ffcc00; }
+
+        #opdracht-panel { pointer-events: auto; position: absolute; top: 55px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); border-radius: 12px; padding: 12px 18px; border: 2px solid #ffcc00; text-align: center; display: none; width: 80%; max-width: 350px;}
+        #opdracht-panel.show { display: block; }
+        #opdracht-panel h2 { color: #ffcc00; font-size: 15px; margin-bottom: 4px; }
+        #opdracht-panel p { color: #ddd; font-size: 12px; margin: 3px 0; }
+        #opdracht-panel .hint { color: #66ccff; font-style: italic; }
+        #opdracht-panel .progress { color: #4ecdc4; font-weight: bold; }
+        .close-opdracht { pointer-events: auto; background: #ff4444; color: #fff; border: none; padding: 4px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; margin-top: 5px; }
+
+        #voorbeeld-container { pointer-events: auto; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); border-radius: 12px; padding: 10px; border: 2px solid #ffcc00; display: none; flex-direction: column; align-items: center; }
+        #voorbeeld-container.show { display: flex; }
+        #voorbeeld-container h4 { color: #ffcc00; font-size: 12px; margin-bottom: 5px; }
+        #voorbeeld-canvas { width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #444; }
+        #voorbeeld-container .stappen { color: #ddd; font-size: 10px; margin-top: 5px; text-align: left; width: 100%; padding: 4px; list-style: none; }
+        #voorbeeld-container .stappen li { margin: 2px 0; color: #aaa; }
+        #voorbeeld-container .stappen li.done { color: #4ecdc4; }
+
+        #popup-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; pointer-events: auto; }
+        #popup-overlay.show { display: flex; }
+        #popup-box { background: #1a1a2e; border: 2px solid #ffcc00; border-radius: 20px; padding: 25px 40px; text-align: center; color: #fff; max-width: 90%;}
+        #popup-box h2 { font-size: 22px; color: #ffcc00; margin-bottom: 8px; }
+        #popup-box p { font-size: 14px; margin: 8px 0; }
+        .btn-popup { margin-top: 15px; padding: 8px 20px; background: #ffcc00; color: #1a1a2e; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; pointer-events: auto; }
+
+        #timer-warning { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: #fff; padding: 15px 30px; border-radius: 15px; font-size: 22px; font-weight: bold; display: none; z-index: 1500; text-shadow: 0 0 15px #000; }
+        #info-balk { pointer-events:none; position:absolute; bottom:15px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); padding:6px 16px; border-radius:30px; color:#ddd; font-size:12px; border:1px solid #ffcc00; text-align:center; white-space:nowrap; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>🚔 POLITIE CYBER CRIME DOSSIER</h1>
-    <p>Missie: Bouw de code en ontmasker nepidentiteiten!</p>
-</div>
-
-<div class="nav">
-    <a href="index.html">1. Inleiding</a>
-    <a href="opdracht.html">2. De Opdracht</a>
-    <a href="werkwijze.html" class="active">3. Werkwijze</a>
-    <a href="bronnen.html">4. Bronnen</a>
-    <a href="beoordeling.html">5. Beoordeling</a>
-    <a href="terugblik.html">6. Terugblik</a>
-    <a href="leerkracht.html">7. Leerkracht</a>
-</div>
-
-<div class="container">
-    <div class="game-header">
-        <h2><i class="fa-solid fa-cubes" style="color:#fbbf24;"></i> Roblox Bouw-Simulator</h2>
-        <span class="timer-badge" id="gameTimer"><i class="fa-solid fa-clock"></i> 03:00</span>
+    <div class="header-main">
+        <h1 style="margin: 0;">POLITIE CYBER CRIME DOSSIER</h1>
+        <p style="margin: 5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
-    <!-- Pop-up alert -->
-    <div id="popupAlert" class="popup-alert">
-        <i class="fa-solid fa-bell"></i> <span id="popupText">Bericht ontvangen...</span>
+    <div class="nav">
+        <a href="index.html">1. Inleiding</a>
+        <a href="opdracht.html">2. De Opdracht</a>
+        <a href="werkwijze.html" class="active">3. Werkwijze</a>
+        <a href="bronnen.html">4. Bronnen</a>
+        <a href="beoordeling.html">5. Beoordeling</a>
+        <a href="terugblik.html">6. Terugblik</a>
+        <a href="leerkracht.html">7. Leerkracht</a>
     </div>
 
-    <div class="game-area">
-        <div class="canvas-wrapper">
-            <canvas id="gameCanvas" width="800" height="400"></canvas>
-            <div class="controls">
-                <button class="btn-game" onclick="movePlayer(-20)"><i class="fa-solid fa-arrow-left"></i> Links</button>
-                <button class="btn-game" onclick="movePlayer(20)">Rechts <i class="fa-solid fa-arrow-right"></i></button>
-                <button class="btn-game green" onclick="placeBlock()"><i class="fa-solid fa-plus"></i> Plaats</button>
-                <button class="btn-game orange" onclick="removeBlock()"><i class="fa-solid fa-minus"></i> Verwijder</button>
-                <button class="btn-game red" onclick="clearBlocks()"><i class="fa-solid fa-trash"></i> Reset</button>
+    <div class="container">
+        <h2>3. Werkwijze: Simulatie & Analyse</h2>
+        <p>Start de opdracht en bouw mee in de VeiligBlox omgeving. Terwijl je speelt, zullen er berichten van andere spelers binnenkomen. <strong>Let goed op wat er voorbij komt!</strong></p>
+
+        <!-- BEWIJSMATERIAAL POPUP & LOG -->
+        <div id="popupAlert" class="chat-popup-alert">
+            <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
+        </div>
+        <p style="font-size: 13px; color: #64748b; font-weight: bold; margin-bottom: 5px;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
+        <div class="chat-log" id="chatLog">
+            <div style="color: #94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
+        </div>
+
+        <!-- 3D VEILIGBLOX INTEGRATIE -->
+        <div id="veiligblox-wrapper">
+            <div id="game-container"></div>
+            <div id="ui-overlay">
+                <div id="game-header">
+                    <h1>🔲 <span>Veilig</span>Blox</h1>
+                    <div class="header-right">
+                        <span class="timer-display" id="timerDisplay">⏱️ 3:00</span>
+                        <span class="score-display">⭐ <span id="scoreDisplay">0</span></span>
+                        <span class="build-counter">🧱 <span id="blockCount">0</span></span>
+                        <span class="safe-badge">✅ Veilig</span>
+                    </div>
+                </div>
+
+                <div id="camera-info">🖱️ Sleep om te draaien · Scroll om te zoomen</div>
+
+                <div id="opdracht-panel">
+                    <h2 id="opdracht-titel">🏗️ Bouw een vogel</h2>
+                    <p id="opdracht-beschrijving">Maak een vogel met een oranje lijf, blauwe vleugels en een gele kop.</p>
+                    <p class="hint" id="opdracht-hint">💡 Begin met het lijf, dan vleugels, en de kop bovenop.</p>
+                    <p class="progress" id="opdracht-progress">Voortgang: 0/3 stappen</p>
+                    <button class="close-opdracht" id="close-opdracht">✖ Sluiten</button>
+                </div>
+
+                <div id="voorbeeld-container">
+                    <h4 id="voorbeeld-titel">📐 Voorbeeld</h4>
+                    <canvas id="voorbeeld-canvas" width="120" height="120"></canvas>
+                    <ul class="stappen" id="voorbeeld-stappen"></ul>
+                </div>
+
+                <div id="build-menu">
+                    <label>🎨 Kleur</label>
+                    <div class="color-grid">
+                        <button class="color-btn active" style="background:#ff6b6b;" data-color="#ff6b6b"></button>
+                        <button class="color-btn" style="background:#ffcc00;" data-color="#ffcc00"></button>
+                        <button class="color-btn" style="background:#4ecdc4;" data-color="#4ecdc4"></button>
+                        <button class="color-btn" style="background:#45b7d1;" data-color="#45b7d1"></button>
+                        <button class="color-btn" style="background:#a29bfe;" data-color="#a29bfe"></button>
+                        <button class="color-btn" style="background:#ff9ff3;" data-color="#ff9ff3"></button>
+                        <button class="color-btn" style="background:#f368e0;" data-color="#f368e0"></button>
+                        <button class="color-btn" style="background:#00d2d3;" data-color="#00d2d3"></button>
+                        <button class="color-btn" style="background:#ff9f43;" data-color="#ff9f43"></button>
+                        <button class="color-btn" style="background:#54a0ff;" data-color="#54a0ff"></button>
+                        <button class="color-btn" style="background:#5f27cd;" data-color="#5f27cd"></button>
+                        <button class="color-btn" style="background:#1dd1a1;" data-color="#1dd1a1"></button>
+                    </div>
+                    <button class="build-btn delete-mode" id="delete-btn">🗑️ Verwijder</button>
+                    <button class="build-btn" id="clear-btn">🧹 Alles weg</button>
+                    <hr style="width:100%;border-color:#444;margin:2px 0;">
+                    <button class="build-btn opdracht-btn" data-opdracht="vogel">🐦 Vogel</button>
+                    <button class="build-btn opdracht-btn" data-opdracht="cijfer2">🔢 Cijfer 2</button>
+                </div>
+
+                <div id="timer-warning">⏰ Nog 30 seconden!</div>
+
+                <div id="popup-overlay">
+                    <div id="popup-box">
+                        <h2 id="popup-title">🎉 Gefeliciteerd!</h2>
+                        <p id="popup-message">Je hebt de opdracht voltooid!</p>
+                        <button class="btn-popup" id="popup-btn">👍 Ga door!</button>
+                    </div>
+                </div>
+
+                <div id="info-balk">
+                    <strong>🔒 VeiligBlox</strong> — Kies een opdracht om de timer te starten!
+                </div>
+            </div>
+        </div>
+        <!-- EINDE VEILIGBLOX -->
+
+        <!-- RECHERCHEUR 1 -->
+        <div class="role-box">
+            <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
+            <div class="form-group">
+                <label>Hoeveel ronselaars ben je tegengekomen tijdens het spelen?</label>
+                <input type="number">
+            </div>
+            <div class="form-group">
+                <label>Noteer de nep-namen van de verdachte accounts:</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Noteer de tekst die jij verdacht vindt en leg uit waarom jij dit verdacht vindt:</label>
+                <textarea></textarea>
             </div>
         </div>
 
-        <div class="side-panel">
-            <h3><i class="fa-regular fa-clipboard"></i> Bouwopdracht</h3>
-            <p style="font-size:13px; color:#94a3b8; margin-top:-5px;">Bouw het cijfer dat je hieronder ziet:</p>
-            
-            <!-- Voorbeeld "2" -->
-            <div id="exampleGrid" class="example-grid"></div>
-            
-            <div id="statusMessage" class="status-box">
-                <i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!
+        <!-- RECHERCHEUR 2 -->
+        <div class="role-box">
+            <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
+            <div class="form-group">
+                <label>Welke naam gebruikt de verdachte persoon?</label>
+                <input type="text">
             </div>
-
-            <p style="font-size:12px; color:#94a3b8; margin:8px 0 4px;">
-                <i class="fa-regular fa-circle-check" style="color:#22c55e;"></i> <span id="blockCount">0</span> blokken geplaatst
-            </p>
-            
-            <!-- Chat log -->
-            <p style="font-size:12px; color:#94a3b8; margin:10px 0 4px;"><i class="fa-regular fa-message"></i> Bewijsmateriaal (chatberichten)</p>
-            <div class="chat-log" id="chatLog">
-                <div style="color: #475569;">Wacht op berichten...</div>
+            <div class="form-group">
+                <label>Wat wil deze persoon van jou?</label>
+                <textarea></textarea>
             </div>
         </div>
+
+        <!-- RECHERCHEUR 3 -->
+        <div class="role-box">
+            <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
+            <div class="form-group">
+                <label>Stap 1 (Bewijs): Wat moet je klasgenoot als eerste doen?</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Stap 2 (Blokkeren): Wat is de vervolgstap op Roblox?</label>
+                <input type="text">
+            </div>
+            <div class="form-group">
+                <label>Stap 3 (Melden): Bij wie meld je dit incident?</label>
+                <input type="text">
+            </div>
+        </div>
+
+        <hr>
+        <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
-    <!-- Rechercheur secties -->
-    <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
-        <div>
-            <h4 style="color:#fbbf24;"><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse</h4>
-            <input type="text" placeholder="Aantal ronselaars?" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
-            <input type="text" placeholder="Nep-namen accounts" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
-            <textarea placeholder="Verdachte tekst + uitleg" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; height:60px;"></textarea>
-        </div>
-        <div>
-            <h4 style="color:#fbbf24;"><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing</h4>
-            <input type="text" placeholder="Naam verdachte" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
-            <textarea placeholder="Wat wil deze persoon?" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; height:60px;"></textarea>
-        </div>
-        <div>
-            <h4 style="color:#fbbf24;"><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie</h4>
-            <input type="text" placeholder="Stap 1: Bewijs verzamelen" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
-            <input type="text" placeholder="Stap 2: Blokkeren" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
-            <input type="text" placeholder="Stap 3: Melden bij..." style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white;">
-        </div>
-    </div>
+    <!-- SCRIPT VOOR VEILIGBLOX EN CHAT LOGICA -->
+    <script>
+        (function() {
+            'use strict';
 
-    <a href="bronnen.html" class="btn-next">Volgende: 4. Bronnen &rarr;</a>
-</div>
+            const MAX_BLOCKS = 150;
+            const BLOCK_SIZE = 0.8;
+            const GRID = 0.5;
 
-<script>
-    // ============================================================
-    //  GAME ENGINE
-    // ============================================================
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const CELL_SIZE = 30;
-    const COLS = 20;
-    const ROWS = 12;
-    const GRID_OFFSET_X = 100;
-    const GRID_OFFSET_Y = 30;
+            let selectedColor = '#ff6b6b';
+            let deleteMode = false;
+            let blocks = [];
+            let blockCount = 0;
+            let score = 0;
+            let currentOpdracht = null;
+            let voltooideStappen = new Set();
 
-    // Speler
-    let player = { x: 4, y: 10 }; // grid coördinaten
+            let timerSeconds = 180; 
+            let timerInterval = null;
+            let timerRunning = false;
+            let timerWarningShown = false;
 
-    // Grid: 0 = leeg, 1 = geplaatst
-    let grid = Array(ROWS).fill().map(() => Array(COLS).fill(0));
-    let blocksPlaced = 0;
+            let scene, camera, renderer, ground;
+            let isDragging = false;
+            let prevMouse = { x: 0, y: 0 };
+            let camTheta = 0.4;
+            let camPhi = 0.6;
+            let camDist = 16;
 
-    // Timer
-    let timeLeft = 180;
-    let gameActive = true;
-    let timerInterval = null;
+            const containerWrapper = document.getElementById('veiligblox-wrapper');
+            const blockCountEl = document.getElementById('blockCount');
+            const scoreDisplayEl = document.getElementById('scoreDisplay');
+            const timerDisplayEl = document.getElementById('timerDisplay');
+            const timerWarningEl = document.getElementById('timer-warning');
+            const deleteBtn = document.getElementById('delete-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const opdrachtPanel = document.getElementById('opdracht-panel');
+            const opdrachtTitel = document.getElementById('opdracht-titel');
+            const opdrachtBeschrijving = document.getElementById('opdracht-beschrijving');
+            const opdrachtHint = document.getElementById('opdracht-hint');
+            const opdrachtProgress = document.getElementById('opdracht-progress');
+            const voorbeeldContainer = document.getElementById('voorbeeld-container');
+            const voorbeeldTitel = document.getElementById('voorbeeld-titel');
+            const voorbeeldCanvas = document.getElementById('voorbeeld-canvas');
+            const voorbeeldStappen = document.getElementById('voorbeeld-stappen');
+            const closeOpdrachtBtn = document.getElementById('close-opdracht');
+            const popupOverlay = document.getElementById('popup-overlay');
+            const popupTitle = document.getElementById('popup-title');
+            const popupMessage = document.getElementById('popup-message');
+            const popupBtn = document.getElementById('popup-btn');
 
-    // Opdracht voltooid?
-    let taskComplete = false;
-    let birdTaskActive = false;
-    let birdComplete = false;
+            // --- Chat Popup Config ---
+            const chatPopups = [
+                { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
+                { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
+                { time: 105, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon." },
+                { time: 70, sender: "SecretFriend_2011", text: "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!" },
+                { time: 30, sender: "VIP_Gamer_007", text: "Stuur me een privéfoto van jezelf voor toegang tot de VIP server." }
+            ];
 
-    // Voorbeeld "2" (5x7 grid)
-    const exampleShape = [
-        [0,1,1,1,1],
-        [0,0,0,0,1],
-        [0,0,0,0,1],
-        [0,1,1,1,1],
-        [1,0,0,0,0],
-        [1,0,0,0,0],
-        [1,1,1,1,1]
-    ];
-
-    // Voorbeeld vogel (5x5)
-    const birdShape = [
-        [0,0,1,0,0],
-        [0,1,0,1,0],
-        [1,0,0,0,1],
-        [0,1,0,1,0],
-        [0,0,1,0,0]
-    ];
-
-    // Pop-up berichten (tijd in seconden)
-    const popups = [
-        { time: 170, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen? DM me!" },
-        { time: 145, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me je wachtwoord." },
-        { time: 115, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Fly Ride Dragon voor jou!" },
-        { time: 75, sender: "SecretFriend_2011", text: "Zullen we praten op Telegram? Vertel het niemand!" },
-        { time: 40, sender: "VIP_Gamer_007", text: "Stuur een privéfoto voor toegang tot VIP server." }
-    ];
-
-    // ============================================================
-    //  RENDER
-    // ============================================================
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Achtergrondgrid
-        ctx.strokeStyle = '#1e293b';
-        ctx.lineWidth = 0.5;
-        for (let r = 0; r <= ROWS; r++) {
-            ctx.beginPath();
-            ctx.moveTo(GRID_OFFSET_X, GRID_OFFSET_Y + r * CELL_SIZE);
-            ctx.lineTo(GRID_OFFSET_X + COLS * CELL_SIZE, GRID_OFFSET_Y + r * CELL_SIZE);
-            ctx.stroke();
-        }
-        for (let c = 0; c <= COLS; c++) {
-            ctx.beginPath();
-            ctx.moveTo(GRID_OFFSET_X + c * CELL_SIZE, GRID_OFFSET_Y);
-            ctx.lineTo(GRID_OFFSET_X + c * CELL_SIZE, GRID_OFFSET_Y + ROWS * CELL_SIZE);
-            ctx.stroke();
-        }
-
-        // Geplaatste blokken
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                if (grid[r][c] === 1) {
-                    const x = GRID_OFFSET_X + c * CELL_SIZE;
-                    const y = GRID_OFFSET_Y + r * CELL_SIZE;
-                    ctx.fillStyle = '#fbbf24';
-                    ctx.shadowColor = '#fbbf24';
-                    ctx.shadowBlur = 8;
-                    ctx.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
-                    ctx.shadowBlur = 0;
-                    ctx.strokeStyle = '#f59e0b';
-                    ctx.strokeRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
-                }
+            function playAlertSound() {
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); 
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } catch(e) {}
             }
-        }
 
-        // Speler (Roblox-stijl)
-        const px = GRID_OFFSET_X + player.x * CELL_SIZE + 2;
-        const py = GRID_OFFSET_Y + player.y * CELL_SIZE + 2;
-        ctx.fillStyle = '#3b82f6';
-        ctx.shadowColor = '#3b82f6';
-        ctx.shadowBlur = 15;
-        ctx.beginPath();
-        ctx.roundRect(px, py, CELL_SIZE - 4, CELL_SIZE - 4, 4);
-        ctx.fill();
-        // Hoofd
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#fca5a5';
-        ctx.beginPath();
-        ctx.arc(px + CELL_SIZE/2 - 2, py - 6, 7, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#1e293b';
-        ctx.beginPath();
-        ctx.arc(px + 4, py - 7, 2, 0, Math.PI*2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(px + CELL_SIZE - 8, py - 7, 2, 0, Math.PI*2);
-        ctx.fill();
-
-        // Tooltip
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '11px monospace';
-        ctx.fillText('⬆⬇⬅➡  |  SPATIE = plaats', 10, 20);
-
-        // Status
-        if (birdComplete) {
-            ctx.fillStyle = '#22c55e';
-            ctx.font = 'bold 24px sans-serif';
-            ctx.fillText('🌟 VOGEL GEBOUWD! 🌟', GRID_OFFSET_X + 100, GRID_OFFSET_Y - 15);
-        } else if (taskComplete) {
-            ctx.fillStyle = '#fbbf24';
-            ctx.font = 'bold 20px sans-serif';
-            ctx.fillText('✅ CIJFER GEBOUWD! Nu de vogel!', GRID_OFFSET_X + 80, GRID_OFFSET_Y - 15);
-        }
-    }
-
-    // Helper voor roundRect
-    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-        if (w < 2 * r) r = w / 2;
-        if (h < 2 * r) r = h / 2;
-        this.moveTo(x + r, y);
-        this.lineTo(x + w - r, y);
-        this.quadraticCurveTo(x + w, y, x + w, y + r);
-        this.lineTo(x + w, y + h - r);
-        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        this.lineTo(x + r, y + h);
-        this.quadraticCurveTo(x, y + h, x, y + h - r);
-        this.lineTo(x, y + r);
-        this.quadraticCurveTo(x, y, x + r, y);
-        this.closePath();
-        return this;
-    };
-
-    // ============================================================
-    //  GAME LOGIC
-    // ============================================================
-    function placeBlock() {
-        if (!gameActive) return;
-        const c = player.x;
-        const r = player.y;
-        if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c] === 0) {
-            grid[r][c] = 1;
-            blocksPlaced++;
-            document.getElementById('blockCount').textContent = blocksPlaced;
-            checkTaskCompletion();
-        }
-    }
-
-    function removeBlock() {
-        if (!gameActive) return;
-        const c = player.x;
-        const r = player.y;
-        if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c] === 1) {
-            grid[r][c] = 0;
-            blocksPlaced--;
-            document.getElementById('blockCount').textContent = blocksPlaced;
-            taskComplete = false;
-            birdComplete = false;
-            birdTaskActive = false;
-            document.getElementById('statusMessage').innerHTML = `<i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!`;
-            document.getElementById('statusMessage').className = 'status-box';
-            updateExampleGrid('2');
-        }
-    }
-
-    function clearBlocks() {
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLS; c++) {
-                grid[r][c] = 0;
-            }
-        }
-        blocksPlaced = 0;
-        taskComplete = false;
-        birdComplete = false;
-        birdTaskActive = false;
-        document.getElementById('blockCount').textContent = '0';
-        document.getElementById('statusMessage').innerHTML = `<i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!`;
-        document.getElementById('statusMessage').className = 'status-box';
-        updateExampleGrid('2');
-    }
-
-    function movePlayer(dx, dy) {
-        if (!gameActive) return;
-        let nx = player.x + dx;
-        let ny = player.y + dy;
-        if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS) {
-            player.x = nx;
-            player.y = ny;
-        }
-    }
-
-    // Toetsenbord
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') movePlayer(-1, 0);
-        else if (e.key === 'ArrowRight') movePlayer(1, 0);
-        else if (e.key === 'ArrowUp') movePlayer(0, -1);
-        else if (e.key === 'ArrowDown') movePlayer(0, 1);
-        else if (e.key === ' ' || e.key === 'Space') { e.preventDefault(); placeBlock(); }
-        else if (e.key === 'r' || e.key === 'R') clearBlocks();
-    });
-
-    // ============================================================
-    //  TAAKCHECK: vergelijk grid met voorbeeld
-    // ============================================================
-    function checkTaskCompletion() {
-        const shape = birdTaskActive ? birdShape : exampleShape;
-        const rows = shape.length;
-        const cols = shape[0].length;
-        // Zoek naar patroon op grid
-        let found = false;
-        for (let r = 0; r <= ROWS - rows; r++) {
-            for (let c = 0; c <= COLS - cols; c++) {
-                let match = true;
-                for (let sr = 0; sr < rows; sr++) {
-                    for (let sc = 0; sc < cols; sc++) {
-                        const expected = shape[sr][sc];
-                        const actual = grid[r + sr][c + sc];
-                        if (expected !== actual) {
-                            match = false;
-                            break;
-                        }
-                    }
-                    if (!match) break;
-                }
-                if (match) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) break;
-        }
-
-        if (found) {
-            if (birdTaskActive) {
-                birdComplete = true;
-                document.getElementById('statusMessage').innerHTML = `🐦 <strong>VOGEL GEBOUWD!</strong> Geweldig! Je bent een echte bouwer!`;
-                document.getElementById('statusMessage').className = 'status-box success';
-            } else {
-                taskComplete = true;
-                birdTaskActive = true;
-                document.getElementById('statusMessage').innerHTML = `✅ <strong>Cijfer gebouwd!</strong> Bouw nu de vogel! 🐦`;
-                document.getElementById('statusMessage').className = 'status-box success';
-                updateExampleGrid('bird');
-                // Speel vogelgeluid
+            function triggerChatPopup(sender, text) {
                 playAlertSound();
+                const alertBox = document.getElementById('popupAlert');
+                const alertText = document.getElementById('popupText');
+                alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
+                alertBox.style.display = 'block';
+                setTimeout(() => { alertBox.style.display = 'none'; }, 6000);
+
+                const chatLog = document.getElementById('chatLog');
+                if (chatLog.children[0] && chatLog.children[0].innerText.includes("Nog geen berichten")) {
+                    chatLog.innerHTML = "";
+                }
+                const newEntry = document.createElement('div');
+                newEntry.className = 'chat-entry';
+                newEntry.innerHTML = `<strong style="color: #f59e0b;">${sender}:</strong> ${text}`;
+                chatLog.appendChild(newEntry);
+                chatLog.scrollTop = chatLog.scrollHeight;
             }
-        }
-    }
 
-    // ============================================================
-    //  VOORBEELD WEERGAVE
-    // ============================================================
-    function updateExampleGrid(type) {
-        const container = document.getElementById('exampleGrid');
-        container.innerHTML = '';
-        let shape = type === 'bird' ? birdShape : exampleShape;
-        const rows = shape.length;
-        const cols = shape[0].length;
-        container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const cell = document.createElement('div');
-                cell.className = 'grid-cell' + (shape[r][c] ? ' filled' : '');
-                if (type === 'bird' && shape[r][c]) cell.className += ' filled-blue';
-                container.appendChild(cell);
+            const OPDACHTEN = {
+                vogel: {
+                    titel: '🐦 Bouw een vogel',
+                    beschrijving: 'Maak een vogel met een oranje lijf, blauwe vleugels en een gele kop.',
+                    hint: '💡 Begin met het lijf (oranje) op de grond, dan vleugels (blauw) links en rechts, en de kop (geel) bovenop.',
+                    stappen: [
+                        { tekst: 'Lijf: oranje blok op de grond', check: () => blocks.filter(b => b.userData.color === '#ff6b6b' && Math.abs(b.userData.y - 0) < 0.1).length > 0 },
+                        { tekst: 'Vleugels: 2 blauwe blokken', check: () => blocks.filter(b => b.userData.color === '#45b7d1' && Math.abs(b.userData.y - 0) < 0.1).length >= 2 },
+                        { tekst: 'Kop: geel blok bovenop', check: () => blocks.filter(b => b.userData.color === '#ffcc00' && b.userData.y >= 0.8).length > 0 }
+                    ],
+                    voorbeeld: [
+                        { x: 0, y: 0, z: 0, color: '#ff6b6b' }, { x: -1.2, y: 0, z: 0, color: '#45b7d1' }, { x: 1.2, y: 0, z: 0, color: '#45b7d1' }, { x: 0, y: 0.8, z: 0, color: '#ffcc00' }
+                    ]
+                },
+                cijfer2: {
+                    titel: '🔢 Bouw het cijfer 2',
+                    beschrijving: 'Maak het cijfer 2 met blokken.',
+                    hint: '💡 Begin bovenaan, maak een gebogen lijn en eindig met een streepje onderaan.',
+                    stappen: [
+                        { tekst: 'Boven: 3 blokken', check: () => blocks.filter(b => Math.abs(b.userData.y - 0.8) < 0.1).length >= 3 },
+                        { tekst: 'Diagonaal', check: () => blocks.filter(b => Math.abs(b.userData.y - 0.4) < 0.1).length >= 1 },
+                        { tekst: 'Onder: 3 blokken op grond', check: () => blocks.filter(b => Math.abs(b.userData.y - 0) < 0.1).length >= 3 }
+                    ],
+                    voorbeeld: [
+                        { x: -1, y: 0.8, z: 0, color: '#ff6b6b' }, { x: -0.5, y: 0.8, z: 0, color: '#ff6b6b' }, { x: 0, y: 0.8, z: 0, color: '#ff6b6b' },
+                        { x: 0.5, y: 0.4, z: 0, color: '#ff6b6b' }, { x: 0.5, y: 0, z: 0, color: '#ff6b6b' }, { x: 0, y: 0, z: 0, color: '#ff6b6b' },
+                        { x: -0.5, y: 0, z: 0, color: '#ff6b6b' }, { x: -1, y: 0, z: 0, color: '#ff6b6b' }
+                    ]
+                }
+            };
+
+            function initScene() {
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x87CEEB);
+                camera = new THREE.PerspectiveCamera(45, containerWrapper.clientWidth / containerWrapper.clientHeight, 0.1, 1000);
+                updateCamera();
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(containerWrapper.clientWidth, containerWrapper.clientHeight);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                document.getElementById('game-container').appendChild(renderer.domElement);
+
+                scene.add(new THREE.AmbientLight(0x404060, 0.6));
+                const sun = new THREE.DirectionalLight(0xffeedd, 1.2);
+                sun.position.set(15, 25, 10);
+                sun.castShadow = true;
+                sun.shadow.mapSize.width = 2048; sun.shadow.mapSize.height = 2048;
+                const d = 25; sun.shadow.camera.left = -d; sun.shadow.camera.right = d; sun.shadow.camera.top = d; sun.shadow.camera.bottom = -d;
+                scene.add(sun);
+                scene.add(new THREE.HemisphereLight(0x87CEEB, 0x3a7d44, 0.4));
             }
-        }
-    }
 
-    // ============================================================
-    //  POP-UP & CHAT
-    // ============================================================
-    function playAlertSound() {
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
-            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.15);
-        } catch(e) { /* stil */ }
-    }
-
-    function triggerPopup(sender, text) {
-        playAlertSound();
-        const alertBox = document.getElementById('popupAlert');
-        const alertText = document.getElementById('popupText');
-        alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
-        alertBox.style.display = 'block';
-        setTimeout(() => { alertBox.style.display = 'none'; }, 6000);
-
-        // Chat log
-        const chatLog = document.getElementById('chatLog');
-        if (chatLog.children[0] && chatLog.children[0].innerText.includes('Wacht op berichten')) {
-            chatLog.innerHTML = '';
-        }
-        const entry = document.createElement('div');
-        entry.className = 'chat-entry';
-        entry.innerHTML = `<span class="sender">${sender}:</span> ${text}`;
-        chatLog.appendChild(entry);
-        chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    // ============================================================
-    //  TIMER
-    // ============================================================
-    function startTimer() {
-        if (timerInterval) return;
-        timerInterval = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                gameActive = false;
-                document.getElementById('gameTimer').innerHTML = `<i class="fa-solid fa-clock"></i> 00:00`;
-                document.getElementById('statusMessage').innerHTML = `⏰ <strong>Tijd is om!</strong> Vul de vragen hieronder in.`;
-                document.getElementById('statusMessage').className = 'status-box fail';
-                return;
+            function createGround() {
+                const geo = new THREE.PlaneGeometry(30, 30);
+                const mat = new THREE.MeshStandardMaterial({ color: 0x5da130, roughness: 0.9 });
+                ground = new THREE.Mesh(geo, mat);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                scene.add(ground);
+                const grid = new THREE.GridHelper(30, 20, 0x88ff88, 0x44aa44);
+                grid.position.y = 0.01;
+                scene.add(grid);
             }
-            timeLeft--;
-            const mins = Math.floor(timeLeft / 60);
-            const secs = timeLeft % 60;
-            document.getElementById('gameTimer').innerHTML = 
-                `<i class="fa-solid fa-clock"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
-            // Pop-up check
-            const match = popups.find(p => p.time === timeLeft);
-            if (match) {
-                triggerPopup(match.sender, match.text);
+            function addBlockToScene(x, y, z, color = null) {
+                const finalColor = color || selectedColor;
+                const geo = new THREE.BoxGeometry(BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                const mat = new THREE.MeshStandardMaterial({ color: finalColor, roughness: 0.4 });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(x, y + BLOCK_SIZE / 2, z);
+                mesh.castShadow = true; mesh.receiveShadow = true;
+                mesh.userData = { isBlock: true, color: finalColor, x, y, z };
+                scene.add(mesh); blocks.push(mesh);
+                blockCount++; updateBlockCounter(); checkOpdracht();
+                return mesh;
             }
-        }, 1000);
-    }
 
-    // ============================================================
-    //  INIT
-    // ============================================================
-    updateExampleGrid('2');
-    document.getElementById('blockCount').textContent = '0';
-    draw();
-    startTimer();
+            function removeBlock(mesh) {
+                if (!mesh || !mesh.userData.isBlock) return;
+                scene.remove(mesh);
+                const idx = blocks.indexOf(mesh);
+                if (idx > -1) blocks.splice(idx, 1);
+                blockCount--; updateBlockCounter();
+                mesh.geometry.dispose(); mesh.material.dispose();
+                checkOpdracht();
+            }
 
-    // Animatielus
-    setInterval(draw, 100);
+            function getHeightAt(x, z) {
+                let maxY = 0;
+                for (let b of blocks) {
+                    if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4) {
+                        const top = b.userData.y + BLOCK_SIZE;
+                        if (top > maxY) maxY = top;
+                    }
+                }
+                return maxY;
+            }
 
-    // Expose functies voor HTML
-    window.movePlayer = (dx) => { movePlayer(dx > 0 ? 1 : -1, 0); };
-    window.placeBlock = placeBlock;
-    window.removeBlock = removeBlock;
-    window.clearBlocks = clearBlocks;
+            function updateBlockCounter() { blockCountEl.textContent = blockCount; }
+            function updateScore(punten) { score += punten; scoreDisplayEl.textContent = score; }
 
-    console.log('🎮 Roblox Bouw-Simulator gestart! Bouw de "2" en daarna de vogel!');
-</script>
-</body>
-</html>
+            function getIntersection(event, objects) {
+                const rect = renderer.domElement.getBoundingClientRect();
+                const mouse = new THREE.Vector2();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(objects);
+                return intersects.length > 0 ? intersects[0] : null;
+            }
+
+            function updateCamera() {
+                camera.position.set(camDist * Math.cos(camTheta) * Math.cos(camPhi), camDist * Math.sin(camPhi), camDist * Math.sin(camTheta) * Math.cos(camPhi));
+                camera.lookAt(0, 0, 0);
+            }
+
+            function setupCameraControls() {
+                const container = renderer.domElement;
+                container.addEventListener('mousedown', (e) => { if (e.button === 0) { isDragging = true; prevMouse.x = e.clientX; prevMouse.y = e.clientY; } });
+                window.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    camTheta -= (e.clientX - prevMouse.x) * 0.005;
+                    camPhi += (e.clientY - prevMouse.y) * 0.005;
+                    camPhi = Math.max(-1.2, Math.min(1.2, camPhi));
+                    updateCamera(); prevMouse.x = e.clientX; prevMouse.y = e.clientY;
+                });
+                window.addEventListener('mouseup', () => { isDragging = false; });
+                container.addEventListener('wheel', (e) => {
+                    e.preventDefault(); camDist += e.deltaY * 0.02; camDist = Math.max(4, Math.min(30, camDist)); updateCamera();
+                }, { passive: false });
+            }
+
+            function startOpdracht(name) {
+                const opdracht = OPDACHTEN[name];
+                if (!opdracht) return;
+                currentOpdracht = name; voltooideStappen = new Set();
+                opdrachtPanel.classList.add('show');
+                opdrachtTitel.textContent = opdracht.titel;
+                opdrachtBeschrijving.textContent = opdracht.beschrijving;
+                opdrachtHint.textContent = opdracht.hint;
+                updateOpdrachtProgress();
+                voorbeeldContainer.classList.add('show');
+                voorbeeldTitel.textContent = '📐 Voorbeeld: ' + opdracht.titel.replace(/[🐦🔢]/g, '').trim();
+                tekenVoorbeeld(opdracht.voorbeeld); updateVoorbeeldStappen(opdracht.stappen);
+                if (!timerRunning) startTimer();
+                popupOverlay.classList.remove('show');
+            }
+
+            function closeOpdracht() {
+                opdrachtPanel.classList.### 🛠️ Webkwestie Update: VeiligBlox
+
+Ik help je hier heel graag mee! Je wilt de HTML-code voor de "VeiligBlox" bouwopdrachten[cite: 1] gebruiken als vervanging voor de eerdere digitale Roblox-omgeving. 
+
+De code die je hebt gedeeld is een compleet uitgewerkte, interactieve 3D-omgeving met onder andere:
+*   Een timer en scorebord[cite: 1].
+*   Een overzichtelijk bouwmenu met kleurkeuzes[cite: 1].
+*   Specifieke bouwopdrachten, zoals het bouwen van een vogel of het cijfer 2[cite: 1].
+
+**Ontbrekende informatie**
+Omdat ik als AI niet de volledige inhoud van onze vorige gesprekken in deze nieuwe sessie kan inzien, heb ik de tekst en opmaak van de *andere* webkwestie-taken op dit moment helaas niet voor me. Ik wil dit graag perfect voor je oplossen, maar heb daarvoor het originele document nodig.
+
+Zou je de tekst of code van de overige webkwestie-taken hieronder willen plakken, zodat ik de nieuwe VeiligBlox-omgeving er naadloos voor je in kan zetten?
