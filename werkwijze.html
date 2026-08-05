@@ -523,16 +523,256 @@
             }
 
             function closeOpdracht() {
-                opdrachtPanel.classList.### 🛠️ Webkwestie Update: VeiligBlox
+                opdrachtPanel.classList.remove('show');
+                voorbeeldContainer.classList.remove('show');
+                currentOpdracht = null;
+                voltooideStappen = new Set();
+                document.querySelectorAll('.opdracht-btn').forEach(b => b.classList.remove('active-opdracht'));
+                if (timerRunning) {
+                    clearInterval(timerInterval);
+                    timerRunning = false;
+                    timerDisplayEl.textContent = '⏱️ 3:00';
+                    timerDisplayEl.style.color = '#ff6b6b';
+                }
+            }
 
-Ik help je hier heel graag mee! Je wilt de HTML-code voor de "VeiligBlox" bouwopdrachten[cite: 1] gebruiken als vervanging voor de eerdere digitale Roblox-omgeving. 
+            function updateOpdrachtProgress() {
+                const opdracht = OPDACHTEN[currentOpdracht];
+                if (!opdracht) return;
+                const total = opdracht.stappen.length;
+                const done = voltooideStappen.size;
+                opdrachtProgress.textContent = 'Voortgang: ' + done + '/' + total + ' stappen';
+            }
 
-De code die je hebt gedeeld is een compleet uitgewerkte, interactieve 3D-omgeving met onder andere:
-*   Een timer en scorebord[cite: 1].
-*   Een overzichtelijk bouwmenu met kleurkeuzes[cite: 1].
-*   Specifieke bouwopdrachten, zoals het bouwen van een vogel of het cijfer 2[cite: 1].
+            function updateVoorbeeldStappen(stappen) {
+                let html = '';
+                stappen.forEach((stap, index) => {
+                    const done = voltooideStappen.has(index);
+                    html += `<li class="${done ? 'done' : ''}">${stap.tekst}</li>`;
+                });
+                voorbeeldStappen.innerHTML = html;
+            }
 
-**Ontbrekende informatie**
-Omdat ik als AI niet de volledige inhoud van onze vorige gesprekken in deze nieuwe sessie kan inzien, heb ik de tekst en opmaak van de *andere* webkwestie-taken op dit moment helaas niet voor me. Ik wil dit graag perfect voor je oplossen, maar heb daarvoor het originele document nodig.
+            function tekenVoorbeeld(blokken) {
+                const ctx = voorbeeldCanvas.getContext('2d');
+                ctx.clearRect(0, 0, 120, 120);
+                const scale = 16;
+                const ox = 60, oy = 100;
+                blokken.forEach(b => {
+                    const x = ox + b.x * scale;
+                    const y = oy - b.z * scale;
+                    const s = (b.size || 0.8) * scale;
+                    ctx.fillStyle = b.color;
+                    ctx.fillRect(x - s/2, y - s/2, s, s);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x - s/2, y - s/2, s, s);
+                });
+            }
 
-Zou je de tekst of code van de overige webkwestie-taken hieronder willen plakken, zodat ik de nieuwe VeiligBlox-omgeving er naadloos voor je in kan zetten?
+            function checkOpdracht() {
+                if (!currentOpdracht) return;
+                const opdracht = OPDACHTEN[currentOpdracht];
+                if (!opdracht) return;
+                let voltooid = 0;
+                opdracht.stappen.forEach((stap, index) => {
+                    const isVoltooid = stap.check();
+                    if (isVoltooid && !voltooideStappen.has(index)) {
+                        voltooideStappen.add(index);
+                        updateScore(10);
+                    }
+                    if (isVoltooid) voltooid++;
+                });
+                updateOpdrachtProgress();
+                updateVoorbeeldStappen(opdracht.stappen);
+                if (voltooid === opdracht.stappen.length) {
+                    updateScore(50);
+                    showPopup('🎉 Gefeliciteerd!', 'Je hebt de opdracht "' + opdracht.titel + '" voltooid! +50 punten!');
+                    blocks.forEach(b => {
+                        b.material.color.setHex(0xffd700);
+                        b.userData.color = '#ffd700';
+                    });
+                    closeOpdracht();
+                }
+            }
+
+            function showPopup(title, message) {
+                popupTitle.textContent = title;
+                popupMessage.textContent = message;
+                popupOverlay.classList.add('show');
+                setTimeout(() => { popupOverlay.classList.remove('show'); }, 5000);
+            }
+
+            popupBtn.addEventListener('click', () => { popupOverlay.classList.remove('show'); });
+
+            function startTimer() {
+                if (timerRunning) return;
+                timerRunning = true;
+                timerSeconds = 180;
+                timerWarningShown = false;
+                timerWarningEl.style.display = 'none';
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    if (timerSeconds <= 30 && !timerWarningShown) {
+                        timerWarningShown = true;
+                        timerWarningEl.style.display = 'block';
+                        setTimeout(() => { timerWarningEl.style.display = 'none'; }, 3000);
+                    }
+                    // Check of er een chatpopup moet komen
+                    chatPopups.forEach(p => {
+                        if (p.time === timerSeconds) {
+                            triggerChatPopup(p.sender, p.text);
+                        }
+                    });
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        showPopup('⏰ Tijd is om!', 'Je hebt de tijd niet gehaald. Probeer het nog een keer!');
+                        closeOpdracht();
+                    }
+                }, 1000);
+            }
+
+            function updateTimerDisplay() {
+                const min = Math.floor(timerSeconds / 60);
+                const sec = timerSeconds % 60;
+                timerDisplayEl.textContent = '⏱️ ' + String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+                timerDisplayEl.style.color = timerSeconds <= 30 ? '#ff4444' : '#ff6b6b';
+            }
+
+            // --- UI Events ---
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedColor = this.dataset.color;
+                    if (deleteMode) { deleteMode = false; deleteBtn.classList.remove('delete-mode'); deleteBtn.textContent = '🗑️ Verwijder'; }
+                });
+            });
+
+            deleteBtn.addEventListener('click', function() {
+                deleteMode = !deleteMode;
+                this.classList.toggle('delete-mode');
+                this.textContent = deleteMode ? '✅ Plaatsen' : '🗑️ Verwijder';
+            });
+
+            clearBtn.addEventListener('click', () => {
+                if (blockCount === 0) return;
+                if (confirm('Weet je zeker dat je alle blokken wilt verwijderen?')) {
+                    while (blocks.length > 0) {
+                        const b = blocks.pop();
+                        scene.remove(b);
+                        b.geometry.dispose();
+                        b.material.dispose();
+                    }
+                    blockCount = 0;
+                    updateBlockCounter();
+                    checkOpdracht();
+                }
+            });
+
+            document.querySelectorAll('.opdracht-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.opdracht;
+                    document.querySelectorAll('.opdracht-btn').forEach(b => b.classList.remove('active-opdracht'));
+                    this.classList.add('active-opdracht');
+                    if (blockCount > 0) {
+                        if (confirm('Wil je de huidige bouwwerken wissen voor een schone start?')) {
+                            while (blocks.length > 0) {
+                                const b = blocks.pop();
+                                scene.remove(b);
+                                b.geometry.dispose();
+                                b.material.dispose();
+                            }
+                            blockCount = 0;
+                            updateBlockCounter();
+                        }
+                    }
+                    startOpdracht(name);
+                });
+            });
+
+            closeOpdrachtBtn.addEventListener('click', closeOpdracht);
+
+            // --- Click/Rechtsklik voor bouwen ---
+            renderer.domElement.addEventListener('click', (e) => {
+                if (e.button !== 0) return;
+                if (deleteMode) {
+                    const hit = getIntersection(e, blocks);
+                    if (hit) removeBlock(hit.object);
+                    return;
+                }
+                const hit = getIntersection(e, [ground]);
+                if (hit) {
+                    const x = Math.round(hit.point.x / GRID) * GRID;
+                    const z = Math.round(hit.point.z / GRID) * GRID;
+                    // Check of er al een blok staat op (x,z) y=0
+                    let occupied = false;
+                    for (let b of blocks) {
+                        if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4 && Math.abs(b.userData.y - 0) < 0.1) {
+                            occupied = true; break;
+                        }
+                    }
+                    if (!occupied && blockCount < MAX_BLOCKS) {
+                        const y = getHeightAt(x, z);
+                        addBlockToScene(x, y, z);
+                    }
+                }
+            });
+
+            renderer.domElement.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                const hit = getIntersection(e, blocks);
+                if (hit) removeBlock(hit.object);
+            });
+
+            // --- Resize ---
+            window.addEventListener('resize', () => {
+                const w = containerWrapper.clientWidth;
+                const h = containerWrapper.clientHeight;
+                if (camera) {
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(w, h);
+                }
+            });
+
+            // --- Start ---
+            function init() {
+                initScene();
+                createGround();
+                setupCameraControls();
+                // Voeg wat startdecoratie toe (bomen, huisje)
+                const treeMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57 });
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const r = 11;
+                    const x = Math.cos(angle) * r;
+                    const z = Math.sin(angle) * r;
+                    // boomstam
+                    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 1.5, 6), new THREE.MeshStandardMaterial({ color: 0x8B5A2B }));
+                    trunk.position.set(x, 0.75, z);
+                    trunk.castShadow = true; trunk.receiveShadow = true;
+                    scene.add(trunk);
+                    // bladeren
+                    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.8, 6, 6), treeMat);
+                    leaf.position.set(x, 2.0, z);
+                    leaf.castShadow = true; leaf.receiveShadow = true;
+                    scene.add(leaf);
+                }
+                // Start animatie
+                function animate() {
+                    requestAnimationFrame(animate);
+                    renderer.render(scene, camera);
+                }
+                animate();
+            }
+
+            init();
+
+        })();
+    </script>
+</body>
+</html>
