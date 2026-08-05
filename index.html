@@ -63,6 +63,53 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+    /* Hover / Tooltip stijl voor ronselaars */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted #003366;
+            color: #003366;
+            font-weight: bold;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #002244;
+            color: #ffffff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 1.4;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+            border: 1px solid #ffcc00;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #002244 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
 }
     </style>
 </head>
