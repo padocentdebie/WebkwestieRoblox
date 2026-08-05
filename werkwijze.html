@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Politiedossier Roblox - Werkwijze</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- THREE.JS VOOR VEILIGBLOX -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* MAIN WEBKWESTIE STYLES */
+        /* MAIN WEBKWESTIE STYLES (ongewijzigd) */
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
         .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
         .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
@@ -18,12 +17,10 @@
         
         .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
         .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
-
         .form-group { margin-bottom: 15px; }
         label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
         input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
         textarea { height: 80px; resize: vertical; }
-
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
 
@@ -33,7 +30,7 @@
         .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
         .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
 
-        /* VEILIGBLOX 3D GAME STYLES (SCOPED) */
+        /* VEILIGBLOX 3D GAME STYLES */
         #veiligblox-wrapper {
             position: relative;
             width: 100%;
@@ -47,6 +44,8 @@
         }
         #veiligblox-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
         #game-container { width: 100%; height: 100%; display: block; }
+        /* Zorg dat de canvas de volledige container vult */
+        #game-container canvas { display: block; width: 100% !important; height: 100% !important; }
         #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
         #game-header {
@@ -129,8 +128,8 @@
 <body>
 
     <div class="header-main">
-        <h1 style="margin: 0;">POLITIE CYBER CRIME DOSSIER</h1>
-        <p style="margin: 5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
+        <h1 style="margin:0;">POLITIE CYBER CRIME DOSSIER</h1>
+        <p style="margin:5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
     <div class="nav">
@@ -151,9 +150,9 @@
         <div id="popupAlert" class="chat-popup-alert">
             <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
         </div>
-        <p style="font-size: 13px; color: #64748b; font-weight: bold; margin-bottom: 5px;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
+        <p style="font-size:13px; color:#64748b; font-weight:bold; margin-bottom:5px;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
         <div class="chat-log" id="chatLog">
-            <div style="color: #94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
+            <div style="color:#94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
         </div>
 
         <!-- 3D VEILIGBLOX INTEGRATIE -->
@@ -277,7 +276,6 @@
         <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
-    <!-- SCRIPT VOOR VEILIGBLOX EN CHAT LOGICA -->
     <script>
         (function() {
             'use strict';
@@ -294,7 +292,7 @@
             let currentOpdracht = null;
             let voltooideStappen = new Set();
 
-            let timerSeconds = 180; 
+            let timerSeconds = 180;
             let timerInterval = null;
             let timerRunning = false;
             let timerWarningShown = false;
@@ -328,7 +326,6 @@
             const popupMessage = document.getElementById('popup-message');
             const popupBtn = document.getElementById('popup-btn');
 
-            // --- Chat Popup Config ---
             const chatPopups = [
                 { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
                 { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
@@ -343,8 +340,8 @@
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
-                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); 
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
                     gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
                     osc.connect(gain);
@@ -407,22 +404,46 @@
             function initScene() {
                 scene = new THREE.Scene();
                 scene.background = new THREE.Color(0x87CEEB);
-                camera = new THREE.PerspectiveCamera(45, containerWrapper.clientWidth / containerWrapper.clientHeight, 0.1, 1000);
+
+                const aspect = containerWrapper.clientWidth / containerWrapper.clientHeight;
+                camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
                 updateCamera();
+
                 renderer = new THREE.WebGLRenderer({ antialias: true });
                 renderer.setSize(containerWrapper.clientWidth, containerWrapper.clientHeight);
                 renderer.shadowMap.enabled = true;
                 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                document.getElementById('game-container').appendChild(renderer.domElement);
+                // Zorg dat de canvas de container vult
+                renderer.domElement.style.display = 'block';
+                renderer.domElement.style.width = '100%';
+                renderer.domElement.style.height = '100%';
+                const container = document.getElementById('game-container');
+                container.appendChild(renderer.domElement);
 
-                scene.add(new THREE.AmbientLight(0x404060, 0.6));
+                // Licht
+                const ambient = new THREE.AmbientLight(0x404060, 0.6);
+                scene.add(ambient);
+
                 const sun = new THREE.DirectionalLight(0xffeedd, 1.2);
                 sun.position.set(15, 25, 10);
                 sun.castShadow = true;
-                sun.shadow.mapSize.width = 2048; sun.shadow.mapSize.height = 2048;
-                const d = 25; sun.shadow.camera.left = -d; sun.shadow.camera.right = d; sun.shadow.camera.top = d; sun.shadow.camera.bottom = -d;
+                sun.shadow.mapSize.width = 2048;
+                sun.shadow.mapSize.height = 2048;
+                const d = 25;
+                sun.shadow.camera.left = -d;
+                sun.shadow.camera.right = d;
+                sun.shadow.camera.top = d;
+                sun.shadow.camera.bottom = -d;
+                sun.shadow.camera.near = 1;
+                sun.shadow.camera.far = 40;
                 scene.add(sun);
-                scene.add(new THREE.HemisphereLight(0x87CEEB, 0x3a7d44, 0.4));
+
+                const fill = new THREE.DirectionalLight(0x8888ff, 0.3);
+                fill.position.set(-10, 5, -10);
+                scene.add(fill);
+
+                const hemi = new THREE.HemisphereLight(0x87CEEB, 0x3a7d44, 0.4);
+                scene.add(hemi);
             }
 
             function createGround() {
@@ -430,8 +451,11 @@
                 const mat = new THREE.MeshStandardMaterial({ color: 0x5da130, roughness: 0.9 });
                 ground = new THREE.Mesh(geo, mat);
                 ground.rotation.x = -Math.PI / 2;
+                ground.position.y = 0;
                 ground.receiveShadow = true;
+                ground.name = 'ground';
                 scene.add(ground);
+
                 const grid = new THREE.GridHelper(30, 20, 0x88ff88, 0x44aa44);
                 grid.position.y = 0.01;
                 scene.add(grid);
@@ -443,10 +467,14 @@
                 const mat = new THREE.MeshStandardMaterial({ color: finalColor, roughness: 0.4 });
                 const mesh = new THREE.Mesh(geo, mat);
                 mesh.position.set(x, y + BLOCK_SIZE / 2, z);
-                mesh.castShadow = true; mesh.receiveShadow = true;
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
                 mesh.userData = { isBlock: true, color: finalColor, x, y, z };
-                scene.add(mesh); blocks.push(mesh);
-                blockCount++; updateBlockCounter(); checkOpdracht();
+                scene.add(mesh);
+                blocks.push(mesh);
+                blockCount++;
+                updateBlockCounter();
+                checkOpdracht();
                 return mesh;
             }
 
@@ -455,8 +483,10 @@
                 scene.remove(mesh);
                 const idx = blocks.indexOf(mesh);
                 if (idx > -1) blocks.splice(idx, 1);
-                blockCount--; updateBlockCounter();
-                mesh.geometry.dispose(); mesh.material.dispose();
+                blockCount--;
+                updateBlockCounter();
+                mesh.geometry.dispose();
+                mesh.material.dispose();
                 checkOpdracht();
             }
 
@@ -471,8 +501,14 @@
                 return maxY;
             }
 
-            function updateBlockCounter() { blockCountEl.textContent = blockCount; }
-            function updateScore(punten) { score += punten; scoreDisplayEl.textContent = score; }
+            function updateBlockCounter() {
+                blockCountEl.textContent = blockCount;
+            }
+
+            function updateScore(punten) {
+                score += punten;
+                scoreDisplayEl.textContent = score;
+            }
 
             function getIntersection(event, objects) {
                 const rect = renderer.domElement.getBoundingClientRect();
@@ -486,30 +522,47 @@
             }
 
             function updateCamera() {
-                camera.position.set(camDist * Math.cos(camTheta) * Math.cos(camPhi), camDist * Math.sin(camPhi), camDist * Math.sin(camTheta) * Math.cos(camPhi));
+                const x = camDist * Math.cos(camTheta) * Math.cos(camPhi);
+                const y = camDist * Math.sin(camPhi);
+                const z = camDist * Math.sin(camTheta) * Math.cos(camPhi);
+                camera.position.set(x, y, z);
                 camera.lookAt(0, 0, 0);
             }
 
             function setupCameraControls() {
                 const container = renderer.domElement;
-                container.addEventListener('mousedown', (e) => { if (e.button === 0) { isDragging = true; prevMouse.x = e.clientX; prevMouse.y = e.clientY; } });
+                container.addEventListener('mousedown', (e) => {
+                    if (e.button === 0) {
+                        isDragging = true;
+                        prevMouse.x = e.clientX;
+                        prevMouse.y = e.clientY;
+                    }
+                });
                 window.addEventListener('mousemove', (e) => {
                     if (!isDragging) return;
-                    camTheta -= (e.clientX - prevMouse.x) * 0.005;
-                    camPhi += (e.clientY - prevMouse.y) * 0.005;
+                    const dx = e.clientX - prevMouse.x;
+                    const dy = e.clientY - prevMouse.y;
+                    camTheta -= dx * 0.005;
+                    camPhi += dy * 0.005;
                     camPhi = Math.max(-1.2, Math.min(1.2, camPhi));
-                    updateCamera(); prevMouse.x = e.clientX; prevMouse.y = e.clientY;
+                    updateCamera();
+                    prevMouse.x = e.clientX;
+                    prevMouse.y = e.clientY;
                 });
                 window.addEventListener('mouseup', () => { isDragging = false; });
                 container.addEventListener('wheel', (e) => {
-                    e.preventDefault(); camDist += e.deltaY * 0.02; camDist = Math.max(4, Math.min(30, camDist)); updateCamera();
+                    e.preventDefault();
+                    camDist += e.deltaY * 0.02;
+                    camDist = Math.max(4, Math.min(30, camDist));
+                    updateCamera();
                 }, { passive: false });
             }
 
             function startOpdracht(name) {
                 const opdracht = OPDACHTEN[name];
                 if (!opdracht) return;
-                currentOpdracht = name; voltooideStappen = new Set();
+                currentOpdracht = name;
+                voltooideStappen = new Set();
                 opdrachtPanel.classList.add('show');
                 opdrachtTitel.textContent = opdracht.titel;
                 opdrachtBeschrijving.textContent = opdracht.beschrijving;
@@ -517,7 +570,8 @@
                 updateOpdrachtProgress();
                 voorbeeldContainer.classList.add('show');
                 voorbeeldTitel.textContent = '📐 Voorbeeld: ' + opdracht.titel.replace(/[🐦🔢]/g, '').trim();
-                tekenVoorbeeld(opdracht.voorbeeld); updateVoorbeeldStappen(opdracht.stappen);
+                tekenVoorbeeld(opdracht.voorbeeld);
+                updateVoorbeeldStappen(opdracht.stappen);
                 if (!timerRunning) startTimer();
                 popupOverlay.classList.remove('show');
             }
@@ -557,16 +611,17 @@
                 const ctx = voorbeeldCanvas.getContext('2d');
                 ctx.clearRect(0, 0, 120, 120);
                 const scale = 16;
-                const ox = 60, oy = 100;
+                const ox = 60,
+                    oy = 100;
                 blokken.forEach(b => {
                     const x = ox + b.x * scale;
                     const y = oy - b.z * scale;
                     const s = (b.size || 0.8) * scale;
                     ctx.fillStyle = b.color;
-                    ctx.fillRect(x - s/2, y - s/2, s, s);
+                    ctx.fillRect(x - s / 2, y - s / 2, s, s);
                     ctx.strokeStyle = '#333';
                     ctx.lineWidth = 1;
-                    ctx.strokeRect(x - s/2, y - s/2, s, s);
+                    ctx.strokeRect(x - s / 2, y - s / 2, s, s);
                 });
             }
 
@@ -620,7 +675,6 @@
                         timerWarningEl.style.display = 'block';
                         setTimeout(() => { timerWarningEl.style.display = 'none'; }, 3000);
                     }
-                    // Check of er een chatpopup moet komen
                     chatPopups.forEach(p => {
                         if (p.time === timerSeconds) {
                             triggerChatPopup(p.sender, p.text);
@@ -648,7 +702,11 @@
                     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     selectedColor = this.dataset.color;
-                    if (deleteMode) { deleteMode = false; deleteBtn.classList.remove('delete-mode'); deleteBtn.textContent = '🗑️ Verwijder'; }
+                    if (deleteMode) {
+                        deleteMode = false;
+                        deleteBtn.classList.remove('delete-mode');
+                        deleteBtn.textContent = '🗑️ Verwijder';
+                    }
                 });
             });
 
@@ -696,7 +754,7 @@
 
             closeOpdrachtBtn.addEventListener('click', closeOpdracht);
 
-            // --- Click/Rechtsklik voor bouwen ---
+            // --- Click / Rechtsklik voor bouwen ---
             renderer.domElement.addEventListener('click', (e) => {
                 if (e.button !== 0) return;
                 if (deleteMode) {
@@ -708,11 +766,11 @@
                 if (hit) {
                     const x = Math.round(hit.point.x / GRID) * GRID;
                     const z = Math.round(hit.point.z / GRID) * GRID;
-                    // Check of er al een blok staat op (x,z) y=0
                     let occupied = false;
                     for (let b of blocks) {
                         if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4 && Math.abs(b.userData.y - 0) < 0.1) {
-                            occupied = true; break;
+                            occupied = true;
+                            break;
                         }
                     }
                     if (!occupied && blockCount < MAX_BLOCKS) {
@@ -739,35 +797,46 @@
                 }
             });
 
-            // --- Start ---
+            // --- Decoratie (bomen en enkele startblokken) ---
+            function addDecoration() {
+                const treeMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57 });
+                const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8B5A2B });
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const r = 10;
+                    const x = Math.cos(angle) * r;
+                    const z = Math.sin(angle) * r;
+                    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 1.5, 6), trunkMat);
+                    trunk.position.set(x, 0.75, z);
+                    trunk.castShadow = true;
+                    trunk.receiveShadow = true;
+                    scene.add(trunk);
+                    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.8, 6, 6), treeMat);
+                    leaf.position.set(x, 2.0, z);
+                    leaf.castShadow = true;
+                    leaf.receiveShadow = true;
+                    scene.add(leaf);
+                }
+                // Startblokken (voorbeeld)
+                addBlockToScene(0, 0, 0, '#ff6b6b');
+                addBlockToScene(1.2, 0, 0, '#45b7d1');
+                addBlockToScene(-1.2, 0, 0, '#45b7d1');
+                addBlockToScene(0, 0.8, 0, '#ffcc00');
+            }
+
+            // --- INIT ---
             function init() {
                 initScene();
                 createGround();
                 setupCameraControls();
-                // Voeg wat startdecoratie toe (bomen, huisje)
-                const treeMat = new THREE.MeshStandardMaterial({ color: 0x2e8b57 });
-                for (let i = 0; i < 6; i++) {
-                    const angle = (i / 6) * Math.PI * 2;
-                    const r = 11;
-                    const x = Math.cos(angle) * r;
-                    const z = Math.sin(angle) * r;
-                    // boomstam
-                    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 1.5, 6), new THREE.MeshStandardMaterial({ color: 0x8B5A2B }));
-                    trunk.position.set(x, 0.75, z);
-                    trunk.castShadow = true; trunk.receiveShadow = true;
-                    scene.add(trunk);
-                    // bladeren
-                    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.8, 6, 6), treeMat);
-                    leaf.position.set(x, 2.0, z);
-                    leaf.castShadow = true; leaf.receiveShadow = true;
-                    scene.add(leaf);
-                }
-                // Start animatie
+                addDecoration();
+                // Start animatie loop
                 function animate() {
                     requestAnimationFrame(animate);
                     renderer.render(scene, camera);
                 }
                 animate();
+                console.log('VeiligBlox gestart');
             }
 
             init();
