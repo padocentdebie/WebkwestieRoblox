@@ -15,24 +15,31 @@
         
         .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
         .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
-        
-        /* Tooltip hover effect */
-        .tooltip { position: relative; display: inline-block; border-bottom: 2px dotted #003366; color: #003366; font-weight: bold; cursor: help; }
-        .tooltip .tooltiptext { visibility: hidden; width: 250px; background-color: #002244; color: #ffffff; text-align: left; border-radius: 6px; padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 13px; font-weight: normal; line-height: 1.4; box-shadow: 0px 4px 8px rgba(0,0,0,0.2); border: 1px solid #ffcc00; }
-        .tooltip .tooltiptext::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #002244 transparent transparent transparent; }
-        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
 
-        /* Simulator styling */
-        .simulator-box { background-color: #1a1a2e; border-radius: 8px; padding: 15px; color: white; margin: 15px 0; }
-        .sim-screen { background-color: #0f0f1b; padding: 10px; border-radius: 6px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-popup { background-color: #252542; padding: 10px; border-radius: 6px; border-left: 4px solid #4a4e69; font-size: 14px; }
-        .chat-popup.suspicious { border-left-color: #e63946; background-color: #2d1b24; }
-        .user-name { font-weight: bold; color: #ff9e00; font-size: 13px; }
+        /* Game & Simulator Container */
+        .game-wrapper { background: #111827; border-radius: 8px; padding: 15px; color: white; margin: 20px 0; }
+        .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; }
+        .timer-badge { background: #e63946; padding: 5px 12px; border-radius: 20px; font-size: 16px; color: white; }
+        
+        #gameCanvas { background: #1f2937; border-radius: 6px; display: block; width: 100%; height: 300px; cursor: pointer; border: 2px solid #374151; }
+        
+        .game-controls { margin-top: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .btn-game { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-game:hover { background: #1d4ed8; }
+
+        /* Pop-up meldingen over het spel */
+        .popup-overlay { position: relative; }
+        .chat-popup-alert { display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 12px; border-radius: 6px; margin-top: 10px; font-weight: bold; animation: pulse 0.5s ease-in-out; }
+        @keyframes pulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+        .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-top: 10px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; }
+        .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
 
         /* Formstijlen */
         .form-group { margin-bottom: 15px; }
         label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
-        input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        textarea { height: 80px; resize: vertical; }
 
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
@@ -56,78 +63,83 @@
     </div>
 
     <div class="container">
-        <h2>3. Werkwijze: Rolverdeling & Opdrachten</h2>
-        <p>Verdeeld in teams van 3 Junior Rechercheurs heeft ieder groepslid een eigen taak:</p>
+        <h2>3. Werkwijze: Roblox Simulatie & Analyse</h2>
+        <p>Speel hieronder het Roblox-stappelspel. Terwijl je bouwt, verschijnen er berichten van andere spelers. <strong>Let goed op wat er voorbij komt!</strong> Je hebt precies 3 minuten de tijd.</p>
+
+        <!-- ROBOLX MINI-GAME SIMULATOR -->
+        <div class="game-wrapper">
+            <div class="game-header">
+                <span><i class="fa-solid fa-cubes"></i> Roblox Bouw-Simulator</span>
+                <span class="timer-badge" id="gameTimer"><i class="fa-solid fa-clock"></i> 03:00</span>
+            </div>
+
+            <canvas id="gameCanvas" width="800" height="300"></canvas>
+
+            <div class="game-controls">
+                <button class="btn-game" onclick="movePlayer(-15)"><i class="fa-solid fa-arrow-left"></i> Links</button>
+                <button class="btn-game" onclick="movePlayer(15)">Rechts <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn-game" style="background:#16a34a;" onclick="placeBlock()"><i class="fa-solid fa-plus"></i> Plaats Blokje</button>
+            </div>
+
+            <!-- INCOMING POPUP ALERT -->
+            <div class="popup-overlay">
+                <div id="popupAlert" class="chat-popup-alert">
+                    <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
+                </div>
+            </div>
+
+            <!-- CHAT LOG VOOR BEWIJSMATERIAAL -->
+            <p style="margin-top: 15px; font-size: 13px; color: #9ca3af;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
+            <div class="chat-log" id="chatLog">
+                <div style="color: #64748b;">Nog geen berichten ontvangen... Start de timer of begin met spelen.</div>
+            </div>
+        </div>
 
         <!-- RECHERCHEUR 1 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
-            <p><strong>De opdracht is:</strong> Maak een Verhoor-Checklist. Je komt 
-                <span class="tooltip">ronselaars
-                    <span class="tooltiptext"><strong>Wat is een ronselaar?</strong><br>Een volwassene met kwade bedoelingen die mooie beloftes, cadeautjes of gratis Robux aanbiedt.</span>
-                </span> 
-                tegen. Noteer de nep-naam, noteer de tekst die jij verdacht vindt. Hoeveel ronselaars ben je tegengekomen?
-            </p>
-
-            <!-- SIMULATOR -->
-            <div class="simulator-box">
-                <strong><i class="fa-solid fa-gamepad"></i> Virtuele Roblox Chat Simulator:</strong>
-                <div class="sim-screen" style="margin-top: 8px;">
-                    <div class="chat-popup"><span class="user-name">CoolBoy99:</span> "Hey! Wil je samen Obby spelen?"</div>
-                    <div class="chat-popup suspicious"><span class="user-name">ShadowMaster_X [VERDACHT]:</span> "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen."</div>
-                    <div class="chat-popup suspicious"><span class="user-name">SecretFriend_2011 [VERDACHT]:</span> "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!"</div>
-                    <div class="chat-popup"><span class="user-name">BuilderGirl_NL:</span> "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon."</div>
-                    <div class="chat-popup suspicious"><span class="user-name">VIP_Gamer_007 [VERDACHT]:</span> "Stuur me een privéfoto van jezelf voor toegang tot de VIP server."</div>
-                </div>
-            </div>
 
             <div class="form-group">
-                <label>Hoeveel ronselaars ben je tegengekomen?</label>
-                <input type="number" placeholder="Vul het aantal in (bijv. 3)">
+                <label>Hoeveel ronselaars ben je tegengekomen tijdens het spelen?</label>
+                <input type="number">
             </div>
             <div class="form-group">
                 <label>Noteer de nep-namen van de verdachte accounts:</label>
-                <input type="text" placeholder="Bijv. ShadowMaster_X, SecretFriend_2011...">
+                <input type="text">
             </div>
             <div class="form-group">
-                <label>Noteer de tekst die jij verdacht vindt:</label>
-                <textarea placeholder="Bijv. Vragen om wachtwoorden, privéfoto's of geheim overstappen naar Telegram..."></textarea>
+                <label>Noteer de tekst die jij verdacht vindt en leg uit waarom jij dit verdacht vindt:</label>
+                <textarea></textarea>
             </div>
         </div>
 
         <!-- RECHERCHEUR 2 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
-            <p><strong>De opdracht is:</strong> Bekijk de verdachte accounts uit de simulator hierboven.</p>
             <div class="form-group">
                 <label>Welke naam gebruikt de verdachte persoon?</label>
-                <input type="text" placeholder="Voer hier de verdachte gebruikersnaam in...">
+                <input type="text">
             </div>
             <div class="form-group">
                 <label>Wat wil deze persoon van jou?</label>
-                <textarea placeholder="Bijv. Mijn wachtwoord, privéfoto's of dat ik mee ga naar een andere app..."></textarea>
+                <textarea></textarea>
             </div>
         </div>
 
         <!-- RECHERCHEUR 3 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
-            <p><strong>De opdracht is:</strong> Maak het Noodprotocol. Wat moet jouw klasgenoot doen als hij of zij te maken heeft met 
-                <span class="tooltip">ronselaars
-                    <span class="tooltiptext"><strong>Onthoud de regels:</strong> Bewijs maken (screenshot), blokkeren en direct melden bij een volwassene!</span>
-                </span>?
-            </p>
             <div class="form-group">
                 <label>Stap 1 (Bewijs): Wat moet je klasgenoot als eerste doen?</label>
-                <input type="text" placeholder="Bijv. Maak meteen een screenshot van het gesprek...">
+                <input type="text">
             </div>
             <div class="form-group">
                 <label>Stap 2 (Blokkeren): Wat is de vervolgstap op Roblox?</label>
-                <input type="text" placeholder="Bijv. Blokkeer de gebruiker direct en verwijder de persoon uit je vriendenlijst...">
+                <input type="text">
             </div>
             <div class="form-group">
                 <label>Stap 3 (Melden): Bij wie meld je dit incident?</label>
-                <input type="text" placeholder="Bijv. Vertel het aan je ouders of leerkracht en meld het bij de politie...">
+                <input type="text">
             </div>
         </div>
 
@@ -135,5 +147,147 @@
         <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
+    <script>
+        // --- GAME ENGINE & SIMULATOR LOGIC ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let player = { x: 380, y: 230, width: 30, height: 40, color: '#ffcc00' };
+        let blocks = [];
+        let timeLeft = 180; // 3 minuten
+        let gameActive = true;
+
+        // Berichten met interval
+        const popups = [
+            { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
+            { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
+            { time: 105, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon." },
+            { time: 70, sender: "SecretFriend_2011", text: "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!" },
+            { time: 30, sender: "VIP_Gamer_007", text: "Stuur me een privéfoto van jezelf voor toegang tot de VIP server." }
+        ];
+
+        // Web Audio Synthesizer voor geluid
+        function playAlertSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // Toon D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // Toon A5
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch(e) {
+                console.log("Audio niet ondersteund of geblokkeerd.");
+            }
+        }
+
+        // Teken functionaliteit
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Grond
+            ctx.fillStyle = '#10b981';
+            ctx.fillRect(0, 270, canvas.width, 30);
+
+            // Geplaatste blokjes
+            blocks.forEach(b => {
+                ctx.fillStyle = b.color;
+                ctx.fillRect(b.x, b.y, b.w, b.h);
+                ctx.strokeStyle = '#000';
+                ctx.strokeRect(b.x, b.y, b.w, b.h);
+            });
+
+            // Speler (Roblox avatar stijl)
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            // Hoofd
+            ctx.fillStyle = '#fca5a5';
+            ctx.fillRect(player.x + 5, player.y - 15, 20, 15);
+
+            requestAnimationFrame(draw);
+        }
+
+        function movePlayer(dir) {
+            if (!gameActive) return;
+            player.x += dir;
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+        }
+
+        function placeBlock() {
+            if (!gameActive) return;
+            const colors = ['#ef4444', '#3b82f6', '#eab308', '#a855f7', '#ec4899'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Stapel op grond of op ander blokje
+            let blockY = 240;
+            blocks.forEach(b => {
+                if (Math.abs(b.x - player.x) < 25) {
+                    blockY = Math.min(blockY, b.y - 30);
+                }
+            });
+
+            blocks.push({ x: player.x, y: blockY, w: 30, h: 30, color: randomColor });
+            player.y = Math.max(20, blockY - 40); // Speler klimt mee omhoog
+        }
+
+        // Toetsenbord besturing
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') movePlayer(-15);
+            if (e.key === 'ArrowRight' || e.key === 'd') movePlayer(15);
+            if (e.key === ' ' || e.key === 'ArrowUp') placeBlock();
+        });
+
+        // Timer and Interval Event Loop
+        const timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                gameActive = false;
+                document.getElementById('gameTimer').innerText = "Tijd is om!";
+                document.getElementById('popupText').innerText = "De 3 minuten zijn voorbij. Vul nu de vragen hieronder in!";
+                document.getElementById('popupAlert').style.display = 'block';
+                return;
+            }
+
+            timeLeft--;
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('gameTimer').innerHTML = `<i class="fa-solid fa-clock"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            // Controleer op Pop-ups
+            const match = popups.find(p => p.time === timeLeft);
+            if (match) {
+                triggerPopup(match.sender, match.text);
+            }
+        }, 1000);
+
+        function triggerPopup(sender, text) {
+            playAlertSound();
+            
+            const alertBox = document.getElementById('popupAlert');
+            const alertText = document.getElementById('popupText');
+            alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
+            alertBox.style.display = 'block';
+
+            // Voeg toe aan log
+            const chatLog = document.getElementById('chatLog');
+            if (chatLog.children[0] && chatLog.children[0].innerText.includes("Nog geen berichten")) {
+                chatLog.innerHTML = "";
+            }
+            
+            const newEntry = document.createElement('div');
+            newEntry.className = 'chat-entry';
+            newEntry.innerHTML = `<strong style="color: #f59e0b;">${sender}:</strong> ${text}`;
+            chatLog.appendChild(newEntry);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        draw();
+    </script>
 </body>
 </html>
