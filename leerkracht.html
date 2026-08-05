@@ -4,31 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Politiedossier Roblox - Leerkracht</title>
-    <!-- De JavaScript bibliotheek om van HTML een PDF te maken -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
-        .header { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
+        .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
         .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
         .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
         .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .teacher-box { background-color: #f4f6f9; border-left: 5px solid #003366; padding: 15px; margin-bottom: 25px; }
         
-        /* Stijlen voor het PDF formulier */
-        .pdf-formulier { border: 2px solid #003366; padding: 25px; border-radius: 6px; background-color: #ffffff; margin-top: 20px; }
-        .pdf-header { color: #003366; border-bottom: 2px solid #003366; padding-bottom: 5px; text-align: center; margin-top: 0; }
-        .pdf-formulier label { font-weight: bold; display: block; margin-top: 15px; color: #1c252e; }
-        .pdf-formulier input[type="text"], .pdf-formulier textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
-        .btn-pdf { background-color: #d9534f; color: white; padding: 14px 24px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-top: 20px; width: 100%; }
-        .btn-pdf:hover { background-color: #c9302c; }
+        .teacher-box { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .teacher-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #ffcc00; padding-bottom: 8px; }
+
+        .step-list { list-style: none; padding-left: 0; }
+        .step-item { background: #f8fafc; border-left: 4px solid #003366; margin-bottom: 15px; padding: 15px; border-radius: 0 6px 6px 0; }
+        .step-title { font-weight: bold; color: #002244; font-size: 16px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .step-desc { font-size: 14px; color: #334155; line-height: 1.5; margin: 0; }
+
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .info-card { background: #fdf8e4; border: 1px solid #f0c36d; padding: 15px; border-radius: 6px; }
+        .info-card h4 { margin: 0 0 8px 0; color: #002244; }
+        .info-card p { margin: 0; font-size: 13px; color: #475569; line-height: 1.4; }
+
+        .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
+        .btn-next:hover { background-color: #ffcc00; color: #002244; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>POLITIE CYBER CRIME DOSSIER</h1>
-        <p>Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
+    <div class="header-main">
+        <h1 style="margin: 0;">POLITIE CYBER CRIME DOSSIER</h1>
+        <p style="margin: 5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
     <div class="nav">
@@ -42,66 +48,92 @@
     </div>
 
     <div class="container">
-        
-        <!-- DIDACTISCHE INFORMATIE -->
-        <h2>7. Leerkracht & Didactische Verantwoording</h2>
+        <h2>7. Docentenhandleiding & Didactische Stappen</h2>
+        <p>Deze webkwestie is ontworpen om leerlingen bewust te maken van online veiligheid, grooming en phishing binnen online platforms zoals Roblox. Hieronder vindt u het overzicht van de didactische leerlijn en de stappen die de leerlingen doorlopen.</p>
+
+        <!-- ALGEMENE INFORMATIE -->
+        <div class="info-grid">
+            <div class="info-card">
+                <h4><i class="fa-solid fa-users"></i> Doelgroep</h4>
+                <p>Bovenbouw basisonderwijs (groep 7/8) en onderbouw voortgezet onderwijs.</p>
+            </div>
+            <div class="info-card">
+                <h4><i class="fa-solid fa-clock"></i> Tijdsduur</h4>
+                <p>Ca. 60 tot 90 minuten (kan verdeeld worden over 2 lessen).</p>
+            </div>
+            <div class="info-card">
+                <h4><i class="fa-solid fa-bullseye"></i> Kerndoelen</h4>
+                <p>Digital Citizenship, Mediawijsheid, Informatievaardigheden en Kritisch Denken.</p>
+            </div>
+        </div>
+
+        <!-- STAPPENPLAN VOOR DE LEERLINGEN -->
         <div class="teacher-box">
-            <p><strong>Doelgroep:</strong> Basisonderwijs (Groep 7/8) en Onderbouw Voortgezet Onderwijs (10-14 jaar).</p>
-            <p><strong>Leerdoelen & Kerndoelen:</strong><br>
-            Deze webkwestie richt zich op Digitale Geletterdheid en Burgerschap. Leerlingen ontwikkelen mediawijsheid door te leren reflecteren op hun online veiligheid. Ze leren de gevaren van nepidentiteiten, grooming en ronselpraktijken (zoals geldezels) in games zoals Roblox herkennen en leren digitaal grenzen aan te geven.</p>
-            <p><strong>Docententip:</strong> Dit onderwerp kan gevoelig liggen. Zorg voor een veilige sfeer in de klas, zodat leerlingen durven te vertellen als zij ongewenst contact of ronselpraktijken in hun eigen gamewereld hebben ervaren.</p>
+            <h3><i class="fa-solid fa-list-check"></i> Stappenplan: Wat maken/doen de leerlingen?</h3>
+            
+            <ol class="step-list">
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-flag"></i> Stap 1: Inleiding &amp; Casus (Kamer 1)</div>
+                    <p class="step-desc">
+                        De leerlingen lezen de introductie en worden via een urgente politie-instructie geconfronteerd met het probleem: online ronselaars en nepidentiteiten op platforms zoals Roblox. Ze activeren hun voorkennis over online gedrag en veiligheid.
+                    </p>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-users-viewfinder"></i> Stap 2: Opdracht &amp; Rolverdeling (Kamer 2)</div>
+                    <p class="step-desc">
+                        De klas werkt in rechercheteams van 3 leerlingen. Elke leerling krijgt een specifieke rechercheursrol met eigen verantwoordelijkheden:
+                        <br>• <strong>Rechercheur 1: Profielanalyse</strong> (herkennen van verdachte namen en patronen).
+                        <br>• <strong>Rechercheur 2: Digital Tracing</strong> (achterhalen van de intenties en chatinhoud).
+                        <br>• <strong>Rechercheur 3: Preventie &amp; Interventie</strong> (opstellen van het protocol: bewijs, blokkeren, melden).
+                    </p>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-cubes"></i> Stap 3: Simulatie &amp; Analyse in VeiligBlox (Kamer 3)</div>
+                    <p class="step-desc">
+                        De leerlingen starten de 3D-bouwsimulatie (VeiligBlox). Tijdens het uitvoeren van bouwopdrachten verschijnen er realistisch gesimuleerde chatberichten in het scherm (bijv. vragen om wachtwoorden, gratis Robux of privéfoto's). De leerlingen analyseren deze berichten en leggen het bewijsmateriaal direct vast in hun digitale dossier.
+                    </p>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-book-open"></i> Stap 4: Bronnenonderzoek (Kamer 4)</div>
+                    <p class="step-desc">
+                        De leerlingen raadplegen de aanbevolen bronnen (onder meer Politie.nl, VraagHetPuck, Helpdesk Online Veiligheid) om hun bevindingen te staven en aanvullende informatie te verzamelen over veilig internetten.
+                    </p>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-chart-simple"></i> Stap 5: Beoordeling &amp; Rubric (Kamer 5)</div>
+                    <p class="step-desc">
+                        De teams controleren hun ingevulde dossier aan de hand van de evaluatierubric. Ze controleren of alle vragen volledig zijn beantwoord en of het bewijsmateriaal correct geanalyseerd is.
+                    </p>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><i class="fa-solid fa-shield-halved"></i> Stap 6: Noodprotocol &amp; Slotreflectie (Kamer 6)</div>
+                    <p class="step-desc">
+                        Het team bestudeert het officiële <strong>Noodprotocol Roblox</strong> (Stap 1: Stop contact, Stap 2: Bewijs vastleggen, Stap 3: Blokkeren/Rapporteren, Stap 4: Melden) en vult de individuele slotreflectie in.
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+        <!-- DIDACTISCHE AANWIJZINGEN -->
+        <div class="teacher-box">
+            <h3><i class="fa-solid fa-chalkboard-user"></i> Didactische Tips &amp; Klassikale Nabespreking</h3>
+            <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+                • <strong>Nabespreking:</strong> Sluit de les klassikaal af door de binnengekomen chatberichten uit de VeiligBlox-simulatie te bespreken. Vraag leerlingen welke signalen voor hen de 'red flags' waren.
+                <br><br>
+                • <strong>Veilige Sfeer:</strong> Online grooming en oplichting kunnen gevoelige onderwerpen zijn. Benadruk dat slachtoffers van online misleiding nooit de schuld dragen en dat praten met een volwassene altijd de juiste stap is.
+                <br><br>
+                • <strong>Noodprotocol Uitdelen:</strong> Het Noodprotocol op de Terugblik-pagina kan worden afgedrukt en opgehangen in het computerlokaal of meegegeven worden naar huis.
+            </p>
         </div>
 
         <hr>
-
-        <!-- DE PDF GENERATOR TOOL (KAMER 3: COMMANDO CENTRUM) -->
-        <h2>Actie: Noodprotocol Maken & Exporteren</h2>
-        <p>Junior Rechercheurs, vul in het formulier hieronder jullie definitieve actieplan (uit Kamer 3) in. Klik daarna op de rode knop om het op te slaan als officieel PDF-dossier!</p>
-
-        <!-- Dit is het blokje dat daadwerkelijk de PDF wordt -->
-        <div id="het-noodprotocol-document" class="pdf-formulier">
-            <h3 class="pdf-header">OFFICIEEL POLITIEDOSSIER:<br>NOODPROTOCOL ROBLOX</h3>
-            
-            <label>Namen van de Junior Rechercheurs:</label>
-            <input type="text" placeholder="Typ hier de namen van jullie teamleden...">
-
-            <label>Stap 1: Wat doe je direct bij een verdacht bericht (bijv. aanbod van geld/Robux)?</label>
-            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 1..."></textarea>
-
-            <label>Stap 2: Hoe leg je digitaal bewijs vast?</label>
-            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 2 (denk aan screenshots)..."></textarea>
-
-            <label>Stap 3: Hoe verbreek je veilig het contact?</label>
-            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 3 (denk aan blokkeren en rapporteren)..."></textarea>
-
-            <label>Stap 4: Wie breng je direct op de hoogte?</label>
-            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 4..."></textarea>
-        </div>
-
-        <!-- De knop om het script uit te voeren -->
-        <button class="btn-pdf" onclick="maakPDF()">Exporteer Noodprotocol als PDF &darr;</button>
-
+        <a href="index.html" class="btn-next">&larr; Terug naar 1. Inleiding</a>
     </div>
-
-    <!-- Het script dat zorgt voor de PDF Download -->
-    <script>
-        function maakPDF() {
-            // Selecteer het stukje HTML dat in de PDF moet
-            const element = document.getElementById('het-noodprotocol-document');
-            
-            // Instellingen voor de PDF
-            const opties = {
-                margin:       15,
-                filename:     'Politie_Noodprotocol_Roblox.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Roep html2pdf aan en bewaar het bestand op de computer
-            html2pdf().set(opties).from(element).save();
-        }
-    </script>
 
 </body>
 </html>
