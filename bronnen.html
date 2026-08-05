@@ -18,55 +18,54 @@
         .tag { display: inline-block; background-color: #ffcc00; color: #002244; font-size: 12px; font-weight: bold; padding: 3px 8px; border-radius: 3px; margin-bottom: 8px; }
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
-        /* Hover / Tooltip stijl voor moeilijke woorden */
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 2px dotted #003366; /* Stippellijn onder het woord */
-    color: #003366;
-    font-weight: bold;
-    cursor: help;
-}
 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 250px;
-    background-color: #002244;
-    color: #ffffff;
-    text-align: left;
-    border-radius: 6px;
-    padding: 10px;
-    position: absolute;
-    z-index: 10;
-    bottom: 125%; /* Toont de tekst boven het woord */
-    left: 50%;
-    margin-left: -125px; /* Centreert de tooltip */
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 13px;
-    font-weight: normal;
-    line-height: 1.4;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-    border: 1px solid #ffcc00;
-}
+        /* Hover / Tooltip stijl voor ronselaars */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted #003366;
+            color: #003366;
+            font-weight: bold;
+            cursor: help;
+        }
 
-/* Driehoekje onderaan de tooltip */
-.tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #002244 transparent transparent transparent;
-}
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #002244;
+            color: #ffffff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 1.4;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+            border: 1px solid #ffcc00;
+        }
 
-/* Laat de tooltip zien bij hover */
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #002244 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +87,18 @@
 
     <div class="container">
         <h2>4. Bewijsmateriaal & Bronnen</h2>
-        <p>Als junior rechercheurs hebben jullie betrouwbare informatie nodig. Gebruik de onderstaande officiële politiewebsites en kennisbanken om bewijsmateriaal te verzamelen voor jullie dossier:</p>
+        <p>Als junior rechercheurs hebben jullie betrouwbare informatie nodig. Gebruik de onderstaande officiële politiewebsites, games en kennisbanken om bewijsmateriaal te verzamelen voor jullie dossier en ontmasker online 
+            <span class="tooltip">ronselaars
+                <span class="tooltiptext"><strong>Wat is een ronselaar?</strong><br>Volwassenen met kwade bedoelingen die mooie beloftes, beloningen of cadeautjes aanbieden.</span>
+            </span>:
+        </p>
+
+        <div class="source-card">
+            <span class="tag">CYBER GAME</span>
+            <h3>HackShield Future Cyber Agent</h3>
+            <p>Word een Cyber Agent! Speel de quests en trainingen om te leren hoe je jezelf en anderen beschermt tegen online gevaren, nepberichten en cybercriminelen.</p>
+            <p>&rarr; <a href="https://hackshieldgame.com/en/game" target="_blank" rel="noopener">Bezoek HackShield Game</a></p>
+        </div>
 
         <div class="source-card">
             <span class="tag">POLITIE INFORMATIE</span>
