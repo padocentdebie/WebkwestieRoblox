@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politiedossier Roblox - Leerkracht</title>
+    <!-- De JavaScript bibliotheek om van HTML een PDF te maken -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
+        .header { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
+        .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
+        .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
+        .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .teacher-box { background-color: #f4f6f9; border-left: 5px solid #003366; padding: 15px; margin-bottom: 25px; }
+        
+        /* Stijlen voor het PDF formulier */
+        .pdf-formulier { border: 2px solid #003366; padding: 25px; border-radius: 6px; background-color: #ffffff; margin-top: 20px; }
+        .pdf-header { color: #003366; border-bottom: 2px solid #003366; padding-bottom: 5px; text-align: center; margin-top: 0; }
+        .pdf-formulier label { font-weight: bold; display: block; margin-top: 15px; color: #1c252e; }
+        .pdf-formulier input[type="text"], .pdf-formulier textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        .btn-pdf { background-color: #d9534f; color: white; padding: 14px 24px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-top: 20px; width: 100%; }
+        .btn-pdf:hover { background-color: #c9302c; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>POLITIE CYBER CRIME DOSSIER</h1>
+        <p>Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
+    </div>
+
+    <div class="nav">
+        <a href="index.html">1. Inleiding</a>
+        <a href="opdracht.html">2. De Opdracht</a>
+        <a href="werkwijze.html">3. Werkwijze</a>
+        <a href="bronnen.html">4. Bronnen</a>
+        <a href="beoordeling.html">5. Beoordeling</a>
+        <a href="terugblik.html">6. Terugblik</a>
+        <a href="leerkracht.html" class="active">7. Leerkracht</a>
+    </div>
+
+    <div class="container">
+        
+        <!-- DIDACTISCHE INFORMATIE -->
+        <h2>7. Leerkracht & Didactische Verantwoording</h2>
+        <div class="teacher-box">
+            <p><strong>Doelgroep:</strong> Basisonderwijs (Groep 7/8) en Onderbouw Voortgezet Onderwijs (10-14 jaar).</p>
+            <p><strong>Leerdoelen & Kerndoelen:</strong><br>
+            Deze webkwestie richt zich op Digitale Geletterdheid en Burgerschap. Leerlingen ontwikkelen mediawijsheid door te leren reflecteren op hun online veiligheid. Ze leren de gevaren van nepidentiteiten, grooming en ronselpraktijken (zoals geldezels) in games zoals Roblox herkennen en leren digitaal grenzen aan te geven.</p>
+            <p><strong>Docententip:</strong> Dit onderwerp kan gevoelig liggen. Zorg voor een veilige sfeer in de klas, zodat leerlingen durven te vertellen als zij ongewenst contact of ronselpraktijken in hun eigen gamewereld hebben ervaren.</p>
+        </div>
+
+        <hr>
+
+        <!-- DE PDF GENERATOR TOOL (KAMER 3: COMMANDO CENTRUM) -->
+        <h2>Actie: Noodprotocol Maken & Exporteren</h2>
+        <p>Junior Rechercheurs, vul in het formulier hieronder jullie definitieve actieplan (uit Kamer 3) in. Klik daarna op de rode knop om het op te slaan als officieel PDF-dossier!</p>
+
+        <!-- Dit is het blokje dat daadwerkelijk de PDF wordt -->
+        <div id="het-noodprotocol-document" class="pdf-formulier">
+            <h3 class="pdf-header">OFFICIEEL POLITIEDOSSIER:<br>NOODPROTOCOL ROBLOX</h3>
+            
+            <label>Namen van de Junior Rechercheurs:</label>
+            <input type="text" placeholder="Typ hier de namen van jullie teamleden...">
+
+            <label>Stap 1: Wat doe je direct bij een verdacht bericht (bijv. aanbod van geld/Robux)?</label>
+            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 1..."></textarea>
+
+            <label>Stap 2: Hoe leg je digitaal bewijs vast?</label>
+            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 2 (denk aan screenshots)..."></textarea>
+
+            <label>Stap 3: Hoe verbreek je veilig het contact?</label>
+            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 3 (denk aan blokkeren en rapporteren)..."></textarea>
+
+            <label>Stap 4: Wie breng je direct op de hoogte?</label>
+            <textarea rows="3" placeholder="Typ hier jullie actie voor stap 4..."></textarea>
+        </div>
+
+        <!-- De knop om het script uit te voeren -->
+        <button class="btn-pdf" onclick="maakPDF()">Exporteer Noodprotocol als PDF &darr;</button>
+
+    </div>
+
+    <!-- Het script dat zorgt voor de PDF Download -->
+    <script>
+        function maakPDF() {
+            // Selecteer het stukje HTML dat in de PDF moet
+            const element = document.getElementById('het-noodprotocol-document');
+            
+            // Instellingen voor de PDF
+            const opties = {
+                margin:       15,
+                filename:     'Politie_Noodprotocol_Roblox.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Roep html2pdf aan en bewaar het bestand op de computer
+            html2pdf().set(opties).from(element).save();
+        }
+    </script>
+
+</body>
+</html>
