@@ -11,10 +11,26 @@
         .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
         .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
-        th, td { border: 1px solid #dce4ec; padding: 12px; text-align: left; vertical-align: top; }
-        th { background-color: #003366; color: white; font-weight: bold; }
-        tr:nth-child(even) { background-color: #f8fafc; }
+        
+        /* Stijlen voor de interactieve rubric */
+        .rubric-card { border: 1px solid #dce4ec; border-left: 5px solid #003366; background: #f8fafc; padding: 20px; margin: 20px 0; border-radius: 0 6px 6px 0; }
+        .rubric-card h3 { margin-top: 0; color: #003366; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 15px; }
+        
+        .option-box { background: white; border: 2px solid #cbd5e1; border-radius: 6px; padding: 12px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; }
+        .option-box:hover { border-color: #003366; }
+        .option-box input[type="radio"] { margin-bottom: 8px; transform: scale(1.2); }
+        .option-title { font-weight: bold; color: #003366; margin-bottom: 5px; }
+        .option-desc { font-size: 13px; color: #475569; line-height: 1.4; }
+        
+        /* Highlight voor geselecteerde opties */
+        .option-box.selected { border-color: #ffcc00; background-color: #fffdf0; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+
+        /* Totaalscore-kaart */
+        .score-card { background-color: #002244; color: white; padding: 20px; border-radius: 6px; text-align: center; margin: 25px 0; }
+        .score-card h3 { margin: 0 0 10px 0; color: #ffcc00; }
+        .score-number { font-size: 32px; font-weight: bold; }
+
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
     </style>
@@ -37,50 +53,131 @@
     </div>
 
     <div class="container">
-        <h2>5. Beoordelingsmatrix (Rubric)</h2>
-        <p>Bekijk van tevoren goed hoe jullie politiedossier en recherchewerk worden beoordeeld. Jullie team kan op de volgende onderdelen punten scoren:</p>
+        <h2>5. Interactieve Beoordelingsmatrix (Rubric)</h2>
+        <p>Evalueer jullie eigen recherchewerk. Kies per onderdeel <strong>één niveau</strong> dat het beste bij jullie resultaat past:</p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Criterium</th>
-                    <th>Goed (3 pt)</th>
-                    <th>Voldoende (2 pt)</th>
-                    <th>Nog te verbeteren (1 pt)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Inhoud & Analyse<br>(Kamer 1 & 2)</strong></td>
-                    <td>Het Signalement (politiefoto) en de Verhoor-Checklist zijn zeer compleet, scherp en onderbouwd met feiten uit de bronnen.</td>
-                    <td>De belangrijkste kenmerken en vragen zijn benoemd, maar missen af en toe verdieping of details.</td>
-                    <td>Er staan maar 1 of 2 algemene tips op; de inhoud over nepidentiteiten is onvolledig.</td>
-                </tr>
-                <tr>
-                    <td><strong>Noodprotocol & PDF Export<br>(Kamer 3)</strong></td>
-                    <td>Het Noodprotocol bevat minstens 4 duidelijke, logische stappen en is succesvol als PDF-document geëxporteerd.</td>
-                    <td>Het Noodprotocol bevat de stappen, maar ze zijn wat algemeen geformuleerd. De PDF is wel gedownload.</td>
-                    <td>Het Noodprotocol is niet afgemaakt of het exporteren naar PDF is niet gelukt.</td>
-                </tr>
-                <tr>
-                    <td><strong>Recherche-Samenwerking</strong></td>
-                    <td>Alle 3 de rechercheurs hebben hun rol uitstekend vervuld en het dossier is als een echt team samengesteld.</td>
-                    <td>De rollen waren verdeeld, maar de samenwerking of afstemming verliep soms wat stroef.</td>
-                    <td>1 of 2 leerlingen hebben al het werk gedaan; er was geen duidelijke rolverdeling.</td>
-                </tr>
-                <tr>
-                    <td><strong>Vormgeving & Presentatie</strong></td>
-                    <td>Het dossier is overzichtelijk, ziet er professioneel uit als een echt politiestuk en is helder uitgelegd.</td>
-                    <td>Het dossier is netjes verzorgd, maar mist wat overzicht of structuur.</td>
-                    <td>Het resultaat ziet er slordig, gehaast of onafgewerkt uit.</td>
-                </tr>
-            </tbody>
-        </table>
+        <form id="rubricForm">
+            <!-- Criterium 1 -->
+            <div class="rubric-card">
+                <h3>1. Inhoud & Analyse (Kamer 1 & 2)</h3>
+                <div class="options-grid">
+                    <label class="option-box">
+                        <input type="radio" name="criterium1" value="3" onclick="berekenScore()">
+                        <span class="option-title">Goed (3 pt)</span>
+                        <span class="option-desc">Het Signalement (politiefoto) en de Verhoor-Checklist zijn zeer compleet, scherp en onderbouwd met feiten.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium1" value="2" onclick="berekenScore()">
+                        <span class="option-title">Voldoende (2 pt)</span>
+                        <span class="option-desc">De belangrijkste kenmerken en vragen zijn benoemd, maar missen af en toe verdieping of details.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium1" value="1" onclick="berekenScore()">
+                        <span class="option-title">Nog te verbeteren (1 pt)</span>
+                        <span class="option-desc">Er staan maar 1 of 2 algemene tips op; de inhoud over nepidentiteiten is onvolledig.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Criterium 2 -->
+            <div class="rubric-card">
+                <h3>2. Noodprotocol & PDF Export (Kamer 3)</h3>
+                <div class="options-grid">
+                    <label class="option-box">
+                        <input type="radio" name="criterium2" value="3" onclick="berekenScore()">
+                        <span class="option-title">Goed (3 pt)</span>
+                        <span class="option-desc">Het Noodprotocol bevat minstens 4 duidelijke, logische stappen en is succesvol als PDF geëxporteerd.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium2" value="2" onclick="berekenScore()">
+                        <span class="option-title">Voldoende (2 pt)</span>
+                        <span class="option-desc">Het Noodprotocol bevat de stappen, maar ze zijn wat algemeen geformuleerd. De PDF is wel gedownload.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium2" value="1" onclick="berekenScore()">
+                        <span class="option-title">Nog te verbeteren (1 pt)</span>
+                        <span class="option-desc">Het Noodprotocol is niet afgemaakt of het exporteren naar PDF is niet gelukt.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Criterium 3 -->
+            <div class="rubric-card">
+                <h3>3. Recherche-Samenwerking</h3>
+                <div class="options-grid">
+                    <label class="option-box">
+                        <input type="radio" name="criterium3" value="3" onclick="berekenScore()">
+                        <span class="option-title">Goed (3 pt)</span>
+                        <span class="option-desc">Alle 3 de rechercheurs hebben hun rol uitstekend vervuld en het dossier is als een echt team samengesteld.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium3" value="2" onclick="berekenScore()">
+                        <span class="option-title">Voldoende (2 pt)</span>
+                        <span class="option-desc">De rollen waren verdeeld, maar de samenwerking of afstemming verliep soms wat stroef.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium3" value="1" onclick="berekenScore()">
+                        <span class="option-title">Nog te verbeteren (1 pt)</span>
+                        <span class="option-desc">1 of 2 leerlingen hebben al het werk gedaan; er was geen duidelijke rolverdeling.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Criterium 4 -->
+            <div class="rubric-card">
+                <h3>4. Vormgeving & Presentatie</h3>
+                <div class="options-grid">
+                    <label class="option-box">
+                        <input type="radio" name="criterium4" value="3" onclick="berekenScore()">
+                        <span class="option-title">Goed (3 pt)</span>
+                        <span class="option-desc">Het dossier is overzichtelijk, ziet er professioneel uit als een echt politiestuk en is helder uitgelegd.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium4" value="2" onclick="berekenScore()">
+                        <span class="option-title">Voldoende (2 pt)</span>
+                        <span class="option-desc">Het dossier is netjes verzorgd, maar mist wat overzicht of structuur.</span>
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" name="criterium4" value="1" onclick="berekenScore()">
+                        <span class="option-title">Nog te verbeteren (1 pt)</span>
+                        <span class="option-desc">Het resultaat ziet er slordig, gehaast of onafgewerkt uit.</span>
+                    </label>
+                </div>
+            </div>
+        </form>
+
+        <!-- Totaalscore resultaat -->
+        <div class="score-card">
+            <h3>Jullie Totale Score</h3>
+            <div class="score-number"><span id="totaalScore">0</span> / 12 punten</div>
+        </div>
 
         <hr>
 
         <a href="terugblik.html" class="btn-next">Ga naar 6. Terugblik &rarr;</a>
     </div>
+
+    <script>
+        function berekenScore() {
+            let totaal = 0;
+            const form = document.getElementById('rubricForm');
+            
+            // Loop door alle optie-blokken om visuele markering (selected class) bij te werken
+            const allBoxes = document.querySelectorAll('.option-box');
+            allBoxes.forEach(box => {
+                const radio = box.querySelector('input[type="radio"]');
+                if (radio.checked) {
+                    box.classList.add('selected');
+                    totaal += parseInt(radio.value);
+                } else {
+                    box.classList.remove('selected');
+                }
+            });
+
+            // Update de totaalscore op het scherm
+            document.getElementById('totaalScore').innerText = totaal;
+        }
+    </script>
 
 </body>
 </html>
