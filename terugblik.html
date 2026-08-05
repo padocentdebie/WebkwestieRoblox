@@ -4,27 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Politiedossier Roblox - Terugblik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
-        .header { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
+        .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
         .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
         .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
         .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .debrief-box { background-color: #f8fafc; border: 1px solid #dce4ec; border-left: 5px solid #ffcc00; padding: 20px; margin: 20px 0; border-radius: 0 4px 4px 0; }
-        .debrief-box h3 { margin-top: 0; color: #002244; }
-        .question-list { list-style-type: none; padding-left: 0; }
-        .question-list li { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; margin-bottom: 12px; font-size: 16px; line-height: 1.5; }
-        .question-list strong { color: #003366; }
-        .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
+        
+        .dossier-box { background: #ffffff; border: 2px solid #002244; border-radius: 8px; padding: 25px; margin-top: 10px; }
+        .dossier-header { background: #002244; color: #ffffff; padding: 15px; margin: -25px -25px 20px -25px; border-top-left-radius: 6px; border-top-right-radius: 6px; text-align: center; }
+        .dossier-header h2 { margin: 0; font-size: 20px; letter-spacing: 1px; color: #ffcc00; }
+        
+        .protocol-section { background: #fdf8e4; border-left: 5px solid #ffcc00; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .protocol-section h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 10px; }
+        .protocol-section p { margin-bottom: 0; font-size: 14px; line-height: 1.5; }
+
+        .reflection-questions { background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-top: 25px; }
+        .reflection-questions h3 { margin-top: 0; color: #002244; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
+        textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 14px; resize: vertical; }
+
+        .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 20px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>POLITIE CYBER CRIME DOSSIER</h1>
-        <p>Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
+    <div class="header-main">
+        <h1 style="margin: 0;">POLITIE CYBER CRIME DOSSIER</h1>
+        <p style="margin: 5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
     <div class="nav">
@@ -38,36 +49,52 @@
     </div>
 
     <div class="container">
-        <h2>6. Terugblik: De Eindrapportage (Debriefing)</h2>
-        <p>Gefeliciteerd met het voltooien van het onderzoek! Als echte rechercheurs sluiten we de missie af met een <strong>debriefing</strong>. Bespreek de onderstaande vragen samen in je rechercheteam:</p>
+        <h2>6. Terugblik &amp; Noodprotocol</h2>
+        <p>Gefeliciteerd rechercheur, het onderzoek is afgerond. Bekijk hieronder het officiële noodprotocol dat je kunt gebruiken als naslagwerk, en vul de slotvragen in om het dossier af te sluiten.</p>
 
-        <div class="debrief-box">
-            <h3>Vragen voor de Debriefing</h3>
-            <ul class="question-list">
-                <li>
-                    <strong>Vraag 1: Profielherkenning</strong><br>
-                    Wat is het belangrijkste waarschuwingssignaal (red flag) waaraan jullie een nepidentiteit op Roblox voortaan direct herkennen?
-                </li>
-                <li>
-                    <strong>Vraag 2: Risicoanalyse van Externe Apps</strong><br>
-                    Waarom proberen personen met verkeerde bedoelingen een kind zo snel mogelijk mee te nemen uit de game Roblox naar apps zoals Telegram, Instagram of TikTok?
-                </li>
-                <li>
-                    <strong>Vraag 3: Casus uit de Praktijk</strong><br>
-                    Stel dat een klasgenoot enthousiast vertelt dat hij 50 euro geboden krijgt van een online 'vriend' om een klusje te doen. Wat raden jullie deze klasgenoot direct aan?
-                </li>
-                <li>
-                    <strong>Vraag 4: Eigen Gedrag & Weerbaarheid</strong><br>
-                    Hoe verandert dit onderzoek de manier waarop jij vanaf nu omgaat met vriendschapsverzoeken van accounts die je niet in het echt kent?
-                </li>
-            </ul>
+        <!-- OFFICIEEL POLITIEDOSSIER: NOODPROTOCOL ROBLOX -->
+        <div class="dossier-box">
+            <div class="dossier-header">
+                <h2>OFFICIEEL POLITIEDOSSIER: NOODPROTOCOL ROBLOX</h2>
+                <p style="margin: 5px 0 0 0; font-size: 13px; color: #e2e8f0;">Preventie- en Handelingsprotocol bij Verdachte Situaties</p>
+            </div>
+
+            <div class="protocol-section">
+                <h3><i class="fa-solid fa-hand"></i> STAP 1: Stop direct het contact</h3>
+                <p>Geef nooit persoonlijke gegevens zoals je echte naam, adres, telefoonnummer, school of wachtwoord. Ga nooit in op vragen om over te stappen naar externe apps (zoals WhatsApp, Discord of Telegram) of om privéfoto's te sturen.</p>
+            </div>
+
+            <div class="protocol-section">
+                <h3><i class="fa-solid fa-camera"></i> STAP 2: Leg bewijsmateriaal vast</h3>
+                <p>Maak direct een screenshot van de chatberichten en de gebruikersnaam (inclusief display name) van de verdachte speler voordat het gesprek verdwijnt of wordt verwijderd.</p>
+            </div>
+
+            <div class="protocol-section">
+                <h3><i class="fa-solid fa-user-slash"></i> STAP 3: Blokkeren en Rapporteren</h3>
+                <p>Gebruik de in-game opties van Roblox: open het menu via het Roblox-logo linksboven, ga naar <strong>Report</strong>, kies de speler en selecteer het type misbruik. Blokkeer het account direct (<strong>Block User</strong>).</p>
+            </div>
+
+            <div class="protocol-section">
+                <h3><i class="fa-solid fa-bullhorn"></i> STAP 4: Meld het incident</h3>
+                <p>Blijf er niet alleen mee rondlopen. Licht direct een ouder, verzorger of leerkracht in. Bij ernstige gevallen van online stalking, oplichting of grooming kan melding worden gemaakt bij de Politie via <strong>0900-8844</strong> of via de Helpdesk Online Veiligheid.</p>
+            </div>
         </div>
 
-        <p>Zijn alle vragen besproken en is het dossier compleet? Dan is het tijd om de resultaten definitief in te vullen en het Noodprotocol te exporteren.</p>
+        <!-- EINDREFLECTIE ONDERZOEKERS -->
+        <div class="reflection-questions">
+            <h3><i class="fa-solid fa-clipboard-check"></i> Slotreflectie Rechercheteam</h3>
+            <div class="form-group">
+                <label>Wat is het belangrijkste dat je tijdens dit onderzoek hebt geleerd over veiligheid op Roblox?</label>
+                <textarea placeholder="Typ hier je antwoord..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Wat zou je een klasgenoot adviseren die benaderd wordt door een vreemde speler?</label>
+                <textarea placeholder="Typ hier je antwoord..."></textarea>
+            </div>
+        </div>
 
-        <hr>
-
-        <a href="leerkracht.html" class="btn-next">Ga naar 7. Leerkracht & Noodprotocol Export &rarr;</a>
+        <hr style="margin-top: 30px;">
+        <a href="leerkracht.html" class="btn-next">Ga naar 7. Leerkracht &rarr;</a>
     </div>
 
 </body>
