@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Politiedossier Roblox - Werkwijze</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
         .header { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
@@ -11,10 +12,28 @@
         .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
         .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 15px; margin-bottom: 15px; border-radius: 4px; }
-        .role-box h3 { margin-top: 0; color: #002244; }
-        .step-list { margin: 20px 0; padding-left: 20px; }
-        .step-list li { margin-bottom: 10px; font-size: 16px; }
+        
+        .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
+        .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
+        
+        /* Tooltip hover effect */
+        .tooltip { position: relative; display: inline-block; border-bottom: 2px dotted #003366; color: #003366; font-weight: bold; cursor: help; }
+        .tooltip .tooltiptext { visibility: hidden; width: 250px; background-color: #002244; color: #ffffff; text-align: left; border-radius: 6px; padding: 10px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s; font-size: 13px; font-weight: normal; line-height: 1.4; box-shadow: 0px 4px 8px rgba(0,0,0,0.2); border: 1px solid #ffcc00; }
+        .tooltip .tooltiptext::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #002244 transparent transparent transparent; }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+
+        /* Simulator styling */
+        .simulator-box { background-color: #1a1a2e; border-radius: 8px; padding: 15px; color: white; margin: 15px 0; }
+        .sim-screen { background-color: #0f0f1b; padding: 10px; border-radius: 6px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-popup { background-color: #252542; padding: 10px; border-radius: 6px; border-left: 4px solid #4a4e69; font-size: 14px; }
+        .chat-popup.suspicious { border-left-color: #e63946; background-color: #2d1b24; }
+        .user-name { font-weight: bold; color: #ff9e00; font-size: 13px; }
+
+        /* Formstijlen */
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
+        input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
     </style>
@@ -37,35 +56,83 @@
     </div>
 
     <div class="container">
-        <h2>3. Werkwijze: Rolverdeling & Stappenplan</h2>
-        <p>Jullie werken in teams van 3 Junior Rechercheurs. Verdeel als eerste de onderstaande rollen binnen je team:</p>
+        <h2>3. Werkwijze: Rolverdeling & Opdrachten</h2>
+        <p>Verdeeld in teams van 3 Junior Rechercheurs heeft ieder groepslid een eigen taak:</p>
 
+        <!-- RECHERCHEUR 1 -->
         <div class="role-box">
-            <h3>Rechercheur 1: Profielanalyse (Kamer 1: Het Digitale Verhoorcentrum)</h3>
-            <p>Jouw taak is het onderzoeken van gedragspatronen. Hoe praten ronselaars op Roblox? Welke smoesjes gebruiken ze en hoe vragen ze om geheimhouding? Jij bent verantwoordelijk voor het opstellen van de <strong>Verhoor-Checklist</strong>.</p>
+            <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
+            <p><strong>De opdracht is:</strong> Maak een Verhoor-Checklist. Je komt 
+                <span class="tooltip">ronselaars
+                    <span class="tooltiptext"><strong>Wat is een ronselaar?</strong><br>Een volwassene met kwade bedoelingen die mooie beloftes, cadeautjes of gratis Robux aanbiedt.</span>
+                </span> 
+                tegen. Noteer de nep-naam, noteer de tekst die jij verdacht vindt. Hoeveel ronselaars ben je tegengekomen?
+            </p>
+
+            <!-- SIMULATOR -->
+            <div class="simulator-box">
+                <strong><i class="fa-solid fa-gamepad"></i> Virtuele Roblox Chat Simulator:</strong>
+                <div class="sim-screen" style="margin-top: 8px;">
+                    <div class="chat-popup"><span class="user-name">CoolBoy99:</span> "Hey! Wil je samen Obby spelen?"</div>
+                    <div class="chat-popup suspicious"><span class="user-name">ShadowMaster_X [VERDACHT]:</span> "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen."</div>
+                    <div class="chat-popup suspicious"><span class="user-name">SecretFriend_2011 [VERDACHT]:</span> "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!"</div>
+                    <div class="chat-popup"><span class="user-name">BuilderGirl_NL:</span> "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon."</div>
+                    <div class="chat-popup suspicious"><span class="user-name">VIP_Gamer_007 [VERDACHT]:</span> "Stuur me een privéfoto van jezelf voor toegang tot de VIP server."</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Hoeveel ronselaars ben je tegengekomen?</label>
+                <input type="number" placeholder="Vul het aantal in (bijv. 3)">
+            </div>
+            <div class="form-group">
+                <label>Noteer de nep-namen van de verdachte accounts:</label>
+                <input type="text" placeholder="Bijv. ShadowMaster_X, SecretFriend_2011...">
+            </div>
+            <div class="form-group">
+                <label>Noteer de tekst die jij verdacht vindt:</label>
+                <textarea placeholder="Bijv. Vragen om wachtwoorden, privéfoto's of geheim overstappen naar Telegram..."></textarea>
+            </div>
         </div>
 
+        <!-- RECHERCHEUR 2 -->
         <div class="role-box">
-            <h3>Rechercheur 2: Digital Tracing (Kamer 2: Het Forensisch Lab)</h3>
-            <p>Jouw taak is het blootleggen van nepidentiteiten. Waarom proberen ze kinderen mee te nemen naar Instagram, TikTok of Telegram? Jij stelt het officiële <strong>Signalement</strong> op (de <em>digitale politiefoto</em> van een gevaarlijk account).</p>
+            <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
+            <p><strong>De opdracht is:</strong> Bekijk de verdachte accounts uit de simulator hierboven.</p>
+            <div class="form-group">
+                <label>Welke naam gebruikt de verdachte persoon?</label>
+                <input type="text" placeholder="Voer hier de verdachte gebruikersnaam in...">
+            </div>
+            <div class="form-group">
+                <label>Wat wil deze persoon van jou?</label>
+                <textarea placeholder="Bijv. Mijn wachtwoord, privéfoto's of dat ik mee ga naar een andere app..."></textarea>
+            </div>
         </div>
 
+        <!-- RECHERCHEUR 3 -->
         <div class="role-box">
-            <h3>Rechercheur 3: Preventie & Interventie (Kamer 3: Het Commando Centrum)</h3>
-            <p>Jouw taak is de actie. Wat moet een kind direct doen bij onraad? Jij formuleert de stappen (screenshot maken, blokkeren, melden) en zorgt voor het definitieve <strong>Noodprotocol</strong>.</p>
+            <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
+            <p><strong>De opdracht is:</strong> Maak het Noodprotocol. Wat moet jouw klasgenoot doen als hij of zij te maken heeft met 
+                <span class="tooltip">ronselaars
+                    <span class="tooltiptext"><strong>Onthoud de regels:</strong> Bewijs maken (screenshot), blokkeren en direct melden bij een volwassene!</span>
+                </span>?
+            </p>
+            <div class="form-group">
+                <label>Stap 1 (Bewijs): Wat moet je klasgenoot als eerste doen?</label>
+                <input type="text" placeholder="Bijv. Maak meteen een screenshot van het gesprek...">
+            </div>
+            <div class="form-group">
+                <label>Stap 2 (Blokkeren): Wat is de vervolgstap op Roblox?</label>
+                <input type="text" placeholder="Bijv. Blokkeer de gebruiker direct en verwijder de persoon uit je vriendenlijst...">
+            </div>
+            <div class="form-group">
+                <label>Stap 3 (Melden): Bij wie meld je dit incident?</label>
+                <input type="text" placeholder="Bijv. Vertel het aan je ouders of leerkracht en meld het bij de politie...">
+            </div>
         </div>
-
-        <h3>Stappenplan van de Missie:</h3>
-        <ol class="step-list">
-            <li><strong>Stap 1:</strong> Kies je rol en bekijk de bronnen op de volgende pagina.</li>
-            <li><strong>Stap 2:</strong> Voer je eigen onderzoek uit en verzamel bewijsmateriaal voor jouw kamer.</li>
-            <li><strong>Stap 3:</strong> Voeg de resultaten samen met je team.</li>
-            <li><strong>Stap 4:</strong> Vul op pagina 7 het formulier in en exporteer jullie Noodprotocol als PDF-document.</li>
-        </ol>
 
         <hr>
-
-        <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen & Bewijsmateriaal &rarr;</a>
+        <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
 </body>
