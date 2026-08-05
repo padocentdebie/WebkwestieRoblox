@@ -3,291 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Politiedossier Roblox - Werkwijze</title>
+    <title>Politiedossier Roblox - Bouwopdracht</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
-        .header { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
-        .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
-        .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
-        .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #0f172a; color: #e2e8f0; }
         
-        .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
-        .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
-
-        /* Game & Simulator Container */
-        .game-wrapper { background: #111827; border-radius: 8px; padding: 15px; color: white; margin: 20px 0; }
-        .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; }
-        .timer-badge { background: #e63946; padding: 5px 12px; border-radius: 20px; font-size: 16px; color: white; }
+        .header { background: linear-gradient(135deg, #002244, #0a3d6b); color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
+        .header h1 { margin: 0; font-size: 1.8rem; }
+        .header p { margin: 5px 0 0; opacity: 0.8; }
         
-        #gameCanvas { background: #1f2937; border-radius: 6px; display: block; width: 100%; height: 300px; cursor: pointer; border: 2px solid #374151; }
+        .nav { background: #1e293b; display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 2px solid #334155; }
+        .nav a { color: #94a3b8; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .nav a:hover, .nav a.active { background: #ffcc00; color: #0f172a; border-radius: 4px 4px 0 0; }
         
-        .game-controls { margin-top: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .btn-game { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .btn-game:hover { background: #1d4ed8; }
-
-        /* Pop-up meldingen over het spel */
-        .popup-overlay { position: relative; }
-        .chat-popup-alert { display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 12px; border-radius: 6px; margin-top: 10px; font-weight: bold; animation: pulse 0.5s ease-in-out; }
-        @keyframes pulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-
-        .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-top: 10px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; }
-        .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
-
-        /* Formstijlen */
-        .form-group { margin-bottom: 15px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; color: #002244; font-size: 14px; }
-        input[type="text"], input[type="number"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 14px; }
-        textarea { height: 80px; resize: vertical; }
-
-        .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
-        .btn-next:hover { background-color: #ffcc00; color: #002244; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 25px; background: #1e293b; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        
+        .game-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 15px; }
+        .game-header h2 { margin: 0; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+        .timer-badge { background: #dc2626; padding: 6px 16px; border-radius: 30px; font-size: 1.3rem; font-weight: bold; color: white; box-shadow: 0 0 15px rgba(220,38,38,0.3); }
+        
+        .game-area { display: flex; gap: 20px; flex-wrap: wrap; }
+        .canvas-wrapper { flex: 1; min-width: 600px; background: #0f172a; border-radius: 10px; padding: 15px; border: 2px solid #334155; }
+        #gameCanvas { background: #0f172a; border-radius: 6px; display: block; width: 100%; height: 400px; cursor: pointer; border: 1px solid #2d3748; }
+        
+        .side-panel { flex: 0 0 280px; background: #0f172a; border-radius: 10px; padding: 15px; border: 2px solid #334155; }
+        .side-panel h3 { margin: 0 0 12px; color: #fbbf24; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .example-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; background: #1e293b; padding: 8px; border-radius: 6px; margin-bottom: 12px; }
+        .grid-cell { aspect-ratio: 1; background: #2d3748; border-radius: 2px; }
+        .grid-cell.filled { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.3); }
+        .grid-cell.filled-blue { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.3); }
+        
+        .status-box { background: #1e293b; padding: 10px; border-radius: 6px; margin: 10px 0; text-align: center; border-left: 4px solid #fbbf24; }
+        .status-box.success { border-left-color: #22c55e; }
+        .status-box.fail { border-left-color: #ef4444; }
+        
+        .chat-log { background: #0f172a; border: 1px solid #1e293b; padding: 8px; border-radius: 6px; max-height: 140px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 12px; margin-top: 10px; }
+        .chat-entry { padding: 4px 8px; margin-bottom: 3px; background: #1e293b; border-radius: 3px; border-left: 3px solid #fbbf24; }
+        .chat-entry .sender { color: #fbbf24; font-weight: bold; }
+        
+        .popup-alert { display: none; background: #7f1d1d; border: 2px solid #ef4444; padding: 12px 16px; border-radius: 8px; margin: 10px 0; animation: pulse 0.5s ease; }
+        .popup-alert .fa-bell { color: #fbbf24; margin-right: 10px; }
+        @keyframes pulse { 0% { transform: scale(0.95); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        
+        .controls { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+        .btn-game { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-game:hover { background: #1d4ed8; transform: scale(1.02); }
+        .btn-game.green { background: #16a34a; }
+        .btn-game.green:hover { background: #15803d; }
+        .btn-game.orange { background: #ea580c; }
+        .btn-game.orange:hover { background: #c2410c; }
+        .btn-game.red { background: #dc2626; }
+        .btn-game.red:hover { background: #b91c1c; }
+        
+        .btn-next { display: inline-block; background: #2563eb; color: white; padding: 12px 28px; text-decoration: none; font-weight: bold; border-radius: 8px; margin-top: 20px; transition: 0.2s; }
+        .btn-next:hover { background: #1d4ed8; transform: translateY(-2px); }
+        
+        @media (max-width: 700px) {
+            .canvas-wrapper { min-width: 100%; }
+            .side-panel { flex: 1; }
+            .game-area { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>POLITIE CYBER CRIME DOSSIER</h1>
-        <p>Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
+<div class="header">
+    <h1>🚔 POLITIE CYBER CRIME DOSSIER</h1>
+    <p>Missie: Bouw de code en ontmasker nepidentiteiten!</p>
+</div>
+
+<div class="nav">
+    <a href="index.html">1. Inleiding</a>
+    <a href="opdracht.html">2. De Opdracht</a>
+    <a href="werkwijze.html" class="active">3. Werkwijze</a>
+    <a href="bronnen.html">4. Bronnen</a>
+    <a href="beoordeling.html">5. Beoordeling</a>
+    <a href="terugblik.html">6. Terugblik</a>
+    <a href="leerkracht.html">7. Leerkracht</a>
+</div>
+
+<div class="container">
+    <div class="game-header">
+        <h2><i class="fa-solid fa-cubes" style="color:#fbbf24;"></i> Roblox Bouw-Simulator</h2>
+        <span class="timer-badge" id="gameTimer"><i class="fa-solid fa-clock"></i> 03:00</span>
     </div>
 
-    <div class="nav">
-        <a href="index.html">1. Inleiding</a>
-        <a href="opdracht.html">2. De Opdracht</a>
-        <a href="werkwijze.html" class="active">3. Werkwijze</a>
-        <a href="bronnen.html">4. Bronnen</a>
-        <a href="beoordeling.html">5. Beoordeling</a>
-        <a href="terugblik.html">6. Terugblik</a>
-        <a href="leerkracht.html">7. Leerkracht</a>
+    <!-- Pop-up alert -->
+    <div id="popupAlert" class="popup-alert">
+        <i class="fa-solid fa-bell"></i> <span id="popupText">Bericht ontvangen...</span>
     </div>
 
-    <div class="container">
-        <h2>3. Werkwijze: Roblox Simulatie & Analyse</h2>
-        <p>Speel hieronder het Roblox-stappelspel. Terwijl je bouwt, verschijnen er berichten van andere spelers. <strong>Let goed op wat er voorbij komt!</strong> Je hebt precies 3 minuten de tijd.</p>
+    <div class="game-area">
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="400"></canvas>
+            <div class="controls">
+                <button class="btn-game" onclick="movePlayer(-20)"><i class="fa-solid fa-arrow-left"></i> Links</button>
+                <button class="btn-game" onclick="movePlayer(20)">Rechts <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn-game green" onclick="placeBlock()"><i class="fa-solid fa-plus"></i> Plaats</button>
+                <button class="btn-game orange" onclick="removeBlock()"><i class="fa-solid fa-minus"></i> Verwijder</button>
+                <button class="btn-game red" onclick="clearBlocks()"><i class="fa-solid fa-trash"></i> Reset</button>
+            </div>
+        </div>
 
-        <!-- ROBOLX MINI-GAME SIMULATOR -->
-        <div class="game-wrapper">
-            <div class="game-header">
-                <span><i class="fa-solid fa-cubes"></i> Roblox Bouw-Simulator</span>
-                <span class="timer-badge" id="gameTimer"><i class="fa-solid fa-clock"></i> 03:00</span>
+        <div class="side-panel">
+            <h3><i class="fa-regular fa-clipboard"></i> Bouwopdracht</h3>
+            <p style="font-size:13px; color:#94a3b8; margin-top:-5px;">Bouw het cijfer dat je hieronder ziet:</p>
+            
+            <!-- Voorbeeld "2" -->
+            <div id="exampleGrid" class="example-grid"></div>
+            
+            <div id="statusMessage" class="status-box">
+                <i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!
             </div>
 
-            <canvas id="gameCanvas" width="800" height="300"></canvas>
-
-            <div class="game-controls">
-                <button class="btn-game" onclick="movePlayer(-15)"><i class="fa-solid fa-arrow-left"></i> Links</button>
-                <button class="btn-game" onclick="movePlayer(15)">Rechts <i class="fa-solid fa-arrow-right"></i></button>
-                <button class="btn-game" style="background:#16a34a;" onclick="placeBlock()"><i class="fa-solid fa-plus"></i> Plaats Blokje</button>
-            </div>
-
-            <!-- INCOMING POPUP ALERT -->
-            <div class="popup-overlay">
-                <div id="popupAlert" class="chat-popup-alert">
-                    <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
-                </div>
-            </div>
-
-            <!-- CHAT LOG VOOR BEWIJSMATERIAAL -->
-            <p style="margin-top: 15px; font-size: 13px; color: #9ca3af;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
+            <p style="font-size:12px; color:#94a3b8; margin:8px 0 4px;">
+                <i class="fa-regular fa-circle-check" style="color:#22c55e;"></i> <span id="blockCount">0</span> blokken geplaatst
+            </p>
+            
+            <!-- Chat log -->
+            <p style="font-size:12px; color:#94a3b8; margin:10px 0 4px;"><i class="fa-regular fa-message"></i> Bewijsmateriaal (chatberichten)</p>
             <div class="chat-log" id="chatLog">
-                <div style="color: #64748b;">Nog geen berichten ontvangen... Start de timer of begin met spelen.</div>
+                <div style="color: #475569;">Wacht op berichten...</div>
             </div>
         </div>
-
-        <!-- RECHERCHEUR 1 -->
-        <div class="role-box">
-            <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
-
-            <div class="form-group">
-                <label>Hoeveel ronselaars ben je tegengekomen tijdens het spelen?</label>
-                <input type="number">
-            </div>
-            <div class="form-group">
-                <label>Noteer de nep-namen van de verdachte accounts:</label>
-                <input type="text">
-            </div>
-            <div class="form-group">
-                <label>Noteer de tekst die jij verdacht vindt en leg uit waarom jij dit verdacht vindt:</label>
-                <textarea></textarea>
-            </div>
-        </div>
-
-        <!-- RECHERCHEUR 2 -->
-        <div class="role-box">
-            <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
-            <div class="form-group">
-                <label>Welke naam gebruikt de verdachte persoon?</label>
-                <input type="text">
-            </div>
-            <div class="form-group">
-                <label>Wat wil deze persoon van jou?</label>
-                <textarea></textarea>
-            </div>
-        </div>
-
-        <!-- RECHERCHEUR 3 -->
-        <div class="role-box">
-            <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
-            <div class="form-group">
-                <label>Stap 1 (Bewijs): Wat moet je klasgenoot als eerste doen?</label>
-                <input type="text">
-            </div>
-            <div class="form-group">
-                <label>Stap 2 (Blokkeren): Wat is de vervolgstap op Roblox?</label>
-                <input type="text">
-            </div>
-            <div class="form-group">
-                <label>Stap 3 (Melden): Bij wie meld je dit incident?</label>
-                <input type="text">
-            </div>
-        </div>
-
-        <hr>
-        <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
-    <script>
-        // --- GAME ENGINE & SIMULATOR LOGIC ---
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- Rechercheur secties -->
+    <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid #334155;">
+        <div>
+            <h4 style="color:#fbbf24;"><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse</h4>
+            <input type="text" placeholder="Aantal ronselaars?" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
+            <input type="text" placeholder="Nep-namen accounts" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
+            <textarea placeholder="Verdachte tekst + uitleg" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; height:60px;"></textarea>
+        </div>
+        <div>
+            <h4 style="color:#fbbf24;"><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing</h4>
+            <input type="text" placeholder="Naam verdachte" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
+            <textarea placeholder="Wat wil deze persoon?" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; height:60px;"></textarea>
+        </div>
+        <div>
+            <h4 style="color:#fbbf24;"><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie</h4>
+            <input type="text" placeholder="Stap 1: Bewijs verzamelen" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
+            <input type="text" placeholder="Stap 2: Blokkeren" style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white; margin-bottom:8px;">
+            <input type="text" placeholder="Stap 3: Melden bij..." style="width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:white;">
+        </div>
+    </div>
 
-        let player = { x: 380, y: 230, width: 30, height: 40, color: '#ffcc00' };
-        let blocks = [];
-        let timeLeft = 180; // 3 minuten
-        let gameActive = true;
+    <a href="bronnen.html" class="btn-next">Volgende: 4. Bronnen &rarr;</a>
+</div>
 
-        // Berichten met interval
-        const popups = [
-            { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
-            { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
-            { time: 105, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon." },
-            { time: 70, sender: "SecretFriend_2011", text: "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!" },
-            { time: 30, sender: "VIP_Gamer_007", text: "Stuur me een privéfoto van jezelf voor toegang tot de VIP server." }
-        ];
+<script>
+    // ============================================================
+    //  GAME ENGINE
+    // ============================================================
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const CELL_SIZE = 30;
+    const COLS = 20;
+    const ROWS = 12;
+    const GRID_OFFSET_X = 100;
+    const GRID_OFFSET_Y = 30;
 
-        // Web Audio Synthesizer voor geluid
-        function playAlertSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // Toon D5
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // Toon A5
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.15);
-            } catch(e) {
-                console.log("Audio niet ondersteund of geblokkeerd.");
+    // Speler
+    let player = { x: 4, y: 10 }; // grid coördinaten
+
+    // Grid: 0 = leeg, 1 = geplaatst
+    let grid = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+    let blocksPlaced = 0;
+
+    // Timer
+    let timeLeft = 180;
+    let gameActive = true;
+    let timerInterval = null;
+
+    // Opdracht voltooid?
+    let taskComplete = false;
+    let birdTaskActive = false;
+    let birdComplete = false;
+
+    // Voorbeeld "2" (5x7 grid)
+    const exampleShape = [
+        [0,1,1,1,1],
+        [0,0,0,0,1],
+        [0,0,0,0,1],
+        [0,1,1,1,1],
+        [1,0,0,0,0],
+        [1,0,0,0,0],
+        [1,1,1,1,1]
+    ];
+
+    // Voorbeeld vogel (5x5)
+    const birdShape = [
+        [0,0,1,0,0],
+        [0,1,0,1,0],
+        [1,0,0,0,1],
+        [0,1,0,1,0],
+        [0,0,1,0,0]
+    ];
+
+    // Pop-up berichten (tijd in seconden)
+    const popups = [
+        { time: 170, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen? DM me!" },
+        { time: 145, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me je wachtwoord." },
+        { time: 115, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Fly Ride Dragon voor jou!" },
+        { time: 75, sender: "SecretFriend_2011", text: "Zullen we praten op Telegram? Vertel het niemand!" },
+        { time: 40, sender: "VIP_Gamer_007", text: "Stuur een privéfoto voor toegang tot VIP server." }
+    ];
+
+    // ============================================================
+    //  RENDER
+    // ============================================================
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Achtergrondgrid
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 0.5;
+        for (let r = 0; r <= ROWS; r++) {
+            ctx.beginPath();
+            ctx.moveTo(GRID_OFFSET_X, GRID_OFFSET_Y + r * CELL_SIZE);
+            ctx.lineTo(GRID_OFFSET_X + COLS * CELL_SIZE, GRID_OFFSET_Y + r * CELL_SIZE);
+            ctx.stroke();
+        }
+        for (let c = 0; c <= COLS; c++) {
+            ctx.beginPath();
+            ctx.moveTo(GRID_OFFSET_X + c * CELL_SIZE, GRID_OFFSET_Y);
+            ctx.lineTo(GRID_OFFSET_X + c * CELL_SIZE, GRID_OFFSET_Y + ROWS * CELL_SIZE);
+            ctx.stroke();
+        }
+
+        // Geplaatste blokken
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (grid[r][c] === 1) {
+                    const x = GRID_OFFSET_X + c * CELL_SIZE;
+                    const y = GRID_OFFSET_Y + r * CELL_SIZE;
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.shadowColor = '#fbbf24';
+                    ctx.shadowBlur = 8;
+                    ctx.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+                    ctx.shadowBlur = 0;
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.strokeRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+                }
             }
         }
 
-        // Teken functionaliteit
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Speler (Roblox-stijl)
+        const px = GRID_OFFSET_X + player.x * CELL_SIZE + 2;
+        const py = GRID_OFFSET_Y + player.y * CELL_SIZE + 2;
+        ctx.fillStyle = '#3b82f6';
+        ctx.shadowColor = '#3b82f6';
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.roundRect(px, py, CELL_SIZE - 4, CELL_SIZE - 4, 4);
+        ctx.fill();
+        // Hoofd
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#fca5a5';
+        ctx.beginPath();
+        ctx.arc(px + CELL_SIZE/2 - 2, py - 6, 7, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(px + 4, py - 7, 2, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(px + CELL_SIZE - 8, py - 7, 2, 0, Math.PI*2);
+        ctx.fill();
 
-            // Grond
-            ctx.fillStyle = '#10b981';
-            ctx.fillRect(0, 270, canvas.width, 30);
+        // Tooltip
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px monospace';
+        ctx.fillText('⬆⬇⬅➡  |  SPATIE = plaats', 10, 20);
 
-            // Geplaatste blokjes
-            blocks.forEach(b => {
-                ctx.fillStyle = b.color;
-                ctx.fillRect(b.x, b.y, b.w, b.h);
-                ctx.strokeStyle = '#000';
-                ctx.strokeRect(b.x, b.y, b.w, b.h);
-            });
-
-            // Speler (Roblox avatar stijl)
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            // Hoofd
-            ctx.fillStyle = '#fca5a5';
-            ctx.fillRect(player.x + 5, player.y - 15, 20, 15);
-
-            requestAnimationFrame(draw);
+        // Status
+        if (birdComplete) {
+            ctx.fillStyle = '#22c55e';
+            ctx.font = 'bold 24px sans-serif';
+            ctx.fillText('🌟 VOGEL GEBOUWD! 🌟', GRID_OFFSET_X + 100, GRID_OFFSET_Y - 15);
+        } else if (taskComplete) {
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.fillText('✅ CIJFER GEBOUWD! Nu de vogel!', GRID_OFFSET_X + 80, GRID_OFFSET_Y - 15);
         }
+    }
 
-        function movePlayer(dir) {
-            if (!gameActive) return;
-            player.x += dir;
-            if (player.x < 0) player.x = 0;
-            if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+    // Helper voor roundRect
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this.moveTo(x + r, y);
+        this.lineTo(x + w - r, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + r);
+        this.lineTo(x + w, y + h - r);
+        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        this.lineTo(x + r, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - r);
+        this.lineTo(x, y + r);
+        this.quadraticCurveTo(x, y, x + r, y);
+        this.closePath();
+        return this;
+    };
+
+    // ============================================================
+    //  GAME LOGIC
+    // ============================================================
+    function placeBlock() {
+        if (!gameActive) return;
+        const c = player.x;
+        const r = player.y;
+        if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c] === 0) {
+            grid[r][c] = 1;
+            blocksPlaced++;
+            document.getElementById('blockCount').textContent = blocksPlaced;
+            checkTaskCompletion();
         }
+    }
 
-        function placeBlock() {
-            if (!gameActive) return;
-            const colors = ['#ef4444', '#3b82f6', '#eab308', '#a855f7', '#ec4899'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Stapel op grond of op ander blokje
-            let blockY = 240;
-            blocks.forEach(b => {
-                if (Math.abs(b.x - player.x) < 25) {
-                    blockY = Math.min(blockY, b.y - 30);
+    function removeBlock() {
+        if (!gameActive) return;
+        const c = player.x;
+        const r = player.y;
+        if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c] === 1) {
+            grid[r][c] = 0;
+            blocksPlaced--;
+            document.getElementById('blockCount').textContent = blocksPlaced;
+            taskComplete = false;
+            birdComplete = false;
+            birdTaskActive = false;
+            document.getElementById('statusMessage').innerHTML = `<i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!`;
+            document.getElementById('statusMessage').className = 'status-box';
+            updateExampleGrid('2');
+        }
+    }
+
+    function clearBlocks() {
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                grid[r][c] = 0;
+            }
+        }
+        blocksPlaced = 0;
+        taskComplete = false;
+        birdComplete = false;
+        birdTaskActive = false;
+        document.getElementById('blockCount').textContent = '0';
+        document.getElementById('statusMessage').innerHTML = `<i class="fa-regular fa-hourglass-half"></i> Bouw de "2" na!`;
+        document.getElementById('statusMessage').className = 'status-box';
+        updateExampleGrid('2');
+    }
+
+    function movePlayer(dx, dy) {
+        if (!gameActive) return;
+        let nx = player.x + dx;
+        let ny = player.y + dy;
+        if (nx >= 0 && nx < COLS && ny >= 0 && ny < ROWS) {
+            player.x = nx;
+            player.y = ny;
+        }
+    }
+
+    // Toetsenbord
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') movePlayer(-1, 0);
+        else if (e.key === 'ArrowRight') movePlayer(1, 0);
+        else if (e.key === 'ArrowUp') movePlayer(0, -1);
+        else if (e.key === 'ArrowDown') movePlayer(0, 1);
+        else if (e.key === ' ' || e.key === 'Space') { e.preventDefault(); placeBlock(); }
+        else if (e.key === 'r' || e.key === 'R') clearBlocks();
+    });
+
+    // ============================================================
+    //  TAAKCHECK: vergelijk grid met voorbeeld
+    // ============================================================
+    function checkTaskCompletion() {
+        const shape = birdTaskActive ? birdShape : exampleShape;
+        const rows = shape.length;
+        const cols = shape[0].length;
+        // Zoek naar patroon op grid
+        let found = false;
+        for (let r = 0; r <= ROWS - rows; r++) {
+            for (let c = 0; c <= COLS - cols; c++) {
+                let match = true;
+                for (let sr = 0; sr < rows; sr++) {
+                    for (let sc = 0; sc < cols; sc++) {
+                        const expected = shape[sr][sc];
+                        const actual = grid[r + sr][c + sc];
+                        if (expected !== actual) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (!match) break;
                 }
-            });
-
-            blocks.push({ x: player.x, y: blockY, w: 30, h: 30, color: randomColor });
-            player.y = Math.max(20, blockY - 40); // Speler klimt mee omhoog
+                if (match) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
         }
 
-        // Toetsenbord besturing
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'a') movePlayer(-15);
-            if (e.key === 'ArrowRight' || e.key === 'd') movePlayer(15);
-            if (e.key === ' ' || e.key === 'ArrowUp') placeBlock();
-        });
+        if (found) {
+            if (birdTaskActive) {
+                birdComplete = true;
+                document.getElementById('statusMessage').innerHTML = `🐦 <strong>VOGEL GEBOUWD!</strong> Geweldig! Je bent een echte bouwer!`;
+                document.getElementById('statusMessage').className = 'status-box success';
+            } else {
+                taskComplete = true;
+                birdTaskActive = true;
+                document.getElementById('statusMessage').innerHTML = `✅ <strong>Cijfer gebouwd!</strong> Bouw nu de vogel! 🐦`;
+                document.getElementById('statusMessage').className = 'status-box success';
+                updateExampleGrid('bird');
+                // Speel vogelgeluid
+                playAlertSound();
+            }
+        }
+    }
 
-        // Timer and Interval Event Loop
-        const timerInterval = setInterval(() => {
+    // ============================================================
+    //  VOORBEELD WEERGAVE
+    // ============================================================
+    function updateExampleGrid(type) {
+        const container = document.getElementById('exampleGrid');
+        container.innerHTML = '';
+        let shape = type === 'bird' ? birdShape : exampleShape;
+        const rows = shape.length;
+        const cols = shape[0].length;
+        container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell' + (shape[r][c] ? ' filled' : '');
+                if (type === 'bird' && shape[r][c]) cell.className += ' filled-blue';
+                container.appendChild(cell);
+            }
+        }
+    }
+
+    // ============================================================
+    //  POP-UP & CHAT
+    // ============================================================
+    function playAlertSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        } catch(e) { /* stil */ }
+    }
+
+    function triggerPopup(sender, text) {
+        playAlertSound();
+        const alertBox = document.getElementById('popupAlert');
+        const alertText = document.getElementById('popupText');
+        alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
+        alertBox.style.display = 'block';
+        setTimeout(() => { alertBox.style.display = 'none'; }, 6000);
+
+        // Chat log
+        const chatLog = document.getElementById('chatLog');
+        if (chatLog.children[0] && chatLog.children[0].innerText.includes('Wacht op berichten')) {
+            chatLog.innerHTML = '';
+        }
+        const entry = document.createElement('div');
+        entry.className = 'chat-entry';
+        entry.innerHTML = `<span class="sender">${sender}:</span> ${text}`;
+        chatLog.appendChild(entry);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // ============================================================
+    //  TIMER
+    // ============================================================
+    function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
+                timerInterval = null;
                 gameActive = false;
-                document.getElementById('gameTimer').innerText = "Tijd is om!";
-                document.getElementById('popupText').innerText = "De 3 minuten zijn voorbij. Vul nu de vragen hieronder in!";
-                document.getElementById('popupAlert').style.display = 'block';
+                document.getElementById('gameTimer').innerHTML = `<i class="fa-solid fa-clock"></i> 00:00`;
+                document.getElementById('statusMessage').innerHTML = `⏰ <strong>Tijd is om!</strong> Vul de vragen hieronder in.`;
+                document.getElementById('statusMessage').className = 'status-box fail';
                 return;
             }
-
             timeLeft--;
             const mins = Math.floor(timeLeft / 60);
             const secs = timeLeft % 60;
-            document.getElementById('gameTimer').innerHTML = `<i class="fa-solid fa-clock"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            document.getElementById('gameTimer').innerHTML = 
+                `<i class="fa-solid fa-clock"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
-            // Controleer op Pop-ups
+            // Pop-up check
             const match = popups.find(p => p.time === timeLeft);
             if (match) {
                 triggerPopup(match.sender, match.text);
             }
         }, 1000);
+    }
 
-        function triggerPopup(sender, text) {
-            playAlertSound();
-            
-            const alertBox = document.getElementById('popupAlert');
-            const alertText = document.getElementById('popupText');
-            alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
-            alertBox.style.display = 'block';
+    // ============================================================
+    //  INIT
+    // ============================================================
+    updateExampleGrid('2');
+    document.getElementById('blockCount').textContent = '0';
+    draw();
+    startTimer();
 
-            // Voeg toe aan log
-            const chatLog = document.getElementById('chatLog');
-            if (chatLog.children[0] && chatLog.children[0].innerText.includes("Nog geen berichten")) {
-                chatLog.innerHTML = "";
-            }
-            
-            const newEntry = document.createElement('div');
-            newEntry.className = 'chat-entry';
-            newEntry.innerHTML = `<strong style="color: #f59e0b;">${sender}:</strong> ${text}`;
-            chatLog.appendChild(newEntry);
-            chatLog.scrollTop = chatLog.scrollHeight;
-        }
+    // Animatielus
+    setInterval(draw, 100);
 
-        draw();
-    </script>
+    // Expose functies voor HTML
+    window.movePlayer = (dx) => { movePlayer(dx > 0 ? 1 : -1, 0); };
+    window.placeBlock = placeBlock;
+    window.removeBlock = removeBlock;
+    window.clearBlocks = clearBlocks;
+
+    console.log('🎮 Roblox Bouw-Simulator gestart! Bouw de "2" en daarna de vogel!');
+</script>
 </body>
 </html>
