@@ -24,7 +24,18 @@
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
 
-        /* POP-UP & CHAT LOG STYLES */
+        /* REFLECTIE STIJLEN */
+        .reflection-questions { background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-top: 25px; }
+        .reflection-questions h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
+        .reflection-questions .form-group { margin-bottom: 15px; }
+        .reflection-questions textarea { height: 90px; }
+        .btn-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+        .btn-group .btn { background-color: #003366; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
+        .btn-group .btn:hover { background-color: #ffcc00; color: #002244; }
+        .btn-group .btn.print { background-color: #1e293b; }
+        .btn-group .btn.print:hover { background-color: #ffcc00; color: #002244; }
+
+        /* POP-UP & CHAT LOG STYLES (ongewijzigd) */
         .chat-popup-alert { display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-weight: bold; animation: pulse 0.5s ease-in-out; }
         @keyframes pulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
@@ -35,7 +46,7 @@
             position: relative;
             width: 100%;
             height: 550px;
-            background: #e8ecf1; /* lichte achtergrond, zoals de referentie */
+            background: #e8ecf1;
             user-select: none;
             border-radius: 8px;
             overflow: hidden;
@@ -47,7 +58,6 @@
         #game-container canvas { display: block; width: 100% !important; height: 100% !important; }
         #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 
-        /* HEADER IETS TRANSPARANTER */
         #game-header {
             pointer-events: auto;
             background: rgba(255, 255, 255, 0.92);
@@ -70,7 +80,6 @@
 
         #camera-info { pointer-events: none; position: absolute; top: 50px; right: 15px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 6px; color: #333; font-size: 11px; border: 1px solid #ccc; }
 
-        /* BOUWMENU - COMPACT EN HELDER */
         #build-menu {
             pointer-events: auto;
             position: absolute;
@@ -133,13 +142,13 @@
 </head>
 <body>
 
-    <!-- HEADER WEBKWESTIE (ONGEWIJZIGD) -->
+    <!-- HEADER WEBKWESTIE -->
     <div class="header-main">
         <h1 style="margin:0;">POLITIE CYBER CRIME DOSSIER</h1>
         <p style="margin:5px 0 0 0;">Missie: Nepidentiteiten op Roblox Ontmaskeren</p>
     </div>
 
-    <!-- NAVIGATIE (ONGEWIJZIGD) -->
+    <!-- NAVIGATIE -->
     <div class="nav">
         <a href="index.html">1. Inleiding</a>
         <a href="opdracht.html">2. De Opdracht</a>
@@ -150,7 +159,7 @@
         <a href="leerkracht.html">7. Leerkracht</a>
     </div>
 
-    <!-- CONTAINER (ONGEWIJZIGD) -->
+    <!-- CONTAINER -->
     <div class="container">
         <h2>3. Werkwijze: Simulatie & Analyse</h2>
         <p>Start de opdracht en bouw mee in de VeiligBlox omgeving. Terwijl je speelt, zullen er berichten van andere spelers binnenkomen. <strong>Let goed op wat er voorbij komt!</strong></p>
@@ -164,7 +173,7 @@
             <div style="color:#94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
         </div>
 
-        <!-- VEILIGBLOX 3D (AANGEPAST) -->
+        <!-- VEILIGBLOX 3D -->
         <div id="veiligblox-wrapper">
             <div id="game-container"></div>
             <div id="ui-overlay">
@@ -234,7 +243,7 @@
         </div>
         <!-- EINDE VEILIGBLOX -->
 
-        <!-- RECHERCHEUR 1 (ONGEWIJZIGD) -->
+        <!-- RECHERCHEUR 1 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
             <div class="form-group">
@@ -251,7 +260,7 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 2 (ONGEWIJZIGD) -->
+        <!-- RECHERCHEUR 2 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
             <div class="form-group">
@@ -264,7 +273,7 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 3 (ONGEWIJZIGD) -->
+        <!-- RECHERCHEUR 3 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
             <div class="form-group">
@@ -281,7 +290,24 @@
             </div>
         </div>
 
-        <hr>
+        <!-- ===== SLOTREFLECTIE RECHERCHELTEAM (LAATSTE OPDracht) ===== -->
+        <div class="reflection-questions" id="slotreflectie">
+            <h3><i class="fa-solid fa-clipboard-check"></i> Slotreflectie Rechercheteam</h3>
+            <div class="form-group">
+                <label>Wat is het belangrijkste dat je tijdens dit onderzoek hebt geleerd over veiligheid op Roblox?</label>
+                <textarea id="reflection1" placeholder="Typ hier je antwoord..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Wat zou je een klasgenoot adviseren die benaderd wordt door een vreemde speler?</label>
+                <textarea id="reflection2" placeholder="Typ hier je antwoord..."></textarea>
+            </div>
+            <div class="btn-group">
+                <button class="btn print" onclick="window.print()"><i class="fa-solid fa-print"></i> Afdrukken</button>
+                <button class="btn" id="saveBtn"><i class="fa-solid fa-download"></i> Opslaan (download .txt)</button>
+            </div>
+        </div>
+
+        <hr style="margin-top: 30px;">
         <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
@@ -419,7 +445,7 @@
             // --- THREE.JS INIT ---
             function initScene() {
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xe8ecf1); // lichte achtergrond
+                scene.background = new THREE.Color(0xe8ecf1);
 
                 const aspect = containerWrapper.clientWidth / containerWrapper.clientHeight;
                 camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
@@ -434,7 +460,6 @@
                 renderer.domElement.style.height = '100%';
                 document.getElementById('game-container').appendChild(renderer.domElement);
 
-                // Licht: zacht en gelijkmatig
                 const ambient = new THREE.AmbientLight(0xffffff, 0.7);
                 scene.add(ambient);
 
@@ -457,7 +482,6 @@
                 scene.add(fillLight);
             }
 
-            // --- GROND (lichter, met raster) ---
             function createGround() {
                 const geo = new THREE.PlaneGeometry(20, 20);
                 const mat = new THREE.MeshStandardMaterial({
@@ -472,13 +496,11 @@
                 ground.name = 'ground';
                 scene.add(ground);
 
-                // Fijn raster (zoals in de referentie)
                 const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xbbbbbb);
                 gridHelper.position.y = 0.01;
                 scene.add(gridHelper);
             }
 
-            // --- BLOK FUNCTIES ---
             function addBlockToScene(x, y, z, color = null) {
                 const finalColor = color || selectedColor;
                 const geo = new THREE.BoxGeometry(BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
@@ -492,7 +514,6 @@
                 mesh.position.set(x, y + BLOCK_SIZE / 2, z);
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
-                // Randen (zwarte lijnen) voor de blokken, zoals in de referentie
                 const edges = new THREE.EdgesGeometry(geo);
                 const lineMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 1 });
                 const wireframe = new THREE.LineSegments(edges, lineMat);
@@ -539,7 +560,6 @@
                 scoreDisplayEl.textContent = score;
             }
 
-            // --- INTERACTIE ---
             function getIntersection(event, objects) {
                 const rect = renderer.domElement.getBoundingClientRect();
                 const mouse = new THREE.Vector2();
@@ -551,7 +571,6 @@
                 return intersects.length > 0 ? intersects[0] : null;
             }
 
-            // --- CAMERA ---
             function updateCamera() {
                 const x = camDist * Math.cos(camTheta) * Math.cos(camPhi);
                 const y = camDist * Math.sin(camPhi);
@@ -589,7 +608,6 @@
                 }, { passive: false });
             }
 
-            // --- OPDACHT LOGICA ---
             function startOpdracht(name) {
                 const opdracht = OPDACHTEN[name];
                 if (!opdracht) return;
@@ -691,7 +709,6 @@
 
             popupBtn.addEventListener('click', () => { popupOverlay.classList.remove('show'); });
 
-            // --- TIMER ---
             function startTimer() {
                 if (timerRunning) return;
                 timerRunning = true;
@@ -786,7 +803,6 @@
 
             closeOpdrachtBtn.addEventListener('click', closeOpdracht);
 
-            // --- KLIK / RECHTSKLIK VOOR BOUWEN ---
             renderer.domElement.addEventListener('click', (e) => {
                 if (e.button !== 0) return;
                 if (deleteMode) {
@@ -798,7 +814,6 @@
                 if (hit) {
                     const x = Math.round(hit.point.x / GRID) * GRID;
                     const z = Math.round(hit.point.z / GRID) * GRID;
-                    // Check of er al een blok staat op (x,z) y=0
                     let occupied = false;
                     for (let b of blocks) {
                         if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4 && Math.abs(b.userData.y - 0) < 0.1) {
@@ -819,7 +834,6 @@
                 if (hit) removeBlock(hit.object);
             });
 
-            // --- RESIZE ---
             window.addEventListener('resize', () => {
                 const w = containerWrapper.clientWidth;
                 const h = containerWrapper.clientHeight;
@@ -830,20 +844,16 @@
                 }
             });
 
-            // --- DECORATIE (enkele startblokken) ---
             function addDecoration() {
-                // Een paar startblokken om te laten zien hoe het werkt
                 addBlockToScene(0, 0, 0, '#ff6b6b');
                 addBlockToScene(1.2, 0, 0, '#45b7d1');
                 addBlockToScene(-1.2, 0, 0, '#45b7d1');
                 addBlockToScene(0, 0.8, 0, '#ffcc00');
-                // Een torentje als voorbeeld
                 addBlockToScene(2.5, 0, 1.5, '#4ecdc4');
                 addBlockToScene(2.5, 0.8, 1.5, '#4ecdc4');
                 addBlockToScene(2.5, 1.6, 1.5, '#ff9f43');
             }
 
-            // --- INIT ---
             function init() {
                 initScene();
                 createGround();
@@ -862,5 +872,37 @@
 
         })();
     </script>
+
+    <!-- ===== SCRIPT VOOR OPSLAAN VAN REFLECTIE ===== -->
+    <script>
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            const antwoord1 = document.getElementById('reflection1').value.trim();
+            const antwoord2 = document.getElementById('reflection2').value.trim();
+
+            if (!antwoord1 && !antwoord2) {
+                alert('Je hebt nog niets ingevuld. Schrijf eerst je antwoorden op.');
+                return;
+            }
+
+            const text = 
+                '=== SLOTREFLECTIE RECHERCHELTEAM ===\n\n' +
+                'Vraag 1: Wat is het belangrijkste dat je tijdens dit onderzoek hebt geleerd over veiligheid op Roblox?\n' +
+                'Antwoord: ' + (antwoord1 || '(niet ingevuld)') + '\n\n' +
+                'Vraag 2: Wat zou je een klasgenoot adviseren die benaderd wordt door een vreemde speler?\n' +
+                'Antwoord: ' + (antwoord2 || '(niet ingevuld)') + '\n\n' +
+                'Datum: ' + new Date().toLocaleDateString('nl-NL') + '\n';
+
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'slotreflectie_rechercheteam.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+
 </body>
 </html>
