@@ -6,14 +6,16 @@
     <title>Politiedossier Roblox - Werkwijze</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
     <style>
-        /* MAIN WEBKWESTIE STYLES (ONGEWIJZIGD) */
+        /* === WEBKWESTIE STIJLEN (BESTAANDE STRUCTUUR) === */
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c252e; }
         .header-main { background-color: #002244; color: #ffffff; padding: 20px; text-align: center; border-bottom: 5px solid #ffcc00; }
         .nav { background-color: #003366; display: flex; justify-content: center; flex-wrap: wrap; }
         .nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav a:hover, .nav a.active { background-color: #ffcc00; color: #002244; }
-        .container { max-width: 900px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 950px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
         .role-box { background: #fdf8e4; border: 1px solid #f0c36d; border-left: 5px solid #ffcc00; padding: 20px; margin-bottom: 25px; border-radius: 6px; }
         .role-box h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
@@ -24,120 +26,102 @@
         .btn-next { display: inline-block; background-color: #003366; color: white; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; margin-top: 15px; }
         .btn-next:hover { background-color: #ffcc00; color: #002244; }
 
-        /* REFLECTIE STIJLEN */
+        .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
+        .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
+
         .reflection-questions { background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-top: 25px; }
-        .reflection-questions h3 { margin-top: 0; color: #002244; display: flex; align-items: center; gap: 8px; }
-        .reflection-questions .form-group { margin-bottom: 15px; }
-        .reflection-questions textarea { height: 90px; }
         .btn-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
         .btn-group .btn { background-color: #003366; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
         .btn-group .btn:hover { background-color: #ffcc00; color: #002244; }
         .btn-group .btn.print { background-color: #1e293b; }
-        .btn-group .btn.print:hover { background-color: #ffcc00; color: #002244; }
 
-        /* POP-UP & CHAT LOG STYLES (ongewijzigd) */
-        .chat-popup-alert { display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-weight: bold; animation: pulse 0.5s ease-in-out; }
-        @keyframes pulse { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        .chat-log { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 6px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 13px; color: white; }
-        .chat-entry { margin-bottom: 5px; padding: 4px 8px; border-radius: 3px; background: #1e293b; }
-
-        /* VEILIGBLOX 3D GAME STYLES (AANGEPAST - LICHTER, MEER ALS REFERENTIE) */
+        /* === 3D REKENWEB STIJLEN (DE DOOR JOU AANGELEVERDE ENGINE) === */
         #veiligblox-wrapper {
-            position: relative;
-            width: 100%;
+            display: flex;
+            flex: 1;
             height: 550px;
-            background: #e8ecf1;
-            user-select: none;
+            margin-bottom: 20px;
             border-radius: 8px;
             overflow: hidden;
-            border: 2px solid #374151;
-            margin-bottom: 20px;
+            border: 2px solid #334155;
+            background: #0f172a;
         }
-        #veiligblox-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
-        #game-container { width: 100%; height: 100%; display: block; }
-        #game-container canvas { display: block; width: 100% !important; height: 100% !important; }
-        #ui-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-
-        #game-header {
-            pointer-events: auto;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(6px);
-            padding: 6px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ccc;
-            flex-wrap: wrap;
-            gap: 6px;
+        #viewport-container {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #334155 0%, #0f172a 100%);
         }
-        #game-header h1 { font-size: 16px; font-weight: 800; color: #003366; font-family: 'Segoe UI', sans-serif; text-shadow: none; }
-        #game-header h1 span { color: #ff6b00; }
-        .header-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .safe-badge { background: #00cc66; color: #fff; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #88ff88; }
-        .build-counter { background: rgba(0,51,102,0.1); color: #003366; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #003366; }
-        .timer-display { background: rgba(200,0,0,0.1); color: #cc0000; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #cc0000; }
-        .score-display { background: rgba(255,200,0,0.2); color: #b8860b; padding: 2px 10px; border-radius: 30px; font-weight: bold; font-size: 11px; border: 1px solid #b8860b; }
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
 
-        #camera-info { pointer-events: none; position: absolute; top: 50px; right: 15px; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 6px; color: #333; font-size: 11px; border: 1px solid #ccc; }
-
-        #build-menu {
-            pointer-events: auto;
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(8px);
-            border-radius: 10px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        /* === 3D SIDEBAR BINNEN DE WEBKWESTIE === */
+        .sidebar {
+            width: 320px;
+            background-color: #0f172a;
+            border-left: 2px solid #334155;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            align-items: center;
-            max-height: 80%;
+            gap: 12px;
             overflow-y: auto;
         }
-        #build-menu label { color: #003366; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-        .color-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; }
-        .color-btn { width: 22px; height: 22px; border-radius: 4px; border: 2px solid #ddd; cursor: pointer; transition: all 0.2s; pointer-events: auto; }
-        .color-btn:hover { transform: scale(1.15); border-color: #003366; }
-        .color-btn.active { border-color: #003366; box-shadow: 0 0 8px rgba(0,51,102,0.4); transform: scale(1.1); }
-        .build-btn { pointer-events: auto; background: #003366; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 10px; cursor: pointer; width: 100%; transition: all 0.2s; }
-        .build-btn:hover { background: #ff6b00; }
-        .build-btn.delete-mode { background: #cc0000; }
-        .build-btn.delete-mode:hover { background: #990000; }
-        .build-btn.opdracht-btn { background: #e6e6e6; color: #003366; }
-        .build-btn.opdracht-btn:hover { background: #ff6b00; color: white; }
-        .build-btn.opdracht-btn.active-opdracht { background: #ff6b00; color: white; }
+        .task-card { background-color: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 15px; }
+        .task-card h2 { font-size: 1.1rem; color: #f59e0b; margin-bottom: 8px; }
+        .task-card p { font-size: 0.9rem; color: #94a3b8; line-height: 1.4; margin-bottom: 12px; }
+        .nav-buttons { display: flex; gap: 8px; margin-bottom: 10px; }
+        .btn-nav { flex: 1; padding: 6px; background: #334155; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-nav:hover { background: #475569; }
 
-        #opdracht-panel { pointer-events: auto; position: absolute; top: 50px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 10px; padding: 10px 16px; border: 1px solid #ccc; text-align: center; display: none; width: 80%; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-        #opdracht-panel.show { display: block; }
-        #opdracht-panel h2 { color: #003366; font-size: 15px; margin-bottom: 3px; }
-        #opdracht-panel p { color: #333; font-size: 12px; margin: 2px 0; }
-        #opdracht-panel .hint { color: #0066cc; font-style: italic; }
-        #opdracht-panel .progress { color: #ff6b00; font-weight: bold; }
-        .close-opdracht { pointer-events: auto; background: #cc0000; color: #fff; border: none; padding: 3px 12px; border-radius: 12px; font-size: 11px; cursor: pointer; margin-top: 4px; }
+        .grid-target { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 160px; height: 160px; margin: 10px auto; background: #334155; padding: 4px; border-radius: 6px; }
+        .grid-cell { background: #1e293b; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #38bdf8; border-radius: 3px; }
+        
+        .controls-panel { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .mode-toggle { display: flex; background: #0f172a; border-radius: 6px; padding: 3px; }
+        .btn-mode { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .btn-mode.active { background: #0284c7; color: white; }
+        .btn-action { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-check { background: #10b981; color: white; }
+        .btn-check:hover { background: #059669; }
+        .btn-clear { background: #ef4444; color: white; }
+        .btn-clear:hover { background: #dc2626; }
+        .stats { display: flex; justify-content: space-between; background: #0f172a; padding: 8px 12px; border-radius: 6px; font-size: 0.9rem; }
 
-        #voorbeeld-container { pointer-events: auto; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border-radius: 10px; padding: 8px; border: 1px solid #ccc; display: none; flex-direction: column; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        #voorbeeld-container.show { display: flex; }
-        #voorbeeld-container h4 { color: #003366; font-size: 11px; margin-bottom: 4px; }
-        #voorbeeld-canvas { width: 100px; height: 100px; background: rgba(255,255,255,0.8); border-radius: 6px; border: 1px solid #ddd; }
-        #voorbeeld-container .stappen { color: #333; font-size: 9px; margin-top: 4px; text-align: left; width: 100%; padding: 2px 4px; list-style: none; }
-        #voorbeeld-container .stappen li { margin: 1px 0; color: #666; }
-        #voorbeeld-container .stappen li.done { color: #006600; }
-
-        #popup-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; pointer-events: auto; }
+        /* === POP-UPS & MELDINGEN IN BEELD (ZONDER DAT ZE ERBOVEN KOMEN) === */
+        #popup-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; 
+            justify-content: center; align-items: center; z-index: 2000; pointer-events: auto;
+        }
         #popup-overlay.show { display: flex; }
-        #popup-box { background: white; border: 2px solid #ff6b00; border-radius: 16px; padding: 20px 30px; text-align: center; color: #003366; max-width: 90%; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-        #popup-box h2 { font-size: 20px; color: #ff6b00; margin-bottom: 6px; }
-        #popup-box p { font-size: 14px; margin: 6px 0; }
-        .btn-popup { margin-top: 12px; padding: 8px 24px; background: #ff6b00; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; pointer-events: auto; }
-        .btn-popup:hover { background: #cc5500; }
+        #popup-box { background: white; border: 2px solid #ff6b00; border-radius: 12px; padding: 20px 30px; text-align: center; color: #003366; max-width: 90%; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        #popup-box h2 { font-size: 20px; color: #10b981; margin-bottom: 6px; }
+        .btn-popup { margin-top: 12px; padding: 8px 24px; background: #10b981; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .btn-popup:hover { background: #059669; }
+
+        #popupAlert {
+            display: none; background: #ffe4e6; border: 2px solid #e11d48; color: #881337; padding: 10px 16px; 
+            border-radius: 8px; font-weight: bold; animation: pulse 0.5s ease-in-out; pointer-events: none;
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 400px; z-index: 100;
+        }
+        @keyframes pulse { 0% { transform: translateX(-50%) scale(0.98); } 50% { transform: translateX(-50%) scale(1.02); } 100% { transform: translateX(-50%) scale(1); } }
+
+        #feedback-msg { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity 0.3s; z-index: 100; }
+        #feedback-msg.show { opacity: 1; }
+        #feedback-msg.good { background: #10b981; }
+        #feedback-msg.bad { background: #ef4444; }
 
         #timer-warning { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(200,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 20px; font-weight: bold; display: none; z-index: 1500; text-shadow: 0 0 10px #000; }
-        #info-balk { pointer-events:none; position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.85); backdrop-filter:blur(4px); padding:4px 14px; border-radius:20px; color:#333; font-size:11px; border:1px solid #ccc; text-align:center; white-space:nowrap; }
+        
+        .tooltip { position: absolute; top: 10px; left: 10px; background: rgba(15, 23, 42, 0.8); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; pointer-events: none; color: #cbd5e1; }
+        
+        @media (max-width: 800px) {
+            #veiligblox-wrapper { flex-direction: column; height: auto; }
+            .sidebar { width: 100%; border-left: none; border-top: 2px solid #334155; max-height: 300px; }
+            #viewport-container { height: 400px; }
+        }
     </style>
 </head>
 <body>
@@ -159,91 +143,71 @@
         <a href="leerkracht.html">7. Leerkracht</a>
     </div>
 
-    <!-- CONTAINER -->
+    <!-- CONTAINER MET 3D SIMULATIE -->
     <div class="container">
         <h2>3. Werkwijze: Simulatie & Analyse</h2>
         <p>Start de opdracht en bouw mee in de VeiligBlox omgeving. Terwijl je speelt, zullen er berichten van andere spelers binnenkomen. <strong>Let goed op wat er voorbij komt!</strong></p>
 
-        <!-- BEWIJSMATERIAAL POPUP & LOG -->
-        <div id="popupAlert" class="chat-popup-alert">
-            <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
-        </div>
+        <!-- BEWIJSMATERIAAL LOG -->
         <p style="font-size:13px; color:#64748b; font-weight:bold; margin-bottom:5px;">Ontvangen Chatberichten (Bewijsmateriaal Log):</p>
         <div class="chat-log" id="chatLog">
             <div style="color:#94a3b8;">Nog geen berichten ontvangen... Start een bouwopdracht.</div>
         </div>
 
-        <!-- VEILIGBLOX 3D -->
+        <!-- VEILIGBLOX 3D (JOUW 3D ENGINE) -->
         <div id="veiligblox-wrapper">
-            <div id="game-container"></div>
-            <div id="ui-overlay">
-                <div id="game-header">
-                    <h1>🧱 <span>Veilig</span>Blox</h1>
-                    <div class="header-right">
-                        <span class="timer-display" id="timerDisplay">⏱️ 3:00</span>
-                        <span class="score-display">⭐ <span id="scoreDisplay">0</span></span>
-                        <span class="build-counter">🧱 <span id="blockCount">0</span></span>
-                        <span class="safe-badge">✅ Veilig</span>
-                    </div>
+            <div id="viewport-container">
+                <div class="tooltip">Klik op een vlak om een blok te plaatsen (voor/achter/links/rechts/boven). Sleep om te draaien.</div>
+                <canvas id="canvas3d"></canvas>
+                
+                <div id="popupAlert">
+                    <i class="fa-solid fa-bell"></i> <span id="popupText">...</span>
                 </div>
-
-                <div id="camera-info">🖱️ Sleep · Scroll om te zoomen</div>
-
-                <div id="opdracht-panel">
-                    <h2 id="opdracht-titel">🏗️ Bouw een vogel</h2>
-                    <p id="opdracht-beschrijving">Maak een vogel met een oranje lijf, blauwe vleugels en een gele kop.</p>
-                    <p class="hint" id="opdracht-hint">💡 Begin met het lijf, dan vleugels, en de kop bovenop.</p>
-                    <p class="progress" id="opdracht-progress">Voortgang: 0/3 stappen</p>
-                    <button class="close-opdracht" id="close-opdracht">✖ Sluiten</button>
-                </div>
-
-                <div id="voorbeeld-container">
-                    <h4 id="voorbeeld-titel">📐 Voorbeeld</h4>
-                    <canvas id="voorbeeld-canvas" width="100" height="100"></canvas>
-                    <ul class="stappen" id="voorbeeld-stappen"></ul>
-                </div>
-
-                <div id="build-menu">
-                    <label>🎨 Kleur</label>
-                    <div class="color-grid">
-                        <button class="color-btn active" style="background:#ff6b6b;" data-color="#ff6b6b"></button>
-                        <button class="color-btn" style="background:#ffcc00;" data-color="#ffcc00"></button>
-                        <button class="color-btn" style="background:#4ecdc4;" data-color="#4ecdc4"></button>
-                        <button class="color-btn" style="background:#45b7d1;" data-color="#45b7d1"></button>
-                        <button class="color-btn" style="background:#a29bfe;" data-color="#a29bfe"></button>
-                        <button class="color-btn" style="background:#ff9ff3;" data-color="#ff9ff3"></button>
-                        <button class="color-btn" style="background:#f368e0;" data-color="#f368e0"></button>
-                        <button class="color-btn" style="background:#00d2d3;" data-color="#00d2d3"></button>
-                        <button class="color-btn" style="background:#ff9f43;" data-color="#ff9f43"></button>
-                        <button class="color-btn" style="background:#54a0ff;" data-color="#54a0ff"></button>
-                        <button class="color-btn" style="background:#5f27cd;" data-color="#5f27cd"></button>
-                        <button class="color-btn" style="background:#1dd1a1;" data-color="#1dd1a1"></button>
-                    </div>
-                    <button class="build-btn delete-mode" id="delete-btn">🗑️ Verwijder</button>
-                    <button class="build-btn" id="clear-btn">🧹 Alles weg</button>
-                    <hr style="width:100%;border-color:#ddd;margin:2px 0;">
-                    <button class="build-btn opdracht-btn" data-opdracht="vogel">🐦 Vogel</button>
-                    <button class="build-btn opdracht-btn" data-opdracht="cijfer2">🔢 Cijfer 2</button>
-                </div>
-
+                
                 <div id="timer-warning">⏰ Nog 30 seconden!</div>
-
+                
                 <div id="popup-overlay">
                     <div id="popup-box">
-                        <h2 id="popup-title">🎉 Gefeliciteerd!</h2>
-                        <p id="popup-message">Je hebt de opdracht voltooid!</p>
+                        <h2 id="popup-title">🎉 Missie Geslaagd!</h2>
+                        <p id="popup-message">Je hebt de opdracht correct voltooid!</p>
                         <button class="btn-popup" id="popup-btn">👍 Ga door!</button>
                     </div>
                 </div>
 
-                <div id="info-balk">
-                    <strong>🔒 VeiligBlox</strong> — Klik op de grond om een blok te plaatsen · Rechtsklik om te verwijderen
+                <div id="feedback-msg"></div>
+            </div>
+
+            <!-- 3D SIDEBAR -->
+            <div class="sidebar">
+                <div class="nav-buttons">
+                    <button class="btn-nav" id="prev-task">◄ Vorige</button>
+                    <span id="task-number" style="align-self: center; font-weight: bold; color:white;">1 / 5</span>
+                    <button class="btn-nav" id="next-task">Volgende ►</button>
+                </div>
+
+                <div class="task-card">
+                    <h2 id="task-title">Opdracht 1: Cijfer 2</h2>
+                    <p id="task-desc">Bouw het cijfer 2 na...</p>
+                    <div id="task-target-container"></div>
+                </div>
+
+                <div class="controls-panel">
+                    <div class="mode-toggle">
+                        <button class="btn-mode active" id="mode-add">➕ Blok Toevoegen</button>
+                        <button class="btn-mode" id="mode-remove">➖ Blok Weghalen</button>
+                    </div>
+                    <div class="stats">
+                        <span>Aantal blokken:</span>
+                        <strong id="block-count">0</strong>
+                    </div>
+                    <button class="btn-action btn-check" id="btn-check">✔️ Controleer Antwoord</button>
+                    <button class="btn-action btn-clear" id="btn-clear">🧹 Wis Alles</button>
                 </div>
             </div>
         </div>
-        <!-- EINDE VEILIGBLOX -->
+        <!-- EINDE 3D VEILIGBLOX -->
 
-        <!-- RECHERCHEUR 1 -->
+        <!-- RECHERCHEUR ROLLEN -->
         <div class="role-box">
             <h3><i class="fa-solid fa-user-secret"></i> Rechercheur 1: Profielanalyse (Kamer 1)</h3>
             <div class="form-group">
@@ -260,7 +224,6 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 2 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-microscope"></i> Rechercheur 2: Digital Tracing (Kamer 2)</h3>
             <div class="form-group">
@@ -273,7 +236,6 @@
             </div>
         </div>
 
-        <!-- RECHERCHEUR 3 -->
         <div class="role-box">
             <h3><i class="fa-solid fa-shield-cat"></i> Rechercheur 3: Preventie & Interventie (Kamer 3)</h3>
             <div class="form-group">
@@ -290,7 +252,7 @@
             </div>
         </div>
 
-        <!-- ===== SLOTREFLECTIE RECHERCHELTEAM (LAATSTE OPDracht) ===== -->
+        <!-- SLOTREFLECTIE -->
         <div class="reflection-questions" id="slotreflectie">
             <h3><i class="fa-solid fa-clipboard-check"></i> Slotreflectie Rechercheteam</h3>
             <div class="form-group">
@@ -306,93 +268,343 @@
                 <button class="btn" id="saveBtn"><i class="fa-solid fa-download"></i> Opslaan (download .txt)</button>
             </div>
         </div>
-
         <hr style="margin-top: 30px;">
         <a href="bronnen.html" class="btn-next">Ga naar 4. Bronnen &rarr;</a>
     </div>
 
+    <!-- ===== SCRIPT (SAMENGEVOEGD) ===== -->
     <script>
         (function() {
             'use strict';
 
-            // --- CONFIG ---
-            const MAX_BLOCKS = 150;
-            const BLOCK_SIZE = 0.8;
-            const GRID = 0.5;
+            // --- CONFIG & STATE ---
+            const GRID_SIZE = 4;
+            const BLOCK_SIZE = 1;
+            let placedBlocks = new Map();
+            let buildMode = 'add';
+            let currentTaskIdx = 0;
 
-            // --- STATE ---
-            let selectedColor = '#ff6b6b';
-            let deleteMode = false;
-            let blocks = [];
-            let blockCount = 0;
-            let score = 0;
-            let currentOpdracht = null;
-            let voltooideStappen = new Set();
-
+            // --- CHAT & TIMER CONFIG ---
             let timerSeconds = 180;
             let timerInterval = null;
             let timerRunning = false;
             let timerWarningShown = false;
-
-            // --- THREE.JS ---
-            let scene, camera, renderer, ground;
-            let isDragging = false;
-            let prevMouse = { x: 0, y: 0 };
-            let camTheta = 0.4;
-            let camPhi = 0.6;
-            let camDist = 16;
-
-            // --- DOM ---
-            const containerWrapper = document.getElementById('veiligblox-wrapper');
-            const blockCountEl = document.getElementById('blockCount');
-            const scoreDisplayEl = document.getElementById('scoreDisplay');
-            const timerDisplayEl = document.getElementById('timerDisplay');
-            const timerWarningEl = document.getElementById('timer-warning');
-            const deleteBtn = document.getElementById('delete-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const opdrachtPanel = document.getElementById('opdracht-panel');
-            const opdrachtTitel = document.getElementById('opdracht-titel');
-            const opdrachtBeschrijving = document.getElementById('opdracht-beschrijving');
-            const opdrachtHint = document.getElementById('opdracht-hint');
-            const opdrachtProgress = document.getElementById('opdracht-progress');
-            const voorbeeldContainer = document.getElementById('voorbeeld-container');
-            const voorbeeldTitel = document.getElementById('voorbeeld-titel');
-            const voorbeeldCanvas = document.getElementById('voorbeeld-canvas');
-            const voorbeeldStappen = document.getElementById('voorbeeld-stappen');
-            const closeOpdrachtBtn = document.getElementById('close-opdracht');
-            const popupOverlay = document.getElementById('popup-overlay');
-            const popupTitle = document.getElementById('popup-title');
-            const popupMessage = document.getElementById('popup-message');
-            const popupBtn = document.getElementById('popup-btn');
-
-            // --- CHAT POPUPS ---
+            
+            // --- 15 CHATBERICHTEN (6 GOEDE, 9 FOUTE) ---
             const chatPopups = [
-                { time: 165, sender: "CoolBoy99", text: "Hey! Wil je samen Obby spelen?" },
-                { time: 140, sender: "ShadowMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
-                { time: 105, sender: "BuilderGirl_NL", text: "Ruilen in Adopt Me? Ik geef een Fly Ride Dragon." },
-                { time: 70, sender: "SecretFriend_2011", text: "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!" },
-                { time: 30, sender: "VIP_Gamer_007", text: "Stuur me een privéfoto van jezelf voor toegang tot de VIP server." }
+                // Goede berichten (6)
+                { time: 175, sender: "BuilderGirl_NL", text: "Hallo medespeler! Zullen we samen bouwen?" },
+                { time: 150, sender: "ProPlayer_X", text: "Mooi bouwwerk! Hoe lang ben je daar mee bezig?" },
+                { time: 125, sender: "TradingMaster", text: "Wil je ruilen in Adopt Me? Ik heb een goede aanbieding." },
+                { time: 100, sender: "FunGamer_88", text: "Zullen we een Obby doen? Ken je een leuke?" },
+                { time: 62,  sender: "SafeGuardian", text: "Let op! Deel nooit je wachtwoord met vreemden hoor." },
+                { time: 38,  sender: "BloxBuilder", text: "Veel plezier met bouwen! Je hebt talent." },
+                
+                // Foute berichten (9)
+                { time: 163, sender: "ScamMaster_X", text: "Ik geef je 10.000 GRATIS Robux! Stuur me even je wachtwoord om te claimen." },
+                { time: 138, sender: "SecretFriend_2011", text: "Zullen we verder praten op Telegram? Vertel het aan niemand hoor!" },
+                { time: 112, sender: "VIP_Gamer_007", text: "Stuur me een privéfoto van jezelf voor toegang tot de VIP server." },
+                { time: 88,  sender: "FreeRobux_Now", text: "Klik op deze link voor gratis Robux! Het is 100% veilig." },
+                { time: 74,  sender: "ShadowVisitor", text: "Doe alsof je mij vertrouwt, dan kom ik bij je langs in de game." },
+                { time: 50,  sender: "GiftSender_NL", text: "Stuur je adres, dan stuur ik je een cadeau thuis." },
+                { time: 25,  sender: "HackHelper", text: "Download dit bestand, dan kan ik je helpen met het winnen van games." },
+                { time: 12,  sender: "SecretCaller", text: "Geef me je telefoonnummer, dan bellen we en praten we verder." },
+                { time: 5,   sender: "FakePolice_RBLX", text: "Ik ben een politieagent, stuur je gegevens ter controle." }
             ];
 
-            function playAlertSound() {
-                try {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.15);
-                } catch(e) {}
+            // --- NIEUWE OPDACHTEN: CIJFERS 2, 3, 4, 5 & OLIFANT ---
+            const tasks = [
+                {
+                    title: "🔢 Bouw een Cijfer 2",
+                    desc: "Bouw het cijfer 2 na zoals getoond in het schema. Let op de hoogtes!",
+                    type: "grid",
+                    target: [
+                        [0, 2, 2, 0],
+                        [0, 0, 2, 0],
+                        [0, 2, 0, 0],
+                        [0, 2, 2, 0]
+                    ]
+                },
+                {
+                    title: "🔢 Bouw een Cijfer 3",
+                    desc: "Bouw het cijfer 3 na volgens de hoogtekaart.",
+                    type: "grid",
+                    target: [
+                        [0, 2, 2, 0],
+                        [0, 0, 2, 0],
+                        [0, 0, 2, 0],
+                        [0, 2, 2, 0]
+                    ]
+                },
+                {
+                    title: "🔢 Bouw een Cijfer 4",
+                    desc: "Bouw het cijfer 4 na met exact de juiste hoogtes.",
+                    type: "grid",
+                    target: [
+                        [0, 2, 2, 0],
+                        [0, 2, 2, 0],
+                        [0, 0, 2, 0],
+                        [0, 0, 2, 0]
+                    ]
+                },
+                {
+                    title: "🔢 Bouw een Cijfer 5",
+                    desc: "Bouw het cijfer 5 na.",
+                    type: "grid",
+                    target: [
+                        [0, 2, 2, 0],
+                        [0, 2, 0, 0],
+                        [0, 2, 2, 0],
+                        [0, 0, 2, 0]
+                    ]
+                },
+                {
+                    title: "🐘 Bouw een Olifant",
+                    desc: "Bouw deze olifant na! Lichaam (2x2), poten (4x), kop, slurf (3x) en oren.",
+                    type: "custom",
+                    check: () => {
+                        // Gestileerde olifant op het 4x4 grid
+                        const requiredBlocks = [
+                            "1,0,1", "2,0,1", "1,0,2", "2,0,2", // Lichaam
+                            "1,1,1",                              // Kop
+                            "0,0,1", "3,0,1", "0,0,2", "3,0,2", // Poten
+                            "0,0,0", "1,0,0", "2,0,0",           // Slurf
+                            "0,1,2", "3,1,2"                     // Oren
+                        ];
+                        for (let key of requiredBlocks) {
+                            if (!placedBlocks.get(key)) return false;
+                        }
+                        return true;
+                    }
+                }
+            ];
+
+            // --- THREE.JS SETUP ---
+            const container = document.getElementById('viewport-container');
+            const scene = new THREE.Scene();
+            const aspect = container.clientWidth / container.clientHeight;
+            const d = 5;
+            const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas3d'), antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+
+            camera.position.set(8, 8, 8);
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 0, 0);
+            controls.enablePan = false;
+            controls.maxPolarAngle = Math.PI / 2 - 0.05;
+            controls.minDistance = 5;
+            controls.maxDistance = 20;
+            controls.update();
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            dirLight.position.set(10, 20, 15);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 1024;
+            dirLight.shadow.mapSize.height = 1024;
+            scene.add(dirLight);
+
+            const gridGroup = new THREE.Group();
+            scene.add(gridGroup);
+            const blocksGroup = new THREE.Group();
+            scene.add(blocksGroup);
+
+            const offset = (GRID_SIZE * BLOCK_SIZE) / 2 - BLOCK_SIZE / 2;
+            const planeGeo = new THREE.PlaneGeometry(GRID_SIZE * BLOCK_SIZE, GRID_SIZE * BLOCK_SIZE);
+            const planeMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.8 });
+            const groundPlane = new THREE.Mesh(planeGeo, planeMat);
+            groundPlane.rotation.x = -Math.PI / 2;
+            groundPlane.position.y = -0.01;
+            groundPlane.receiveShadow = true;
+            gridGroup.add(groundPlane);
+
+            const interactiveTiles = [];
+            const tileGeo = new THREE.BoxGeometry(BLOCK_SIZE * 0.95, 0.05, BLOCK_SIZE * 0.95);
+            for (let x = 0; x < GRID_SIZE; x++) {
+                for (let z = 0; z < GRID_SIZE; z++) {
+                    const tileMat = new THREE.MeshStandardMaterial({ color: (x + z) % 2 === 0 ? 0x475569 : 0x64748b });
+                    const tile = new THREE.Mesh(tileGeo, tileMat);
+                    tile.position.set(x * BLOCK_SIZE - offset, 0, z * BLOCK_SIZE - offset);
+                    tile.userData = { gridX: x, gridZ: z };
+                    gridGroup.add(tile);
+                    interactiveTiles.push(tile);
+                }
             }
 
+            const blockGeo = new THREE.BoxGeometry(BLOCK_SIZE * 0.96, BLOCK_SIZE * 0.96, BLOCK_SIZE * 0.96);
+            function createBlockMesh(x, y, z) {
+                const materials = [
+                    new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.4 }),
+                    new THREE.MeshStandardMaterial({ color: 0xfcb338, roughness: 0.4 }),
+                ];
+                const mats = [materials[0], materials[0], materials[1], materials[0], materials[0], materials[0]];
+                const mesh = new THREE.Mesh(blockGeo, mats);
+                mesh.position.set(x * BLOCK_SIZE - offset, y * BLOCK_SIZE + BLOCK_SIZE / 2, z * BLOCK_SIZE - offset);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.userData = { gridX: x, gridY: y, gridZ: z };
+                return mesh;
+            }
+
+            function renderBlocks() {
+                while(blocksGroup.children.length > 0) blocksGroup.remove(blocksGroup.children[0]);
+                let totalBlocks = 0;
+                for (const [key, exists] of placedBlocks) {
+                    if (exists) {
+                        const [x, y, z] = key.split(',').map(Number);
+                        const block = createBlockMesh(x, y, z);
+                        blocksGroup.add(block);
+                        totalBlocks++;
+                    }
+                }
+                document.getElementById('block-count').innerText = totalBlocks;
+            }
+
+            // --- INTERACTIE ---
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            let isDragging = false;
+            let mouseDownPos = { x: 0, y: 0 };
+
+            window.addEventListener('pointerdown', (e) => { mouseDownPos = { x: e.clientX, y: e.clientY }; isDragging = false; });
+            window.addEventListener('pointermove', (e) => { if (Math.abs(e.clientX - mouseDownPos.x) > 5 || Math.abs(e.clientY - mouseDownPos.y) > 5) isDragging = true; });
+            window.addEventListener('pointerup', (e) => {
+                if (isDragging) return;
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                if (mouse.x < -1 || mouse.x > 1 || mouse.y < -1 || mouse.y > 1) return;
+
+                raycaster.setFromCamera(mouse, camera);
+                const allObjects = [...interactiveTiles, ...blocksGroup.children];
+                const intersects = raycaster.intersectObjects(allObjects);
+
+                if (intersects.length > 0) {
+                    const hit = intersects[0];
+                    const hitPoint = hit.point;
+                    let gx = Math.floor((hitPoint.x + offset) / BLOCK_SIZE);
+                    let gz = Math.floor((hitPoint.z + offset) / BLOCK_SIZE);
+                    let yStart = 0;
+                    let finalX = gx;
+                    let finalZ = gz;
+
+                    if (hit.object.userData.gridY !== undefined) {
+                        const normal = hit.face.normal;
+                        if (Math.abs(normal.y) > 0.5) {
+                            yStart = normal.y > 0 ? hit.object.userData.gridY + 1 : hit.object.userData.gridY - 1;
+                        } else if (Math.abs(normal.x) > 0.5) {
+                            finalX = normal.x > 0 ? hit.object.userData.gridX + 1 : hit.object.userData.gridX - 1;
+                            yStart = hit.object.userData.gridY;
+                        } else if (Math.abs(normal.z) > 0.5) {
+                            finalZ = normal.z > 0 ? hit.object.userData.gridZ + 1 : hit.object.userData.gridZ - 1;
+                            yStart = hit.object.userData.gridY;
+                        }
+                    }
+
+                    if (finalX >= 0 && finalX < GRID_SIZE && finalZ >= 0 && finalZ < GRID_SIZE && yStart >= 0 && yStart < 10) {
+                        if (buildMode === 'add') {
+                            const key = `${finalX},${yStart},${finalZ}`;
+                            if (!placedBlocks.has(key)) {
+                                placedBlocks.set(key, true);
+                                renderBlocks();
+                            }
+                        } else if (buildMode === 'remove' && hit.object.userData.gridY !== undefined) {
+                            const bx = hit.object.userData.gridX, by = hit.object.userData.gridY, bz = hit.object.userData.gridZ;
+                            const rKey = `${bx},${by},${bz}`;
+                            if (placedBlocks.has(rKey)) {
+                                placedBlocks.set(rKey, false);
+                                renderBlocks();
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- OPDRACHT LOGICA ---
+            function loadTask(idx) {
+                currentTaskIdx = idx;
+                const task = tasks[idx];
+                document.getElementById('task-number').innerText = `${idx + 1} / ${tasks.length}`;
+                document.getElementById('task-title').innerText = task.title;
+                document.getElementById('task-desc').innerText = task.desc;
+                
+                const containerTarget = document.getElementById('task-target-container');
+                containerTarget.innerHTML = '';
+
+                if (task.type === 'grid') {
+                    const gridEl = document.createElement('div');
+                    gridEl.className = 'grid-target';
+                    for (let r = 0; r < 4; r++) {
+                        for (let c = 0; c < 4; c++) {
+                            const cell = document.createElement('div');
+                            cell.className = 'grid-cell';
+                            cell.innerText = task.target[r][c] || '';
+                            gridEl.appendChild(cell);
+                        }
+                    }
+                    containerTarget.appendChild(gridEl);
+                }
+                document.getElementById('popup-overlay').style.display = 'none';
+                if (!timerRunning) startTimer();
+            }
+
+            // --- CHECK & FEEDBACK ---
+            function showFeedback(message, isGood = true) {
+                const msgEl = document.getElementById('feedback-msg');
+                msgEl.textContent = message;
+                msgEl.className = 'show';
+                msgEl.classList.add(isGood ? 'good' : 'bad');
+                clearTimeout(msgEl._timeout);
+                msgEl._timeout = setTimeout(() => { msgEl.classList.remove('show'); }, 2500);
+            }
+
+            function checkAnswer() {
+                const task = tasks[currentTaskIdx];
+                let isCorrect = false;
+
+                if (task.type === 'grid') {
+                    isCorrect = true;
+                    for (let x = 0; x < 4; x++) {
+                        for (let z = 0; z < 4; z++) {
+                            let currentMax = 0;
+                            for (let y = 0; y < 10; y++) {
+                                if (placedBlocks.has(`${x},${y},${z}`)) currentMax = y + 1;
+                            }
+                            if (currentMax !== task.target[x][z]) {
+                                isCorrect = false;
+                                break;
+                            }
+                        }
+                    }
+                } else if (task.type === 'custom') {
+                    isCorrect = task.check();
+                }
+
+                if (isCorrect) {
+                    document.getElementById('popup-overlay').style.display = 'flex';
+                    if (timerRunning) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                    }
+                } else {
+                    showFeedback('Nog niet helemaal goed. Kijk goed naar de hoogtekaart en probeer opnieuw!', false);
+                }
+            }
+
+            document.getElementById('popup-btn').addEventListener('click', () => {
+                document.getElementById('popup-overlay').style.display = 'none';
+                if (currentTaskIdx < tasks.length - 1) {
+                    loadTask(currentTaskIdx + 1);
+                } else {
+                    showFeedback('🎉 Gefeliciteerd! Alle opdrachten zijn voltooid!', true);
+                }
+            });
+
+            // --- CHAT & TIMER FUNCTIES ---
             function triggerChatPopup(sender, text) {
-                playAlertSound();
                 const alertBox = document.getElementById('popupAlert');
                 const alertText = document.getElementById('popupText');
                 alertText.innerHTML = `<strong>${sender}:</strong> "${text}"`;
@@ -400,9 +612,7 @@
                 setTimeout(() => { alertBox.style.display = 'none'; }, 6000);
 
                 const chatLog = document.getElementById('chatLog');
-                if (chatLog.children[0] && chatLog.children[0].innerText.includes("Nog geen berichten")) {
-                    chatLog.innerHTML = "";
-                }
+                if (chatLog.children[0] && chatLog.children[0].innerText.includes("Nog geen berichten")) chatLog.innerHTML = "";
                 const newEntry = document.createElement('div');
                 newEntry.className = 'chat-entry';
                 newEntry.innerHTML = `<strong style="color: #f59e0b;">${sender}:</strong> ${text}`;
@@ -410,499 +620,87 @@
                 chatLog.scrollTop = chatLog.scrollHeight;
             }
 
-            // --- OPDACHTEN ---
-            const OPDACHTEN = {
-                vogel: {
-                    titel: '🐦 Bouw een vogel',
-                    beschrijving: 'Maak een vogel met een oranje lijf, blauwe vleugels en een gele kop.',
-                    hint: '💡 Begin met het lijf (oranje) op de grond, dan vleugels (blauw) links en rechts, en de kop (geel) bovenop.',
-                    stappen: [
-                        { tekst: 'Lijf: oranje blok op de grond', check: () => blocks.filter(b => b.userData.color === '#ff6b6b' && Math.abs(b.userData.y - 0) < 0.1).length > 0 },
-                        { tekst: 'Vleugels: 2 blauwe blokken', check: () => blocks.filter(b => b.userData.color === '#45b7d1' && Math.abs(b.userData.y - 0) < 0.1).length >= 2 },
-                        { tekst: 'Kop: geel blok bovenop', check: () => blocks.filter(b => b.userData.color === '#ffcc00' && b.userData.y >= 0.8).length > 0 }
-                    ],
-                    voorbeeld: [
-                        { x: 0, y: 0, z: 0, color: '#ff6b6b' }, { x: -1.2, y: 0, z: 0, color: '#45b7d1' }, { x: 1.2, y: 0, z: 0, color: '#45b7d1' }, { x: 0, y: 0.8, z: 0, color: '#ffcc00' }
-                    ]
-                },
-                cijfer2: {
-                    titel: '🔢 Bouw het cijfer 2',
-                    beschrijving: 'Maak het cijfer 2 met blokken.',
-                    hint: '💡 Begin bovenaan, maak een gebogen lijn en eindig met een streepje onderaan.',
-                    stappen: [
-                        { tekst: 'Boven: 3 blokken', check: () => blocks.filter(b => Math.abs(b.userData.y - 0.8) < 0.1).length >= 3 },
-                        { tekst: 'Diagonaal', check: () => blocks.filter(b => Math.abs(b.userData.y - 0.4) < 0.1).length >= 1 },
-                        { tekst: 'Onder: 3 blokken op grond', check: () => blocks.filter(b => Math.abs(b.userData.y - 0) < 0.1).length >= 3 }
-                    ],
-                    voorbeeld: [
-                        { x: -1, y: 0.8, z: 0, color: '#ff6b6b' }, { x: -0.5, y: 0.8, z: 0, color: '#ff6b6b' }, { x: 0, y: 0.8, z: 0, color: '#ff6b6b' },
-                        { x: 0.5, y: 0.4, z: 0, color: '#ff6b6b' }, { x: 0.5, y: 0, z: 0, color: '#ff6b6b' }, { x: 0, y: 0, z: 0, color: '#ff6b6b' },
-                        { x: -0.5, y: 0, z: 0, color: '#ff6b6b' }, { x: -1, y: 0, z: 0, color: '#ff6b6b' }
-                    ]
-                }
-            };
-
-            // --- THREE.JS INIT ---
-            function initScene() {
-                scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xe8ecf1);
-
-                const aspect = containerWrapper.clientWidth / containerWrapper.clientHeight;
-                camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 1000);
-                updateCamera();
-
-                renderer = new THREE.WebGLRenderer({ antialias: true });
-                renderer.setSize(containerWrapper.clientWidth, containerWrapper.clientHeight);
-                renderer.shadowMap.enabled = true;
-                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                renderer.domElement.style.display = 'block';
-                renderer.domElement.style.width = '100%';
-                renderer.domElement.style.height = '100%';
-                document.getElementById('game-container').appendChild(renderer.domElement);
-
-                const ambient = new THREE.AmbientLight(0xffffff, 0.7);
-                scene.add(ambient);
-
-                const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-                dirLight.position.set(10, 20, 10);
-                dirLight.castShadow = true;
-                dirLight.shadow.mapSize.width = 2048;
-                dirLight.shadow.mapSize.height = 2048;
-                const d = 15;
-                dirLight.shadow.camera.left = -d;
-                dirLight.shadow.camera.right = d;
-                dirLight.shadow.camera.top = d;
-                dirLight.shadow.camera.bottom = -d;
-                dirLight.shadow.camera.near = 1;
-                dirLight.shadow.camera.far = 30;
-                scene.add(dirLight);
-
-                const fillLight = new THREE.DirectionalLight(0xccddff, 0.3);
-                fillLight.position.set(-10, 5, -10);
-                scene.add(fillLight);
-            }
-
-            function createGround() {
-                const geo = new THREE.PlaneGeometry(20, 20);
-                const mat = new THREE.MeshStandardMaterial({
-                    color: 0xdadfe6,
-                    roughness: 0.8,
-                    metalness: 0.1
-                });
-                ground = new THREE.Mesh(geo, mat);
-                ground.rotation.x = -Math.PI / 2;
-                ground.position.y = 0;
-                ground.receiveShadow = true;
-                ground.name = 'ground';
-                scene.add(ground);
-
-                const gridHelper = new THREE.GridHelper(20, 20, 0x888888, 0xbbbbbb);
-                gridHelper.position.y = 0.01;
-                scene.add(gridHelper);
-            }
-
-            function addBlockToScene(x, y, z, color = null) {
-                const finalColor = color || selectedColor;
-                const geo = new THREE.BoxGeometry(BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                const mat = new THREE.MeshStandardMaterial({
-                    color: finalColor,
-                    roughness: 0.3,
-                    metalness: 0.05,
-                    emissive: new THREE.Color(finalColor).multiplyScalar(0.05)
-                });
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.set(x, y + BLOCK_SIZE / 2, z);
-                mesh.castShadow = true;
-                mesh.receiveShadow = true;
-                const edges = new THREE.EdgesGeometry(geo);
-                const lineMat = new THREE.LineBasicMaterial({ color: 0x222222, linewidth: 1 });
-                const wireframe = new THREE.LineSegments(edges, lineMat);
-                mesh.add(wireframe);
-
-                mesh.userData = { isBlock: true, color: finalColor, x, y, z };
-                scene.add(mesh);
-                blocks.push(mesh);
-                blockCount++;
-                updateBlockCounter();
-                checkOpdracht();
-                return mesh;
-            }
-
-            function removeBlock(mesh) {
-                if (!mesh || !mesh.userData.isBlock) return;
-                scene.remove(mesh);
-                const idx = blocks.indexOf(mesh);
-                if (idx > -1) blocks.splice(idx, 1);
-                blockCount--;
-                updateBlockCounter();
-                mesh.geometry.dispose();
-                mesh.material.dispose();
-                checkOpdracht();
-            }
-
-            function getHeightAt(x, z) {
-                let maxY = 0;
-                for (let b of blocks) {
-                    if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4) {
-                        const top = b.userData.y + BLOCK_SIZE;
-                        if (top > maxY) maxY = top;
-                    }
-                }
-                return maxY;
-            }
-
-            function updateBlockCounter() {
-                blockCountEl.textContent = blockCount;
-            }
-
-            function updateScore(punten) {
-                score += punten;
-                scoreDisplayEl.textContent = score;
-            }
-
-            function getIntersection(event, objects) {
-                const rect = renderer.domElement.getBoundingClientRect();
-                const mouse = new THREE.Vector2();
-                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-                const raycaster = new THREE.Raycaster();
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(objects);
-                return intersects.length > 0 ? intersects[0] : null;
-            }
-
-            function updateCamera() {
-                const x = camDist * Math.cos(camTheta) * Math.cos(camPhi);
-                const y = camDist * Math.sin(camPhi);
-                const z = camDist * Math.sin(camTheta) * Math.cos(camPhi);
-                camera.position.set(x, y, z);
-                camera.lookAt(0, 0, 0);
-            }
-
-            function setupCameraControls() {
-                const container = renderer.domElement;
-                container.addEventListener('mousedown', (e) => {
-                    if (e.button === 0) {
-                        isDragging = true;
-                        prevMouse.x = e.clientX;
-                        prevMouse.y = e.clientY;
-                    }
-                });
-                window.addEventListener('mousemove', (e) => {
-                    if (!isDragging) return;
-                    const dx = e.clientX - prevMouse.x;
-                    const dy = e.clientY - prevMouse.y;
-                    camTheta -= dx * 0.005;
-                    camPhi += dy * 0.005;
-                    camPhi = Math.max(-1.2, Math.min(1.2, camPhi));
-                    updateCamera();
-                    prevMouse.x = e.clientX;
-                    prevMouse.y = e.clientY;
-                });
-                window.addEventListener('mouseup', () => { isDragging = false; });
-                container.addEventListener('wheel', (e) => {
-                    e.preventDefault();
-                    camDist += e.deltaY * 0.02;
-                    camDist = Math.max(4, Math.min(30, camDist));
-                    updateCamera();
-                }, { passive: false });
-            }
-
-            function startOpdracht(name) {
-                const opdracht = OPDACHTEN[name];
-                if (!opdracht) return;
-                currentOpdracht = name;
-                voltooideStappen = new Set();
-                opdrachtPanel.classList.add('show');
-                opdrachtTitel.textContent = opdracht.titel;
-                opdrachtBeschrijving.textContent = opdracht.beschrijving;
-                opdrachtHint.textContent = opdracht.hint;
-                updateOpdrachtProgress();
-                voorbeeldContainer.classList.add('show');
-                voorbeeldTitel.textContent = '📐 Voorbeeld: ' + opdracht.titel.replace(/[🐦🔢]/g, '').trim();
-                tekenVoorbeeld(opdracht.voorbeeld);
-                updateVoorbeeldStappen(opdracht.stappen);
-                if (!timerRunning) startTimer();
-                popupOverlay.classList.remove('show');
-            }
-
-            function closeOpdracht() {
-                opdrachtPanel.classList.remove('show');
-                voorbeeldContainer.classList.remove('show');
-                currentOpdracht = null;
-                voltooideStappen = new Set();
-                document.querySelectorAll('.opdracht-btn').forEach(b => b.classList.remove('active-opdracht'));
-                if (timerRunning) {
-                    clearInterval(timerInterval);
-                    timerRunning = false;
-                    timerDisplayEl.textContent = '⏱️ 3:00';
-                    timerDisplayEl.style.color = '#cc0000';
-                }
-            }
-
-            function updateOpdrachtProgress() {
-                const opdracht = OPDACHTEN[currentOpdracht];
-                if (!opdracht) return;
-                const total = opdracht.stappen.length;
-                const done = voltooideStappen.size;
-                opdrachtProgress.textContent = 'Voortgang: ' + done + '/' + total + ' stappen';
-            }
-
-            function updateVoorbeeldStappen(stappen) {
-                let html = '';
-                stappen.forEach((stap, index) => {
-                    const done = voltooideStappen.has(index);
-                    html += `<li class="${done ? 'done' : ''}">${stap.tekst}</li>`;
-                });
-                voorbeeldStappen.innerHTML = html;
-            }
-
-            function tekenVoorbeeld(blokken) {
-                const ctx = voorbeeldCanvas.getContext('2d');
-                ctx.clearRect(0, 0, 100, 100);
-                const scale = 14;
-                const ox = 50, oy = 85;
-                blokken.forEach(b => {
-                    const x = ox + b.x * scale;
-                    const y = oy - b.z * scale;
-                    const s = (b.size || 0.8) * scale;
-                    ctx.fillStyle = b.color;
-                    ctx.fillRect(x - s/2, y - s/2, s, s);
-                    ctx.strokeStyle = '#333';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(x - s/2, y - s/2, s, s);
-                });
-            }
-
-            function checkOpdracht() {
-                if (!currentOpdracht) return;
-                const opdracht = OPDACHTEN[currentOpdracht];
-                if (!opdracht) return;
-                let voltooid = 0;
-                opdracht.stappen.forEach((stap, index) => {
-                    const isVoltooid = stap.check();
-                    if (isVoltooid && !voltooideStappen.has(index)) {
-                        voltooideStappen.add(index);
-                        updateScore(10);
-                    }
-                    if (isVoltooid) voltooid++;
-                });
-                updateOpdrachtProgress();
-                updateVoorbeeldStappen(opdracht.stappen);
-                if (voltooid === opdracht.stappen.length) {
-                    updateScore(50);
-                    showPopup('🎉 Gefeliciteerd!', 'Je hebt de opdracht "' + opdracht.titel + '" voltooid! +50 punten!');
-                    blocks.forEach(b => {
-                        b.material.color.setHex(0xffd700);
-                        b.userData.color = '#ffd700';
-                    });
-                    closeOpdracht();
-                }
-            }
-
-            function showPopup(title, message) {
-                popupTitle.textContent = title;
-                popupMessage.textContent = message;
-                popupOverlay.classList.add('show');
-                setTimeout(() => { popupOverlay.classList.remove('show'); }, 5000);
-            }
-
-            popupBtn.addEventListener('click', () => { popupOverlay.classList.remove('show'); });
-
             function startTimer() {
                 if (timerRunning) return;
                 timerRunning = true;
                 timerSeconds = 180;
                 timerWarningShown = false;
-                timerWarningEl.style.display = 'none';
-                updateTimerDisplay();
+                document.getElementById('timer-warning').style.display = 'none';
+                
                 timerInterval = setInterval(() => {
                     timerSeconds--;
-                    updateTimerDisplay();
                     if (timerSeconds <= 30 && !timerWarningShown) {
                         timerWarningShown = true;
-                        timerWarningEl.style.display = 'block';
-                        setTimeout(() => { timerWarningEl.style.display = 'none'; }, 3000);
+                        document.getElementById('timer-warning').style.display = 'block';
+                        setTimeout(() => { document.getElementById('timer-warning').style.display = 'none'; }, 3000);
                     }
                     chatPopups.forEach(p => {
-                        if (p.time === timerSeconds) {
-                            triggerChatPopup(p.sender, p.text);
-                        }
+                        if (p.time === timerSeconds) triggerChatPopup(p.sender, p.text);
                     });
                     if (timerSeconds <= 0) {
                         clearInterval(timerInterval);
                         timerRunning = false;
-                        showPopup('⏰ Tijd is om!', 'Je hebt de tijd niet gehaald. Probeer het nog een keer!');
-                        closeOpdracht();
+                        document.getElementById('popup-title').innerText = '⏰ Tijd is om!';
+                        document.getElementById('popup-message').innerText = 'De tijd is verstreken! Klik op "Opnieuw" om de opdracht te resetten.';
+                        document.getElementById('popup-btn').innerText = 'Opnieuw';
+                        document.getElementById('popup-btn').onclick = function() {
+                            document.getElementById('popup-overlay').style.display = 'none';
+                            placedBlocks.clear();
+                            renderBlocks();
+                            loadTask(currentTaskIdx);
+                            document.getElementById('popup-btn').innerText = '👍 Ga door!';
+                            document.getElementById('popup-btn').onclick = function() {
+                                document.getElementById('popup-overlay').style.display = 'none';
+                                if (currentTaskIdx < tasks.length - 1) loadTask(currentTaskIdx + 1);
+                                else showFeedback('🎉 Gefeliciteerd! Alle opdrachten zijn voltooid!', true);
+                            };
+                        };
+                        document.getElementById('popup-overlay').style.display = 'flex';
                     }
                 }, 1000);
             }
 
-            function updateTimerDisplay() {
-                const min = Math.floor(timerSeconds / 60);
-                const sec = timerSeconds % 60;
-                timerDisplayEl.textContent = '⏱️ ' + String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
-                timerDisplayEl.style.color = timerSeconds <= 30 ? '#cc0000' : '#003366';
-            }
-
-            // --- UI EVENTS ---
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    selectedColor = this.dataset.color;
-                    if (deleteMode) {
-                        deleteMode = false;
-                        deleteBtn.classList.remove('delete-mode');
-                        deleteBtn.textContent = '🗑️ Verwijder';
-                    }
-                });
-            });
-
-            deleteBtn.addEventListener('click', function() {
-                deleteMode = !deleteMode;
-                this.classList.toggle('delete-mode');
-                this.textContent = deleteMode ? '✅ Plaatsen' : '🗑️ Verwijder';
-            });
-
-            clearBtn.addEventListener('click', () => {
-                if (blockCount === 0) return;
-                if (confirm('Weet je zeker dat je alle blokken wilt verwijderen?')) {
-                    while (blocks.length > 0) {
-                        const b = blocks.pop();
-                        scene.remove(b);
-                        b.geometry.dispose();
-                        b.material.dispose();
-                    }
-                    blockCount = 0;
-                    updateBlockCounter();
-                    checkOpdracht();
-                }
-            });
-
-            document.querySelectorAll('.opdracht-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const name = this.dataset.opdracht;
-                    document.querySelectorAll('.opdracht-btn').forEach(b => b.classList.remove('active-opdracht'));
-                    this.classList.add('active-opdracht');
-                    if (blockCount > 0) {
-                        if (confirm('Wil je de huidige bouwwerken wissen voor een schone start?')) {
-                            while (blocks.length > 0) {
-                                const b = blocks.pop();
-                                scene.remove(b);
-                                b.geometry.dispose();
-                                b.material.dispose();
-                            }
-                            blockCount = 0;
-                            updateBlockCounter();
-                        }
-                    }
-                    startOpdracht(name);
-                });
-            });
-
-            closeOpdrachtBtn.addEventListener('click', closeOpdracht);
-
-            renderer.domElement.addEventListener('click', (e) => {
-                if (e.button !== 0) return;
-                if (deleteMode) {
-                    const hit = getIntersection(e, blocks);
-                    if (hit) removeBlock(hit.object);
-                    return;
-                }
-                const hit = getIntersection(e, [ground]);
-                if (hit) {
-                    const x = Math.round(hit.point.x / GRID) * GRID;
-                    const z = Math.round(hit.point.z / GRID) * GRID;
-                    let occupied = false;
-                    for (let b of blocks) {
-                        if (Math.abs(b.userData.x - x) < 0.4 && Math.abs(b.userData.z - z) < 0.4 && Math.abs(b.userData.y - 0) < 0.1) {
-                            occupied = true;
-                            break;
-                        }
-                    }
-                    if (!occupied && blockCount < MAX_BLOCKS) {
-                        const y = getHeightAt(x, z);
-                        addBlockToScene(x, y, z);
-                    }
-                }
-            });
-
-            renderer.domElement.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                const hit = getIntersection(e, blocks);
-                if (hit) removeBlock(hit.object);
-            });
+            // --- EVENTS & UI ---
+            document.getElementById('mode-add').addEventListener('click', (e) => { buildMode = 'add'; e.target.classList.add('active'); document.getElementById('mode-remove').classList.remove('active'); });
+            document.getElementById('mode-remove').addEventListener('click', (e) => { buildMode = 'remove'; e.target.classList.add('active'); document.getElementById('mode-add').classList.remove('active'); });
+            document.getElementById('btn-clear').addEventListener('click', () => { placedBlocks.clear(); renderBlocks(); });
+            document.getElementById('btn-check').addEventListener('click', checkAnswer);
+            document.getElementById('prev-task').addEventListener('click', () => { if (currentTaskIdx > 0) loadTask(currentTaskIdx - 1); });
+            document.getElementById('next-task').addEventListener('click', () => { if (currentTaskIdx < tasks.length - 1) loadTask(currentTaskIdx + 1); });
 
             window.addEventListener('resize', () => {
-                const w = containerWrapper.clientWidth;
-                const h = containerWrapper.clientHeight;
-                if (camera) {
-                    camera.aspect = w / h;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(w, h);
-                }
+                const aspect = container.clientWidth / container.clientHeight;
+                camera.left = -d * aspect; camera.right = d * aspect; camera.top = d; camera.bottom = -d;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
             });
 
-            function addDecoration() {
-                addBlockToScene(0, 0, 0, '#ff6b6b');
-                addBlockToScene(1.2, 0, 0, '#45b7d1');
-                addBlockToScene(-1.2, 0, 0, '#45b7d1');
-                addBlockToScene(0, 0.8, 0, '#ffcc00');
-                addBlockToScene(2.5, 0, 1.5, '#4ecdc4');
-                addBlockToScene(2.5, 0.8, 1.5, '#4ecdc4');
-                addBlockToScene(2.5, 1.6, 1.5, '#ff9f43');
+            // --- INIT ---
+            loadTask(0);
+            renderBlocks();
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
             }
-
-            function init() {
-                initScene();
-                createGround();
-                setupCameraControls();
-                addDecoration();
-
-                function animate() {
-                    requestAnimationFrame(animate);
-                    renderer.render(scene, camera);
-                }
-                animate();
-                console.log('VeiligBlox gestart (referentiestijl)');
-            }
-
-            init();
+            animate();
 
         })();
     </script>
-
-    <!-- ===== SCRIPT VOOR OPSLAAN VAN REFLECTIE ===== -->
+    
+    <!-- ===== REFLECTIE OPSLAAN ===== -->
     <script>
         document.getElementById('saveBtn').addEventListener('click', function() {
             const antwoord1 = document.getElementById('reflection1').value.trim();
             const antwoord2 = document.getElementById('reflection2').value.trim();
-
-            if (!antwoord1 && !antwoord2) {
-                alert('Je hebt nog niets ingevuld. Schrijf eerst je antwoorden op.');
-                return;
-            }
-
-            const text = 
-                '=== SLOTREFLECTIE RECHERCHELTEAM ===\n\n' +
-                'Vraag 1: Wat is het belangrijkste dat je tijdens dit onderzoek hebt geleerd over veiligheid op Roblox?\n' +
-                'Antwoord: ' + (antwoord1 || '(niet ingevuld)') + '\n\n' +
-                'Vraag 2: Wat zou je een klasgenoot adviseren die benaderd wordt door een vreemde speler?\n' +
-                'Antwoord: ' + (antwoord2 || '(niet ingevuld)') + '\n\n' +
-                'Datum: ' + new Date().toLocaleDateString('nl-NL') + '\n';
-
+            if (!antwoord1 && !antwoord2) { alert('Je hebt nog niets ingevuld. Schrijf eerst je antwoorden op.'); return; }
+            const text = '=== SLOTREFLECTIE RECHERCHELTEAM ===\n\nVraag 1: Wat is het belangrijkste dat je tijdens dit onderzoek hebt geleerd over veiligheid op Roblox?\nAntwoord: ' + (antwoord1 || '(niet ingevuld)') + '\n\nVraag 2: Wat zou je een klasgenoot adviseren die benaderd wordt door een vreemde speler?\nAntwoord: ' + (antwoord2 || '(niet ingevuld)') + '\n\nDatum: ' + new Date().toLocaleDateString('nl-NL') + '\n';
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'slotreflectie_rechercheteam.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            a.href = url; a.download = 'slotreflectie_rechercheteam.txt';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
         });
     </script>
-
 </body>
 </html>
